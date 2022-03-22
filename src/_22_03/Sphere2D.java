@@ -2,12 +2,18 @@ package _22_03;
 
 import processing.core.PApplet;
 import processing.core.PGraphics;
+import processing.core.PVector;
 import toolbox.Gui;
+import toolbox.global.State;
+import toolbox.global.Utils;
+
+import java.util.ArrayList;
 
 public class Sphere2D extends PApplet {
 
     Gui gui;
     PGraphics pg;
+    private ArrayList<PVector> gaussPoints = new ArrayList<>();
 
     public static void main(String[] args) {
         PApplet.main(java.lang.invoke.MethodHandles.lookup().lookupClass());
@@ -22,12 +28,13 @@ public class Sphere2D extends PApplet {
     public void setup() {
         gui = new Gui(this);
         pg = createGraphics(width, height, P2D);
-        colorMode(HSB,1,1,1,1);
+        colorMode(HSB, 1, 1, 1, 1);
     }
 
     @Override
     public void draw() {
         pg.beginDraw();
+        pg.blendMode(BLEND);
         drawBackground(pg);
         drawSphere(pg);
         pg.endDraw();
@@ -40,7 +47,7 @@ public class Sphere2D extends PApplet {
     @Override
     public void keyPressed() {
         if (key == 's') {
-            saveFrame("out/screenshot_####.jpg");
+            saveFrame("out/screenshots/" + State.timestamp() + ".jpg");
         }
     }
 
@@ -61,17 +68,32 @@ public class Sphere2D extends PApplet {
         pg.fill(gui.colorPicker("circle/fill", color(0, 0)).hex);
         pg.translate(pg.width / 2f, pg.height / 2f);
         pg.circle(circleX, circleY, diameter);
-        if (gui.toggle("points/do gauss", true)) {
+        if (gui.toggle("points/regenerate", true)) {
+            gaussPoints.clear();
             float pointsOffsetX = gui.slider("points/x");
             float pointsOffsetY = gui.slider("points/y");
             float gaussRange = gui.slider("points/gauss range", 200);
             int pointCount = gui.sliderInt("points/count", 1000);
+            for (int i = 0; i < pointCount; i++) {
+                float gaussX = pointsOffsetX + randomGaussian() * gaussRange;
+                float gaussY = pointsOffsetY + randomGaussian() * gaussRange;
+                if(gui.toggle("dist culling", true) &&
+                        dist(circleX, circleY, gaussX, gaussY) > radius){
+                    continue;
+                }
+                gaussPoints.add(new PVector(gaussX, gaussY));
+            }
+        }
+        if (gui.toggle("points/draw gauss", true)) {
             pg.stroke(gui.colorPicker("points/stroke", color(1)).hex);
             pg.strokeWeight(gui.slider("points/weight", 1));
-            for (int i = 0; i < pointCount; i++) {
-                float gaussX = randomGaussian() * gaussRange;
-                float gaussY = randomGaussian() * gaussRange;
-                pg.point(pointsOffsetX + gaussX, pointsOffsetY + gaussY);
+            if(gui.stringPicker("points/blend mode", new String[]{"blend", "add"}).equals("add")){
+                pg.blendMode(ADD);
+            }else{
+                pg.blendMode(BLEND);
+            }
+            for(PVector p : gaussPoints){
+                pg.point(p.x, p.y);
             }
         }
     }
