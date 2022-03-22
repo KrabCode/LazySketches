@@ -38,7 +38,6 @@ public class Test extends PApplet {
         clear();
         image(pg, 0, 0);
         gui.draw();
-        gui.record(pg);
     }
 
 

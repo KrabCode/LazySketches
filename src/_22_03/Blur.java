@@ -63,10 +63,5 @@ public class Blur extends PApplet {
         }
 
         gui.draw();
-        if(passes > 0){
-            gui.record(graphics.get(passes-1));
-        }else{
-            gui.record(canvas);
-        }
     }
 }
