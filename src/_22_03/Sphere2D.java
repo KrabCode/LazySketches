@@ -8,6 +8,7 @@ import toolbox.global.State;
 import toolbox.global.Utils;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class Sphere2D extends PApplet {
 
@@ -47,7 +48,7 @@ public class Sphere2D extends PApplet {
     @Override
     public void keyPressed() {
         if (key == 's') {
-            saveFrame("out/screenshots/" + State.timestamp() + ".jpg");
+            saveFrame("out/screenshots/" + UUID.randomUUID() + ".png");
         }
     }
 

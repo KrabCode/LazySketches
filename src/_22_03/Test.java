@@ -4,7 +4,6 @@ package _22_03;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PVector;
-import shaders.GeneralPurposeShaders;
 import toolbox.Gui;
 
 import java.util.ArrayList;
@@ -44,7 +43,6 @@ public class Test extends PApplet {
     private void drawScene() {
         pg.pushMatrix();
         pg.translate(width/2f, height/2f);
-        GeneralPurposeShaders.applyShaders("shaders", pg);
         int count = gui.sliderInt("flower/count", 10);
         float middleRadius = gui.slider("flower/middle radius", 100);
         float offsetRadius = gui.slider("flower/offset radius", 250);
@@ -67,7 +65,6 @@ public class Test extends PApplet {
             lastPositions.get(i).y = y;
         }
         pg.resetShader();
-        GeneralPurposeShaders.applyFilters("filters", pg);
         pg.popMatrix();
     }
 }
