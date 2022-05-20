@@ -40,7 +40,7 @@ public class Sphere2D extends PApplet {
         drawSphere(pg);
         pg.endDraw();
         image(pg, 0, 0);
-        gui.palettePicker();
+        gui.themePicker();
         gui.draw();
 
     }
