@@ -1,6 +1,5 @@
 package _22_03;
 
-import processing.video.*;
 import ch.bildspur.postfx.builder.PostFX;
 import ch.bildspur.postfx.builder.PostFXBuilder;
 import processing.core.PApplet;

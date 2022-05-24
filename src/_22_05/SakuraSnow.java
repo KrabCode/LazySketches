@@ -4,6 +4,7 @@ import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PVector;
 import toolbox.Gui;
+import toolbox.global.Utils;
 import toolbox.windows.nodes.colorPicker.Color;
 
 import java.util.ArrayList;
@@ -21,7 +22,8 @@ public class SakuraSnow extends PApplet {
 
     @Override
     public void settings() {
-        size(1000,1000,P2D);
+//        size(1000,1000,P2D);
+        fullScreen(P2D);
     }
 
     @Override
@@ -50,6 +52,12 @@ public class SakuraSnow extends PApplet {
         }else{
             isRec = false;
             recFrame = 1;
+        }
+        if(gui.toggle("record/show rectangle")){
+            rectMode(CORNER);
+            noFill();
+            stroke(255);
+            rect(width/2f - recSize / 2f, height / 2f - recSize / 2f, recSize, recSize);
         }
         imageMode(CORNER);
         image(pg, 0, 0, width, height);
@@ -92,7 +100,10 @@ public class SakuraSnow extends PApplet {
         PVector pos = new PVector(), spd = new PVector();
         float timePos;
         int frameBorn = frameCount;
-        float sizeModifier = randomGaussian() * gui.slider("leaf/draw/size variation", 1);
+        float sizeModifier = randomGaussian();
+        float hueModifier = randomGaussian();
+        float satModifier = randomGaussian();
+        float brModifier = randomGaussian();
         private int lifeLength;
 
         Leaf(){
@@ -120,9 +131,9 @@ public class SakuraSnow extends PApplet {
             spd.mult(gui.slider("leaf/move/drag", .98f));
             spd.add(acc);
             pos.add(spd);
-            Color baseFill = gui.colorPicker("leaf/draw/base fill", color(255));
-            float fade = constrain(norm(frameCount, frameBorn, frameBorn + gui.slider("leaf/draw/fade in time", 60)), 0, 1);
-            float fadeOutDuration = gui.slider("leaf/draw/fade out time", 60);
+            Color baseFill = gui.colorPicker("leaf/base fill", color(255));
+            float fade = constrain(norm(frameCount, frameBorn, frameBorn + gui.slider("leaf/fade in time", 60)), 0, 1);
+            float fadeOutDuration = gui.slider("leaf/fade out time", 60);
             if(frameCount >= frameBorn + lifeLength - fadeOutDuration){
                 fade =  1 - constrain(norm(frameCount, frameBorn + lifeLength - fadeOutDuration, frameBorn + lifeLength), 0, 1);
             }
@@ -132,9 +143,12 @@ public class SakuraSnow extends PApplet {
                 pg.rotate(TAU * norm(mirrorIndex, 0, mirrorCount));
                 pg.translate(pos.x, pos.y);
                 pg.rotate(spd.heading());
-                pg.fill(baseFill.hue, baseFill.saturation, baseFill.brightness, lerp(0, baseFill.alpha, fade));
+                pg.fill(Utils.hueModulo(baseFill.hue + hueModifier  * gui.slider("leaf/hue variation", 0)),
+                        constrain(baseFill.saturation + satModifier  * gui.slider("leaf/sat variation", 0), 0, 1),
+                        constrain(baseFill.brightness + brModifier * gui.slider("leaf/br variation", 0), 0, 1),
+                        lerp(0, baseFill.alpha, fade));
                 pg.noStroke();
-                float size = gui.slider("leaf/draw/size", 2) + sizeModifier;
+                float size = gui.slider("leaf/size", 2) + sizeModifier  * gui.slider("leaf/size variation", 1);
                 if (gui.stringPicker("leaf/shape", new String[]{"rectangle", "circle"}).equals("rectangle")) {
                     pg.rect(0, 0, size, size);
                 } else {

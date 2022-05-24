@@ -19,9 +19,6 @@ public class PostFxAdapter {
             if (gui.toggle("fx/blur/enabled")) {
                 fxBuilder.blur(gui.sliderInt("fx/blur/size"), gui.slider("fx/blur/sigma"));
             }
-            if (gui.toggle("fx/glitch/enabled")) {
-                fxBuilder.binaryGlitch(gui.slider("fx/glitch/strength"));
-            }
             if (gui.toggle("fx/noise/enabled")) {
                 fxBuilder.noise(gui.slider("fx/noise/amount"),
                         gui.slider("fx/noise/speed"));
@@ -32,9 +29,6 @@ public class PostFxAdapter {
             }
             if(gui.toggle("fx/denoise/enabled")){
                 fxBuilder.denoise(gui.slider("fx/denoise/exponent"));
-            }
-            if(gui.toggle("fx/exposure/enabled")){
-                fxBuilder.exposure(gui.slider("fx/exposure/amount"));
             }
             if(gui.toggle("fx/grayscale/enabled")){
                 fxBuilder.grayScale();
