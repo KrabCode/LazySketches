@@ -23,7 +23,7 @@
       "type": "FOLDER"
     },
     {
-      "hexString": "FF000107",
+      "hexString": "FF000000",
       "children": [
         {
           "className": "ColorPreviewNode",
@@ -31,22 +31,22 @@
           "type": "VALUE_NODE"
         },
         {
-          "valueFloat": 0.64285713,
+          "valueFloat": 0.0,
           "valueFloatPrecision": 0.01,
           "className": "HueNode",
           "path": "main background/hue",
           "type": "VALUE_NODE"
         },
         {
-          "valueFloat": 1.0,
+          "valueFloat": 0.0,
           "valueFloatPrecision": 0.01,
           "className": "SaturationNode",
           "path": "main background/sat",
           "type": "VALUE_NODE"
         },
         {
-          "valueFloat": 0.02745098,
-          "valueFloatPrecision": 0.01,
+          "valueFloat": 0.0,
+          "valueFloatPrecision": 0.001,
           "className": "BrightnessNode",
           "path": "main background/br",
           "type": "VALUE_NODE"
@@ -73,17 +73,17 @@
         {
           "children": [
             {
-              "valueFloat": 1594.0002,
-              "valueFloatPrecision": 10.0,
+              "valueFloat": 400.0,
+              "valueFloatPrecision": 1.0,
               "className": "SliderIntNode",
-              "path": "leaf/spawn/count",
+              "path": "leaf/spawn/lifetime",
               "type": "VALUE_NODE"
             },
             {
-              "valueFloat": 4.799998,
-              "valueFloatPrecision": 0.1,
+              "valueFloat": 2042.0002,
+              "valueFloatPrecision": 10.0,
               "className": "SliderIntNode",
-              "path": "leaf/spawn/speed",
+              "path": "leaf/spawn/count",
               "type": "VALUE_NODE"
             },
             {
@@ -101,24 +101,10 @@
               "type": "VALUE_NODE"
             },
             {
-              "valueFloat": 100.099976,
-              "valueFloatPrecision": 1.0,
+              "valueFloat": 1.000001,
+              "valueFloatPrecision": 0.01,
               "className": "SliderNode",
-              "path": "leaf/spawn/range x",
-              "type": "VALUE_NODE"
-            },
-            {
-              "valueFloat": 10.799934,
-              "valueFloatPrecision": 1.0,
-              "className": "SliderNode",
-              "path": "leaf/spawn/range y",
-              "type": "VALUE_NODE"
-            },
-            {
-              "valueFloat": 150.2003,
-              "valueFloatPrecision": 1.0,
-              "className": "SliderIntNode",
-              "path": "leaf/spawn/lifetime",
+              "path": "leaf/spawn/range",
               "type": "VALUE_NODE"
             }
           ],
@@ -155,8 +141,8 @@
               "type": "VALUE_NODE"
             },
             {
-              "valueFloat": 0.019999992,
-              "valueFloatPrecision": 0.01,
+              "valueFloat": 1.4901161E-8,
+              "valueFloatPrecision": 0.1,
               "className": "SliderNode",
               "path": "leaf/move/acc y",
               "type": "VALUE_NODE"
@@ -164,22 +150,22 @@
             {
               "children": [
                 {
-                  "valueFloat": 0.029999344,
-                  "valueFloatPrecision": 0.001,
+                  "valueFloat": 0.8899994,
+                  "valueFloatPrecision": 0.01,
                   "className": "SliderNode",
                   "path": "leaf/move/noise/time",
                   "type": "VALUE_NODE"
                 },
                 {
-                  "valueFloat": 0.033900063,
+                  "valueFloat": 0.04060016,
                   "valueFloatPrecision": 1.0E-4,
                   "className": "SliderNode",
                   "path": "leaf/move/noise/freq",
                   "type": "VALUE_NODE"
                 },
                 {
-                  "valueFloat": 0.21800068,
-                  "valueFloatPrecision": 0.001,
+                  "valueFloat": 0.09000027,
+                  "valueFloatPrecision": 0.01,
                   "className": "SliderNode",
                   "path": "leaf/move/noise/power",
                   "type": "VALUE_NODE"
@@ -190,7 +176,7 @@
               "type": "FOLDER"
             },
             {
-              "valueFloat": 0.88040084,
+              "valueFloat": 0.98990065,
               "valueFloatPrecision": 0.001,
               "className": "SliderNode",
               "path": "leaf/move/drag",
@@ -202,7 +188,7 @@
           "type": "FOLDER"
         },
         {
-          "hexString": "FF6C737F",
+          "hexString": "FF7C7C7C",
           "children": [
             {
               "className": "ColorPreviewNode",
@@ -210,21 +196,21 @@
               "type": "VALUE_NODE"
             },
             {
-              "valueFloat": 0.6052632,
+              "valueFloat": 0.0,
               "valueFloatPrecision": 0.01,
               "className": "HueNode",
               "path": "leaf/base fill/hue",
               "type": "VALUE_NODE"
             },
             {
-              "valueFloat": 0.1496063,
+              "valueFloat": 0.0,
               "valueFloatPrecision": 0.01,
               "className": "SaturationNode",
               "path": "leaf/base fill/sat",
               "type": "VALUE_NODE"
             },
             {
-              "valueFloat": 0.49803922,
+              "valueFloat": 0.4862745,
               "valueFloatPrecision": 0.01,
               "className": "BrightnessNode",
               "path": "leaf/base fill/br",
@@ -262,35 +248,35 @@
           "type": "VALUE_NODE"
         },
         {
-          "valueFloat": 0.054000232,
-          "valueFloatPrecision": 0.001,
+          "valueFloat": 1.0000001,
+          "valueFloatPrecision": 0.1,
           "className": "SliderNode",
           "path": "leaf/hue variation",
           "type": "VALUE_NODE"
         },
         {
-          "valueFloat": 0.5999999,
-          "valueFloatPrecision": 0.01,
+          "valueFloat": 0.5,
+          "valueFloatPrecision": 0.1,
           "className": "SliderNode",
           "path": "leaf/sat variation",
           "type": "VALUE_NODE"
         },
         {
-          "valueFloat": 0.054999977,
-          "valueFloatPrecision": 0.001,
+          "valueFloat": 9.655952E-6,
+          "valueFloatPrecision": 0.01,
           "className": "SliderNode",
           "path": "leaf/br variation",
           "type": "VALUE_NODE"
         },
         {
-          "valueFloat": 2.2000003,
+          "valueFloat": 2.0,
           "valueFloatPrecision": 0.1,
           "className": "SliderNode",
           "path": "leaf/size",
           "type": "VALUE_NODE"
         },
         {
-          "valueFloat": 1.8999996,
+          "valueFloat": 1.0,
           "valueFloatPrecision": 0.1,
           "className": "SliderNode",
           "path": "leaf/size variation",
@@ -321,7 +307,7 @@
       "type": "FOLDER"
     },
     {
-      "valueFloat": 9.699925,
+      "valueFloat": 9.599923,
       "valueFloatPrecision": 0.1,
       "className": "SliderIntNode",
       "path": "mirrors",
@@ -330,8 +316,8 @@
     {
       "children": [
         {
-          "valueFloat": 600.3,
-          "valueFloatPrecision": 0.1,
+          "valueFloat": 399.9004,
+          "valueFloatPrecision": 1.0,
           "className": "SliderIntNode",
           "path": "record/size",
           "type": "VALUE_NODE"

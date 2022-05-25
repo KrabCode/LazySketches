@@ -14,7 +14,7 @@ public class SakuraSnow extends PApplet {
     PGraphics pg;
     ArrayList<Leaf> leaves = new ArrayList<>();
     ArrayList<Leaf> leavesToRemove = new ArrayList<>();
-
+    int lifeDuration;
 
     public static void main(String[] args) {
         PApplet.main(java.lang.invoke.MethodHandles.lookup().lookupClass());
@@ -66,10 +66,12 @@ public class SakuraSnow extends PApplet {
     }
 
     private void updateLeaves() {
+        lifeDuration = gui.sliderInt("leaf/spawn/lifetime", 120, 1, Integer.MAX_VALUE);
         int leafCount = gui.sliderInt("leaf/spawn/count", 100);
+        int particlesPerFrame = min(1, leafCount / lifeDuration);
+
         if(leaves.size() < leafCount){
-            int leavesSpawnedPerFrame = gui.sliderInt("leaf/spawn/speed", 1);
-            for (int i = 0; i < leavesSpawnedPerFrame; i++) {
+            for (int i = 0; i < particlesPerFrame; i++) {
                 leaves.add(new Leaf());
             }
         }
@@ -104,13 +106,13 @@ public class SakuraSnow extends PApplet {
         float hueModifier = randomGaussian();
         float satModifier = randomGaussian();
         float brModifier = randomGaussian();
-        private int lifeLength;
 
         Leaf(){
             float x = gui.slider("leaf/spawn/x", 0);
             float y = gui.slider("leaf/spawn/y", 0);
-            float spawnRangeX = randomGaussian() * gui.slider("leaf/spawn/range x");
-            float spawnRangeY = randomGaussian() *  gui.slider("leaf/spawn/range y");
+            float range = gui.slider("leaf/spawn/range");
+            float spawnRangeX = randomGaussian() * range;
+            float spawnRangeY = randomGaussian() * range;
             pos.x = x + spawnRangeX;
             pos.y = y + spawnRangeY;
 
@@ -118,7 +120,6 @@ public class SakuraSnow extends PApplet {
 
         void update(){
             PVector acc = new PVector(gui.slider("leaf/move/acc x"), gui.slider("leaf/move/acc y"));
-            lifeLength = gui.sliderInt("leaf/spawn/lifetime", 120);
             timePos += radians(gui.slider("leaf/move/noise/time", 1));
             float freq = gui.slider("leaf/move/noise/freq", 0.1f);
             PVector noise = new PVector(
@@ -134,8 +135,8 @@ public class SakuraSnow extends PApplet {
             Color baseFill = gui.colorPicker("leaf/base fill", color(255));
             float fade = constrain(norm(frameCount, frameBorn, frameBorn + gui.slider("leaf/fade in time", 60)), 0, 1);
             float fadeOutDuration = gui.slider("leaf/fade out time", 60);
-            if(frameCount >= frameBorn + lifeLength - fadeOutDuration){
-                fade =  1 - constrain(norm(frameCount, frameBorn + lifeLength - fadeOutDuration, frameBorn + lifeLength), 0, 1);
+            if(frameCount >= frameBorn + lifeDuration - fadeOutDuration){
+                fade =  1 - constrain(norm(frameCount, frameBorn + lifeDuration - fadeOutDuration, frameBorn + lifeDuration), 0, 1);
             }
             int mirrorCount = gui.sliderInt("mirrors", 1);
             for (int mirrorIndex = 0; mirrorIndex < mirrorCount; mirrorIndex++) {
@@ -159,7 +160,7 @@ public class SakuraSnow extends PApplet {
         }
 
         public boolean isGarbage() {
-            return frameBorn + lifeLength < frameCount;
+            return frameBorn + lifeDuration < frameCount;
         }
     }
 }
