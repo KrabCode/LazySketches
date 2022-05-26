@@ -1,5 +1,6 @@
 package _22_05;
 
+import _22_03.PostFxAdapter;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PVector;
@@ -45,6 +46,7 @@ public class SakuraSnow extends PApplet {
         pg.translate(width/2f, height/2f);
         updateLeaves();
         pg.endDraw();
+        PostFxAdapter.apply(this, gui, pg);
         int recSize = gui.sliderInt("record/size", 600);
         if(gui.toggle("record/active", false)){
             isRec = true;
@@ -120,14 +122,14 @@ public class SakuraSnow extends PApplet {
 
         void update(){
             PVector acc = new PVector(gui.slider("leaf/move/acc x"), gui.slider("leaf/move/acc y"));
-            timePos += radians(gui.slider("leaf/move/noise/time", 1));
-            float freq = gui.slider("leaf/move/noise/freq", 0.1f);
+            timePos += radians(gui.slider("leaf/move/noise time", 1));
+            float freq = gui.slider("leaf/move/noise freq", 0.1f);
             PVector noise = new PVector(
                     noise(pos.x * freq, pos.y* freq, timePos),
                     noise(pos.x * freq +430.95f, pos.y* freq -1740.125f, timePos+320.5f)
             );
             noise.sub(0.5f, 0.5f);
-            noise.mult(gui.slider("leaf/move/noise/power", 1));
+            noise.mult(gui.slider("leaf/move/noise power", 1));
             acc.add(noise);
             spd.mult(gui.slider("leaf/move/drag", .98f));
             spd.add(acc);
