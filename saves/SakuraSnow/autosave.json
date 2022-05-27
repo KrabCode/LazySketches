@@ -23,7 +23,7 @@
       "type": "FOLDER"
     },
     {
-      "hexString": "00010101",
+      "hexString": "FF000000",
       "children": [
         {
           "className": "ColorPreviewNode",
@@ -52,7 +52,7 @@
           "type": "VALUE_NODE"
         },
         {
-          "valueFloat": 0.0,
+          "valueFloat": 1.0,
           "valueFloatPrecision": 0.01,
           "className": "AlphaNode",
           "path": "main background/a",
@@ -73,15 +73,15 @@
         {
           "children": [
             {
-              "valueFloat": 301.1999,
+              "valueFloat": 299.50003,
               "valueFloatPrecision": 1.0,
               "className": "SliderIntNode",
               "path": "leaf/spawn/lifetime",
               "type": "VALUE_NODE"
             },
             {
-              "valueFloat": 1562.3008,
-              "valueFloatPrecision": 100.0,
+              "valueFloat": 1000.301,
+              "valueFloatPrecision": 1.0,
               "className": "SliderIntNode",
               "path": "leaf/spawn/count",
               "type": "VALUE_NODE"
@@ -101,7 +101,7 @@
               "type": "VALUE_NODE"
             },
             {
-              "valueFloat": 100.90001,
+              "valueFloat": 50.900024,
               "valueFloatPrecision": 1.0,
               "className": "SliderNode",
               "path": "leaf/spawn/range",
@@ -155,21 +155,21 @@
               "type": "VALUE_NODE"
             },
             {
-              "valueFloat": 0.019999728,
-              "valueFloatPrecision": 0.001,
+              "valueFloat": 0.0019997284,
+              "valueFloatPrecision": 1.0E-4,
               "className": "SliderNode",
               "path": "leaf/move/noise freq",
               "type": "VALUE_NODE"
             },
             {
-              "valueFloat": 0.24000008,
+              "valueFloat": 0.07000011,
               "valueFloatPrecision": 0.01,
               "className": "SliderNode",
               "path": "leaf/move/noise power",
               "type": "VALUE_NODE"
             },
             {
-              "valueFloat": 0.9589007,
+              "valueFloat": 0.95090127,
               "valueFloatPrecision": 0.001,
               "className": "SliderNode",
               "path": "leaf/move/drag",
@@ -241,35 +241,35 @@
           "type": "VALUE_NODE"
         },
         {
-          "valueFloat": 0.16000013,
+          "valueFloat": 0.10000015,
           "valueFloatPrecision": 0.01,
           "className": "SliderNode",
           "path": "leaf/hue variation",
           "type": "VALUE_NODE"
         },
         {
-          "valueFloat": 0.23000064,
+          "valueFloat": 0.10000039,
           "valueFloatPrecision": 0.01,
           "className": "SliderNode",
           "path": "leaf/sat variation",
           "type": "VALUE_NODE"
         },
         {
-          "valueFloat": 0.16000153,
+          "valueFloat": 0.14000143,
           "valueFloatPrecision": 0.01,
           "className": "SliderNode",
           "path": "leaf/br variation",
           "type": "VALUE_NODE"
         },
         {
-          "valueFloat": 5.0999937,
+          "valueFloat": -3.7401915E-6,
           "valueFloatPrecision": 0.1,
           "className": "SliderNode",
           "path": "leaf/size",
           "type": "VALUE_NODE"
         },
         {
-          "valueFloat": 2.4999998,
+          "valueFloat": 3.999999,
           "valueFloatPrecision": 0.1,
           "className": "SliderNode",
           "path": "leaf/size variation",
@@ -278,13 +278,13 @@
         {
           "children": [
             {
-              "valueBoolean": false,
+              "valueBoolean": true,
               "className": "StringPickerItem",
               "path": "leaf/shape/rectangle",
               "type": "VALUE_NODE"
             },
             {
-              "valueBoolean": true,
+              "valueBoolean": false,
               "className": "StringPickerItem",
               "path": "leaf/shape/circle",
               "type": "VALUE_NODE"
@@ -300,7 +300,7 @@
       "type": "FOLDER"
     },
     {
-      "valueFloat": 15.99992,
+      "valueFloat": 11.899918,
       "valueFloatPrecision": 1.0,
       "className": "SliderIntNode",
       "path": "mirrors",
@@ -313,199 +313,6 @@
           "className": "ToggleNode",
           "path": "fx/enabled",
           "type": "VALUE_NODE"
-        },
-        {
-          "children": [
-            {
-              "valueBoolean": false,
-              "className": "ToggleNode",
-              "path": "fx/blur/enabled",
-              "type": "VALUE_NODE"
-            },
-            {
-              "valueFloat": 3.3000011,
-              "valueFloatPrecision": 0.1,
-              "className": "SliderIntNode",
-              "path": "fx/blur/size",
-              "type": "VALUE_NODE"
-            },
-            {
-              "valueFloat": 13.9,
-              "valueFloatPrecision": 0.1,
-              "className": "SliderNode",
-              "path": "fx/blur/sigma",
-              "type": "VALUE_NODE"
-            }
-          ],
-          "className": "NodeFolder",
-          "path": "fx/blur",
-          "type": "FOLDER"
-        },
-        {
-          "children": [
-            {
-              "valueBoolean": false,
-              "className": "ToggleNode",
-              "path": "fx/noise/enabled",
-              "type": "VALUE_NODE"
-            },
-            {
-              "valueFloat": 0.34999993,
-              "valueFloatPrecision": 0.01,
-              "className": "SliderNode",
-              "path": "fx/noise/amount",
-              "type": "VALUE_NODE"
-            },
-            {
-              "valueFloat": 1.0399996,
-              "valueFloatPrecision": 0.01,
-              "className": "SliderNode",
-              "path": "fx/noise/speed",
-              "type": "VALUE_NODE"
-            }
-          ],
-          "className": "NodeFolder",
-          "path": "fx/noise",
-          "type": "FOLDER"
-        },
-        {
-          "children": [
-            {
-              "valueBoolean": false,
-              "className": "ToggleNode",
-              "path": "fx/contrast/enabled",
-              "type": "VALUE_NODE"
-            },
-            {
-              "valueFloat": 0.8000001,
-              "valueFloatPrecision": 0.1,
-              "className": "SliderNode",
-              "path": "fx/contrast/brightness",
-              "type": "VALUE_NODE"
-            },
-            {
-              "valueFloat": 1.0,
-              "valueFloatPrecision": 0.1,
-              "className": "SliderNode",
-              "path": "fx/contrast/contrast",
-              "type": "VALUE_NODE"
-            }
-          ],
-          "className": "NodeFolder",
-          "path": "fx/contrast",
-          "type": "FOLDER"
-        },
-        {
-          "children": [
-            {
-              "valueBoolean": false,
-              "className": "ToggleNode",
-              "path": "fx/denoise/enabled",
-              "type": "VALUE_NODE"
-            },
-            {
-              "valueFloat": 24.299997,
-              "valueFloatPrecision": 0.1,
-              "className": "SliderNode",
-              "path": "fx/denoise/exponent",
-              "type": "VALUE_NODE"
-            }
-          ],
-          "className": "NodeFolder",
-          "path": "fx/denoise",
-          "type": "FOLDER"
-        },
-        {
-          "children": [
-            {
-              "valueBoolean": false,
-              "className": "ToggleNode",
-              "path": "fx/grayscale/enabled",
-              "type": "VALUE_NODE"
-            }
-          ],
-          "className": "NodeFolder",
-          "path": "fx/grayscale",
-          "type": "FOLDER"
-        },
-        {
-          "children": [
-            {
-              "valueBoolean": false,
-              "className": "ToggleNode",
-              "path": "fx/invert/enabled",
-              "type": "VALUE_NODE"
-            }
-          ],
-          "className": "NodeFolder",
-          "path": "fx/invert",
-          "type": "FOLDER"
-        },
-        {
-          "children": [
-            {
-              "valueBoolean": false,
-              "className": "ToggleNode",
-              "path": "fx/bright pass/enabled",
-              "type": "VALUE_NODE"
-            },
-            {
-              "valueFloat": -0.09999999,
-              "valueFloatPrecision": 0.1,
-              "className": "SliderNode",
-              "path": "fx/bright pass/threshold",
-              "type": "VALUE_NODE"
-            }
-          ],
-          "className": "NodeFolder",
-          "path": "fx/bright pass",
-          "type": "FOLDER"
-        },
-        {
-          "children": [
-            {
-              "valueBoolean": false,
-              "className": "ToggleNode",
-              "path": "fx/bloom/enabled",
-              "type": "VALUE_NODE"
-            }
-          ],
-          "className": "NodeFolder",
-          "path": "fx/bloom",
-          "type": "FOLDER"
-        },
-        {
-          "children": [
-            {
-              "valueBoolean": false,
-              "className": "ToggleNode",
-              "path": "fx/rgb split/enabled",
-              "type": "VALUE_NODE"
-            },
-            {
-              "valueFloat": 66.2,
-              "valueFloatPrecision": 1.0,
-              "className": "SliderNode",
-              "path": "fx/rgb split/delta",
-              "type": "VALUE_NODE"
-            }
-          ],
-          "className": "NodeFolder",
-          "path": "fx/rgb split",
-          "type": "FOLDER"
-        },
-        {
-          "children": [
-            {
-              "valueBoolean": false,
-              "className": "ToggleNode",
-              "path": "fx/chromab/enabled",
-              "type": "VALUE_NODE"
-            }
-          ],
-          "className": "NodeFolder",
-          "path": "fx/chromab",
-          "type": "FOLDER"
         }
       ],
       "className": "NodeFolder",
@@ -515,7 +322,7 @@
     {
       "children": [
         {
-          "valueFloat": 800.40027,
+          "valueFloat": 400.4002,
           "valueFloatPrecision": 0.1,
           "className": "SliderIntNode",
           "path": "record/size",

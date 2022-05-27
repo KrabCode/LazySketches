@@ -41,13 +41,23 @@ public class SakuraSnow extends PApplet {
     public void draw() {
         pg.colorMode(HSB,1,1,1,1);
         pg.beginDraw();
+        pg.pushStyle();
+        pg.blendMode(BLEND);
         drawMainBackground();
-        pg.clear();
+        pg.popStyle();
         pg.translate(width/2f, height/2f);
         updateLeaves();
         pg.endDraw();
         PostFxAdapter.apply(this, gui, pg);
+        imageMode(CORNER);
+        image(pg, 0, 0, width, height);
         int recSize = gui.sliderInt("record/size", 600);
+        if(gui.toggle("record/show rectangle")){
+            rectMode(CORNER);
+            noFill();
+            stroke(255);
+            rect(width/2f - recSize / 2f, height / 2f - recSize / 2f, recSize, recSize);
+        }
         if(gui.toggle("record/active", false)){
             isRec = true;
             pg.get(width/2 - recSize / 2, height / 2 - recSize / 2, recSize, recSize).save("/out/sakura/" + recFrame++ + ".jpg");
@@ -55,14 +65,6 @@ public class SakuraSnow extends PApplet {
             isRec = false;
             recFrame = 1;
         }
-        if(gui.toggle("record/show rectangle")){
-            rectMode(CORNER);
-            noFill();
-            stroke(255);
-            rect(width/2f - recSize / 2f, height / 2f - recSize / 2f, recSize, recSize);
-        }
-        imageMode(CORNER);
-        image(pg, 0, 0, width, height);
         gui.themePicker();
         gui.draw();
     }
@@ -94,10 +96,10 @@ public class SakuraSnow extends PApplet {
     }
 
     private void drawMainBackground() {
-        fill(gui.colorPicker("main background", color(0)).hex);
-        noStroke();
-        rectMode(CORNER);
-        rect(0,0,width,height);
+        pg.fill(gui.colorPicker("main background", color(0)).hex);
+        pg.noStroke();
+        pg.rectMode(CORNER);
+        pg.rect(0,0,width,height);
     }
 
     class Leaf{
