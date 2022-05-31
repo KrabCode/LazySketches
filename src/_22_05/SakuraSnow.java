@@ -65,6 +65,14 @@ public class SakuraSnow extends PApplet {
             isRec = false;
             recFrame = 1;
         }
+        if(gui.toggle("record/show rectangle")){
+            rectMode(CORNER);
+            noFill();
+            stroke(255);
+            rect(width/2f - recSize / 2f, height / 2f - recSize / 2f, recSize, recSize);
+        }
+        imageMode(CORNER);
+        image(pg, 0, 0, width, height);
         gui.themePicker();
         gui.draw();
     }
@@ -110,6 +118,7 @@ public class SakuraSnow extends PApplet {
         float hueModifier = randomGaussian();
         float satModifier = randomGaussian();
         float brModifier = randomGaussian();
+        private int lifeLength;
 
         Leaf(){
             float x = gui.slider("leaf/spawn/x", 0);
