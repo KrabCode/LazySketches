@@ -1,0 +1,554 @@
+{
+  "children": [
+    {
+      "children": [
+        {
+          "className": "ButtonNode",
+          "path": "/saves/new save",
+          "type": "VALUE_NODE"
+        },
+        {
+          "className": "StateListItemNode",
+          "path": "/saves/2022-04-30_08.57.51",
+          "type": "VALUE_NODE"
+        },
+        {
+          "className": "StateListItemNode",
+          "path": "/saves/2022-04-30_09.18.22",
+          "type": "VALUE_NODE"
+        },
+        {
+          "className": "StateListItemNode",
+          "path": "/saves/2022-04-30_16.32.45",
+          "type": "VALUE_NODE"
+        },
+        {
+          "className": "StateListItemNode",
+          "path": "/saves/2022-04-30_16.35.25",
+          "type": "VALUE_NODE"
+        },
+        {
+          "className": "StateListItemNode",
+          "path": "/saves/2022-04-30_16.37.28",
+          "type": "VALUE_NODE"
+        },
+        {
+          "className": "StateListItemNode",
+          "path": "/saves/2022-05-04_21.07.00",
+          "type": "VALUE_NODE"
+        }
+      ],
+      "className": "StateListFolder",
+      "path": "/saves",
+      "type": "FOLDER"
+    },
+    {
+      "valueFloat": 1.0,
+      "valueFloatPrecision": 0.1,
+      "className": "SliderNode",
+      "path": "time speed",
+      "type": "VALUE_NODE"
+    },
+    {
+      "hexString": "FF0A0A1E",
+      "children": [
+        {
+          "className": "ColorPreviewNode",
+          "path": "background/preview",
+          "type": "VALUE_NODE"
+        },
+        {
+          "valueFloat": 0.6666667,
+          "valueFloatPrecision": 0.01,
+          "className": "HueNode",
+          "path": "background/hue",
+          "type": "VALUE_NODE"
+        },
+        {
+          "valueFloat": 0.6666667,
+          "valueFloatPrecision": 0.01,
+          "className": "SaturationNode",
+          "path": "background/sat",
+          "type": "VALUE_NODE"
+        },
+        {
+          "valueFloat": 0.11764706,
+          "valueFloatPrecision": 0.01,
+          "className": "BrightnessNode",
+          "path": "background/br",
+          "type": "VALUE_NODE"
+        },
+        {
+          "valueFloat": 1.0,
+          "valueFloatPrecision": 0.01,
+          "className": "AlphaNode",
+          "path": "background/a",
+          "type": "VALUE_NODE"
+        },
+        {
+          "className": "HexNode",
+          "path": "background/hex",
+          "type": "VALUE_NODE"
+        }
+      ],
+      "className": "ColorPickerFolder",
+      "path": "background",
+      "type": "FOLDER"
+    },
+    {
+      "children": [
+        {
+          "valueFloat": 689.50024,
+          "valueFloatPrecision": 0.1,
+          "className": "SliderNode",
+          "path": "leaf/x",
+          "type": "VALUE_NODE"
+        },
+        {
+          "valueFloat": 531.39935,
+          "valueFloatPrecision": 1.0,
+          "className": "SliderNode",
+          "path": "leaf/y",
+          "type": "VALUE_NODE"
+        },
+        {
+          "hexString": "00010101",
+          "children": [
+            {
+              "className": "ColorPreviewNode",
+              "path": "leaf/stroke/preview",
+              "type": "VALUE_NODE"
+            },
+            {
+              "valueFloat": 0.0,
+              "valueFloatPrecision": 0.01,
+              "className": "HueNode",
+              "path": "leaf/stroke/hue",
+              "type": "VALUE_NODE"
+            },
+            {
+              "valueFloat": 0.0,
+              "valueFloatPrecision": 0.01,
+              "className": "SaturationNode",
+              "path": "leaf/stroke/sat",
+              "type": "VALUE_NODE"
+            },
+            {
+              "valueFloat": 0.003921569,
+              "valueFloatPrecision": 0.01,
+              "className": "BrightnessNode",
+              "path": "leaf/stroke/br",
+              "type": "VALUE_NODE"
+            },
+            {
+              "valueFloat": 0.0,
+              "valueFloatPrecision": 0.01,
+              "className": "AlphaNode",
+              "path": "leaf/stroke/a",
+              "type": "VALUE_NODE"
+            },
+            {
+              "className": "HexNode",
+              "path": "leaf/stroke/hex",
+              "type": "VALUE_NODE"
+            }
+          ],
+          "className": "ColorPickerFolder",
+          "path": "leaf/stroke",
+          "type": "FOLDER"
+        },
+        {
+          "hexString": "1DFCFCFC",
+          "children": [
+            {
+              "className": "ColorPreviewNode",
+              "path": "leaf/fill/preview",
+              "type": "VALUE_NODE"
+            },
+            {
+              "valueFloat": 0.0,
+              "valueFloatPrecision": 0.01,
+              "className": "HueNode",
+              "path": "leaf/fill/hue",
+              "type": "VALUE_NODE"
+            },
+            {
+              "valueFloat": 0.0,
+              "valueFloatPrecision": 0.01,
+              "className": "SaturationNode",
+              "path": "leaf/fill/sat",
+              "type": "VALUE_NODE"
+            },
+            {
+              "valueFloat": 0.9882353,
+              "valueFloatPrecision": 0.01,
+              "className": "BrightnessNode",
+              "path": "leaf/fill/br",
+              "type": "VALUE_NODE"
+            },
+            {
+              "valueFloat": 0.11372549,
+              "valueFloatPrecision": 0.001,
+              "className": "AlphaNode",
+              "path": "leaf/fill/a",
+              "type": "VALUE_NODE"
+            },
+            {
+              "className": "HexNode",
+              "path": "leaf/fill/hex",
+              "type": "VALUE_NODE"
+            }
+          ],
+          "className": "ColorPickerFolder",
+          "path": "leaf/fill",
+          "type": "FOLDER"
+        },
+        {
+          "valueFloat": 5.8998055,
+          "valueFloatPrecision": 0.1,
+          "className": "SliderNode",
+          "path": "leaf/size",
+          "type": "VALUE_NODE"
+        },
+        {
+          "children": [
+            {
+              "valueBoolean": false,
+              "className": "StringPickerItem",
+              "path": "leaf/shape/rect",
+              "type": "VALUE_NODE"
+            },
+            {
+              "valueBoolean": true,
+              "className": "StringPickerItem",
+              "path": "leaf/shape/ellipse",
+              "type": "VALUE_NODE"
+            }
+          ],
+          "className": "StringPickerFolder",
+          "path": "leaf/shape",
+          "type": "FOLDER"
+        }
+      ],
+      "className": "NodeFolder",
+      "path": "leaf",
+      "type": "FOLDER"
+    },
+    {
+      "children": [
+        {
+          "valueFloat": 2.7000003,
+          "valueFloatPrecision": 0.1,
+          "className": "SliderIntNode",
+          "path": "fractal/step count",
+          "type": "VALUE_NODE"
+        },
+        {
+          "valueFloat": 7.7999997,
+          "valueFloatPrecision": 0.1,
+          "className": "SliderIntNode",
+          "path": "fractal/gen count",
+          "type": "VALUE_NODE"
+        },
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "valueFloat": 6.4400153,
+                  "valueFloatPrecision": 0.01,
+                  "className": "SliderNode",
+                  "path": "fractal/steps/0/rotate",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "valueFloat": 0.44998744,
+                  "valueFloatPrecision": 10.0,
+                  "className": "SliderNode",
+                  "path": "fractal/steps/0/x",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "valueFloat": 11.300006,
+                  "valueFloatPrecision": 0.1,
+                  "className": "SliderNode",
+                  "path": "fractal/steps/0/y",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "valueFloat": 0.0,
+                  "valueFloatPrecision": 0.1,
+                  "className": "SliderNode",
+                  "path": "fractal/steps/0/mag",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "valueFloat": 1.0,
+                  "valueFloatPrecision": 0.1,
+                  "className": "SliderNode",
+                  "path": "fractal/steps/0/speed",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "valueFloat": 0.99999976,
+                  "valueFloatPrecision": 0.01,
+                  "className": "SliderNode",
+                  "path": "fractal/steps/0/scale",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "hexString": "FF022AFF",
+                  "children": [
+                    {
+                      "className": "ColorPreviewNode",
+                      "path": "fractal/steps/0/color/preview",
+                      "type": "VALUE_NODE"
+                    },
+                    {
+                      "valueFloat": 0.6403162,
+                      "valueFloatPrecision": 0.01,
+                      "className": "HueNode",
+                      "path": "fractal/steps/0/color/hue",
+                      "type": "VALUE_NODE"
+                    },
+                    {
+                      "valueFloat": 0.99215686,
+                      "valueFloatPrecision": 0.01,
+                      "className": "SaturationNode",
+                      "path": "fractal/steps/0/color/sat",
+                      "type": "VALUE_NODE"
+                    },
+                    {
+                      "valueFloat": 1.0,
+                      "valueFloatPrecision": 0.01,
+                      "className": "BrightnessNode",
+                      "path": "fractal/steps/0/color/br",
+                      "type": "VALUE_NODE"
+                    },
+                    {
+                      "valueFloat": 1.0,
+                      "valueFloatPrecision": 0.01,
+                      "className": "AlphaNode",
+                      "path": "fractal/steps/0/color/a",
+                      "type": "VALUE_NODE"
+                    },
+                    {
+                      "className": "HexNode",
+                      "path": "fractal/steps/0/color/hex",
+                      "type": "VALUE_NODE"
+                    }
+                  ],
+                  "className": "ColorPickerFolder",
+                  "path": "fractal/steps/0/color",
+                  "type": "FOLDER"
+                }
+              ],
+              "className": "NodeFolder",
+              "path": "fractal/steps/0",
+              "type": "FOLDER"
+            },
+            {
+              "children": [
+                {
+                  "valueFloat": 3.6860027,
+                  "valueFloatPrecision": 0.001,
+                  "className": "SliderNode",
+                  "path": "fractal/steps/1/rotate",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "valueFloat": 117.599976,
+                  "valueFloatPrecision": 1.0,
+                  "className": "SliderNode",
+                  "path": "fractal/steps/1/x",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "valueFloat": 19.400024,
+                  "valueFloatPrecision": 1.0,
+                  "className": "SliderNode",
+                  "path": "fractal/steps/1/y",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "valueFloat": 0.0,
+                  "valueFloatPrecision": 0.1,
+                  "className": "SliderNode",
+                  "path": "fractal/steps/1/mag",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "valueFloat": 1.0,
+                  "valueFloatPrecision": 0.1,
+                  "className": "SliderNode",
+                  "path": "fractal/steps/1/speed",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "valueFloat": 1.0900009,
+                  "valueFloatPrecision": 0.01,
+                  "className": "SliderNode",
+                  "path": "fractal/steps/1/scale",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "hexString": "FF00FFE0",
+                  "children": [
+                    {
+                      "className": "ColorPreviewNode",
+                      "path": "fractal/steps/1/color/preview",
+                      "type": "VALUE_NODE"
+                    },
+                    {
+                      "valueFloat": 0.47973856,
+                      "valueFloatPrecision": 0.01,
+                      "className": "HueNode",
+                      "path": "fractal/steps/1/color/hue",
+                      "type": "VALUE_NODE"
+                    },
+                    {
+                      "valueFloat": 1.0,
+                      "valueFloatPrecision": 0.01,
+                      "className": "SaturationNode",
+                      "path": "fractal/steps/1/color/sat",
+                      "type": "VALUE_NODE"
+                    },
+                    {
+                      "valueFloat": 1.0,
+                      "valueFloatPrecision": 0.01,
+                      "className": "BrightnessNode",
+                      "path": "fractal/steps/1/color/br",
+                      "type": "VALUE_NODE"
+                    },
+                    {
+                      "valueFloat": 1.0,
+                      "valueFloatPrecision": 0.01,
+                      "className": "AlphaNode",
+                      "path": "fractal/steps/1/color/a",
+                      "type": "VALUE_NODE"
+                    },
+                    {
+                      "className": "HexNode",
+                      "path": "fractal/steps/1/color/hex",
+                      "type": "VALUE_NODE"
+                    }
+                  ],
+                  "className": "ColorPickerFolder",
+                  "path": "fractal/steps/1/color",
+                  "type": "FOLDER"
+                }
+              ],
+              "className": "NodeFolder",
+              "path": "fractal/steps/1",
+              "type": "FOLDER"
+            },
+            {
+              "children": [
+                {
+                  "valueFloat": 5.899998,
+                  "valueFloatPrecision": 0.1,
+                  "className": "SliderNode",
+                  "path": "fractal/steps/2/rotate",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "valueFloat": -29.300005,
+                  "valueFloatPrecision": 10.0,
+                  "className": "SliderNode",
+                  "path": "fractal/steps/2/x",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "valueFloat": 56.29988,
+                  "valueFloatPrecision": 1.0,
+                  "className": "SliderNode",
+                  "path": "fractal/steps/2/y",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "valueFloat": 0.0,
+                  "valueFloatPrecision": 0.1,
+                  "className": "SliderNode",
+                  "path": "fractal/steps/2/mag",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "valueFloat": 1.0,
+                  "valueFloatPrecision": 0.1,
+                  "className": "SliderNode",
+                  "path": "fractal/steps/2/speed",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "valueFloat": 0.65000093,
+                  "valueFloatPrecision": 0.01,
+                  "className": "SliderNode",
+                  "path": "fractal/steps/2/scale",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "hexString": "FFAAE5FF",
+                  "children": [
+                    {
+                      "className": "ColorPreviewNode",
+                      "path": "fractal/steps/2/color/preview",
+                      "type": "VALUE_NODE"
+                    },
+                    {
+                      "valueFloat": 0.5509804,
+                      "valueFloatPrecision": 0.01,
+                      "className": "HueNode",
+                      "path": "fractal/steps/2/color/hue",
+                      "type": "VALUE_NODE"
+                    },
+                    {
+                      "valueFloat": 0.33333334,
+                      "valueFloatPrecision": 0.01,
+                      "className": "SaturationNode",
+                      "path": "fractal/steps/2/color/sat",
+                      "type": "VALUE_NODE"
+                    },
+                    {
+                      "valueFloat": 1.0,
+                      "valueFloatPrecision": 0.01,
+                      "className": "BrightnessNode",
+                      "path": "fractal/steps/2/color/br",
+                      "type": "VALUE_NODE"
+                    },
+                    {
+                      "valueFloat": 1.0,
+                      "valueFloatPrecision": 0.01,
+                      "className": "AlphaNode",
+                      "path": "fractal/steps/2/color/a",
+                      "type": "VALUE_NODE"
+                    },
+                    {
+                      "className": "HexNode",
+                      "path": "fractal/steps/2/color/hex",
+                      "type": "VALUE_NODE"
+                    }
+                  ],
+                  "className": "ColorPickerFolder",
+                  "path": "fractal/steps/2/color",
+                  "type": "FOLDER"
+                }
+              ],
+              "className": "NodeFolder",
+              "path": "fractal/steps/2",
+              "type": "FOLDER"
+            }
+          ],
+          "className": "NodeFolder",
+          "path": "fractal/steps",
+          "type": "FOLDER"
+        }
+      ],
+      "className": "NodeFolder",
+      "path": "fractal",
+      "type": "FOLDER"
+    }
+  ],
+  "className": "NodeFolder",
+  "path": "",
+  "type": "FOLDER"
+}

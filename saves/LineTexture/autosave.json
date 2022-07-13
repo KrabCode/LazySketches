@@ -1,0 +1,542 @@
+{
+  "children": [
+    {
+      "children": [
+        {
+          "className": "ButtonNode",
+          "path": "/saves/new save",
+          "type": "VALUE_NODE"
+        },
+        {
+          "className": "StateListItemNode",
+          "path": "/saves/autosave",
+          "type": "VALUE_NODE"
+        }
+      ],
+      "className": "StateListFolder",
+      "path": "/saves",
+      "type": "FOLDER"
+    },
+    {
+      "valueBoolean": false,
+      "className": "ToggleNode",
+      "path": "update",
+      "type": "VALUE_NODE"
+    },
+    {
+      "hexString": "FF313131",
+      "children": [
+        {
+          "className": "ColorPreviewNode",
+          "path": "background/preview",
+          "type": "VALUE_NODE"
+        },
+        {
+          "valueFloat": 0.0,
+          "valueFloatPrecision": 0.01,
+          "className": "HueNode",
+          "path": "background/hue",
+          "type": "VALUE_NODE"
+        },
+        {
+          "valueFloat": 0.0,
+          "valueFloatPrecision": 0.01,
+          "className": "SaturationNode",
+          "path": "background/sat",
+          "type": "VALUE_NODE"
+        },
+        {
+          "valueFloat": 0.1980394,
+          "valueFloatPrecision": 0.001,
+          "className": "BrightnessNode",
+          "path": "background/br",
+          "type": "VALUE_NODE"
+        },
+        {
+          "valueFloat": 1.0,
+          "valueFloatPrecision": 0.01,
+          "className": "AlphaNode",
+          "path": "background/a",
+          "type": "VALUE_NODE"
+        },
+        {
+          "className": "HexNode",
+          "path": "background/hex",
+          "type": "VALUE_NODE"
+        }
+      ],
+      "className": "ColorPickerFolder",
+      "path": "background",
+      "type": "FOLDER"
+    },
+    {
+      "valueFloat": 19.200024,
+      "valueFloatPrecision": 0.1,
+      "className": "SliderNode",
+      "path": "scale",
+      "type": "VALUE_NODE"
+    },
+    {
+      "children": [
+        {
+          "hexString": "3D010101",
+          "children": [
+            {
+              "className": "ColorPreviewNode",
+              "path": "rect/stroke/preview",
+              "type": "VALUE_NODE"
+            },
+            {
+              "valueFloat": 0.0,
+              "valueFloatPrecision": 0.01,
+              "className": "HueNode",
+              "path": "rect/stroke/hue",
+              "type": "VALUE_NODE"
+            },
+            {
+              "valueFloat": 0.0,
+              "valueFloatPrecision": 0.01,
+              "className": "SaturationNode",
+              "path": "rect/stroke/sat",
+              "type": "VALUE_NODE"
+            },
+            {
+              "valueFloat": 0.003921569,
+              "valueFloatPrecision": 0.01,
+              "className": "BrightnessNode",
+              "path": "rect/stroke/br",
+              "type": "VALUE_NODE"
+            },
+            {
+              "valueFloat": 0.24000072,
+              "valueFloatPrecision": 0.01,
+              "className": "AlphaNode",
+              "path": "rect/stroke/a",
+              "type": "VALUE_NODE"
+            },
+            {
+              "className": "HexNode",
+              "path": "rect/stroke/hex",
+              "type": "VALUE_NODE"
+            }
+          ],
+          "className": "ColorPickerFolder",
+          "path": "rect/stroke",
+          "type": "FOLDER"
+        },
+        {
+          "hexString": "FFFF0000",
+          "children": [
+            {
+              "className": "ColorPreviewNode",
+              "path": "rect/fill/preview",
+              "type": "VALUE_NODE"
+            },
+            {
+              "valueFloat": 0.0,
+              "valueFloatPrecision": 0.01,
+              "className": "HueNode",
+              "path": "rect/fill/hue",
+              "type": "VALUE_NODE"
+            },
+            {
+              "valueFloat": 1.0,
+              "valueFloatPrecision": 0.01,
+              "className": "SaturationNode",
+              "path": "rect/fill/sat",
+              "type": "VALUE_NODE"
+            },
+            {
+              "valueFloat": 1.0,
+              "valueFloatPrecision": 0.01,
+              "className": "BrightnessNode",
+              "path": "rect/fill/br",
+              "type": "VALUE_NODE"
+            },
+            {
+              "valueFloat": 1.0,
+              "valueFloatPrecision": 0.01,
+              "className": "AlphaNode",
+              "path": "rect/fill/a",
+              "type": "VALUE_NODE"
+            },
+            {
+              "className": "HexNode",
+              "path": "rect/fill/hex",
+              "type": "VALUE_NODE"
+            }
+          ],
+          "className": "ColorPickerFolder",
+          "path": "rect/fill",
+          "type": "FOLDER"
+        },
+        {
+          "valueFloat": 235.09885,
+          "valueFloatPrecision": 0.001,
+          "className": "SliderNode",
+          "path": "rect/weight",
+          "type": "VALUE_NODE"
+        }
+      ],
+      "className": "NodeFolder",
+      "path": "rect",
+      "type": "FOLDER"
+    },
+    {
+      "children": [
+        {
+          "hexString": "B5000000",
+          "children": [
+            {
+              "className": "ColorPreviewNode",
+              "path": "texture/stroke/preview",
+              "type": "VALUE_NODE"
+            },
+            {
+              "valueFloat": 0.75999975,
+              "valueFloatPrecision": 0.01,
+              "className": "HueNode",
+              "path": "texture/stroke/hue",
+              "type": "VALUE_NODE"
+            },
+            {
+              "valueFloat": 0.7600002,
+              "valueFloatPrecision": 0.01,
+              "className": "SaturationNode",
+              "path": "texture/stroke/sat",
+              "type": "VALUE_NODE"
+            },
+            {
+              "valueFloat": 0.0,
+              "valueFloatPrecision": 0.01,
+              "className": "BrightnessNode",
+              "path": "texture/stroke/br",
+              "type": "VALUE_NODE"
+            },
+            {
+              "valueFloat": 0.7099998,
+              "valueFloatPrecision": 0.01,
+              "className": "AlphaNode",
+              "path": "texture/stroke/a",
+              "type": "VALUE_NODE"
+            },
+            {
+              "className": "HexNode",
+              "path": "texture/stroke/hex",
+              "type": "VALUE_NODE"
+            }
+          ],
+          "className": "ColorPickerFolder",
+          "path": "texture/stroke",
+          "type": "FOLDER"
+        },
+        {
+          "valueFloat": 0.6000023,
+          "valueFloatPrecision": 0.1,
+          "className": "SliderNode",
+          "path": "texture/weight",
+          "type": "VALUE_NODE"
+        },
+        {
+          "valueFloat": 1348.2012,
+          "valueFloatPrecision": 100.0,
+          "className": "SliderIntNode",
+          "path": "texture/count",
+          "type": "VALUE_NODE"
+        }
+      ],
+      "className": "NodeFolder",
+      "path": "texture",
+      "type": "FOLDER"
+    },
+    {
+      "className": "ButtonNode",
+      "path": "capture",
+      "type": "VALUE_NODE"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "valueBoolean": true,
+              "className": "StringPickerItem",
+              "path": "/themes/preset/dark",
+              "type": "VALUE_NODE"
+            },
+            {
+              "valueBoolean": false,
+              "className": "StringPickerItem",
+              "path": "/themes/preset/light",
+              "type": "VALUE_NODE"
+            },
+            {
+              "valueBoolean": false,
+              "className": "StringPickerItem",
+              "path": "/themes/preset/pink",
+              "type": "VALUE_NODE"
+            },
+            {
+              "valueBoolean": false,
+              "className": "StringPickerItem",
+              "path": "/themes/preset/blue",
+              "type": "VALUE_NODE"
+            },
+            {
+              "valueBoolean": false,
+              "className": "StringPickerItem",
+              "path": "/themes/preset/custom",
+              "type": "VALUE_NODE"
+            }
+          ],
+          "className": "StringPickerFolder",
+          "path": "/themes/preset",
+          "type": "FOLDER"
+        },
+        {
+          "children": [
+            {
+              "hexString": "FFFFFFFF",
+              "children": [
+                {
+                  "className": "ColorPreviewNode",
+                  "path": "/themes/custom/focus foreground/preview",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "valueFloat": 0.0,
+                  "valueFloatPrecision": 0.01,
+                  "className": "HueNode",
+                  "path": "/themes/custom/focus foreground/hue",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "valueFloat": 0.0,
+                  "valueFloatPrecision": 0.01,
+                  "className": "SaturationNode",
+                  "path": "/themes/custom/focus foreground/sat",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "valueFloat": 1.0,
+                  "valueFloatPrecision": 0.01,
+                  "className": "BrightnessNode",
+                  "path": "/themes/custom/focus foreground/br",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "valueFloat": 1.0,
+                  "valueFloatPrecision": 0.01,
+                  "className": "AlphaNode",
+                  "path": "/themes/custom/focus foreground/a",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "className": "HexNode",
+                  "path": "/themes/custom/focus foreground/hex",
+                  "type": "VALUE_NODE"
+                }
+              ],
+              "className": "ColorPickerFolder",
+              "path": "/themes/custom/focus foreground",
+              "type": "FOLDER"
+            },
+            {
+              "hexString": "FF2F2F2F",
+              "children": [
+                {
+                  "className": "ColorPreviewNode",
+                  "path": "/themes/custom/focus background/preview",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "valueFloat": 0.0,
+                  "valueFloatPrecision": 0.01,
+                  "className": "HueNode",
+                  "path": "/themes/custom/focus background/hue",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "valueFloat": 0.0,
+                  "valueFloatPrecision": 0.01,
+                  "className": "SaturationNode",
+                  "path": "/themes/custom/focus background/sat",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "valueFloat": 0.18431373,
+                  "valueFloatPrecision": 0.01,
+                  "className": "BrightnessNode",
+                  "path": "/themes/custom/focus background/br",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "valueFloat": 1.0,
+                  "valueFloatPrecision": 0.01,
+                  "className": "AlphaNode",
+                  "path": "/themes/custom/focus background/a",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "className": "HexNode",
+                  "path": "/themes/custom/focus background/hex",
+                  "type": "VALUE_NODE"
+                }
+              ],
+              "className": "ColorPickerFolder",
+              "path": "/themes/custom/focus background",
+              "type": "FOLDER"
+            },
+            {
+              "hexString": "FFB0B0B0",
+              "children": [
+                {
+                  "className": "ColorPreviewNode",
+                  "path": "/themes/custom/normal foreground/preview",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "valueFloat": 0.0,
+                  "valueFloatPrecision": 0.01,
+                  "className": "HueNode",
+                  "path": "/themes/custom/normal foreground/hue",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "valueFloat": 0.0,
+                  "valueFloatPrecision": 0.01,
+                  "className": "SaturationNode",
+                  "path": "/themes/custom/normal foreground/sat",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "valueFloat": 0.6901961,
+                  "valueFloatPrecision": 0.01,
+                  "className": "BrightnessNode",
+                  "path": "/themes/custom/normal foreground/br",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "valueFloat": 1.0,
+                  "valueFloatPrecision": 0.01,
+                  "className": "AlphaNode",
+                  "path": "/themes/custom/normal foreground/a",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "className": "HexNode",
+                  "path": "/themes/custom/normal foreground/hex",
+                  "type": "VALUE_NODE"
+                }
+              ],
+              "className": "ColorPickerFolder",
+              "path": "/themes/custom/normal foreground",
+              "type": "FOLDER"
+            },
+            {
+              "hexString": "FF0B0B0B",
+              "children": [
+                {
+                  "className": "ColorPreviewNode",
+                  "path": "/themes/custom/normal background/preview",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "valueFloat": 0.0,
+                  "valueFloatPrecision": 0.01,
+                  "className": "HueNode",
+                  "path": "/themes/custom/normal background/hue",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "valueFloat": 0.0,
+                  "valueFloatPrecision": 0.01,
+                  "className": "SaturationNode",
+                  "path": "/themes/custom/normal background/sat",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "valueFloat": 0.043137256,
+                  "valueFloatPrecision": 0.01,
+                  "className": "BrightnessNode",
+                  "path": "/themes/custom/normal background/br",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "valueFloat": 1.0,
+                  "valueFloatPrecision": 0.01,
+                  "className": "AlphaNode",
+                  "path": "/themes/custom/normal background/a",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "className": "HexNode",
+                  "path": "/themes/custom/normal background/hex",
+                  "type": "VALUE_NODE"
+                }
+              ],
+              "className": "ColorPickerFolder",
+              "path": "/themes/custom/normal background",
+              "type": "FOLDER"
+            },
+            {
+              "hexString": "FF787878",
+              "children": [
+                {
+                  "className": "ColorPreviewNode",
+                  "path": "/themes/custom/window border/preview",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "valueFloat": 0.0,
+                  "valueFloatPrecision": 0.01,
+                  "className": "HueNode",
+                  "path": "/themes/custom/window border/hue",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "valueFloat": 0.0,
+                  "valueFloatPrecision": 0.01,
+                  "className": "SaturationNode",
+                  "path": "/themes/custom/window border/sat",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "valueFloat": 0.47058824,
+                  "valueFloatPrecision": 0.01,
+                  "className": "BrightnessNode",
+                  "path": "/themes/custom/window border/br",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "valueFloat": 1.0,
+                  "valueFloatPrecision": 0.01,
+                  "className": "AlphaNode",
+                  "path": "/themes/custom/window border/a",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "className": "HexNode",
+                  "path": "/themes/custom/window border/hex",
+                  "type": "VALUE_NODE"
+                }
+              ],
+              "className": "ColorPickerFolder",
+              "path": "/themes/custom/window border",
+              "type": "FOLDER"
+            }
+          ],
+          "className": "NodeFolder",
+          "path": "/themes/custom",
+          "type": "FOLDER"
+        }
+      ],
+      "className": "NodeFolder",
+      "path": "/themes",
+      "type": "FOLDER"
+    }
+  ],
+  "className": "NodeFolder",
+  "path": "",
+  "type": "FOLDER"
+}

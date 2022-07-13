@@ -35,7 +35,7 @@ public class LineTexture extends PApplet {
             pg.endDraw();
         }
         image(pg, 0, 0);
-        if(gui.button("capture") || key == 's'){
+        if (gui.button("capture") || key == 's') {
             saveFrame("out/LineTexture/####.jpg");
         }
         gui.themePicker();
@@ -67,46 +67,46 @@ public class LineTexture extends PApplet {
     }
 
     private PVector getRandomPosOnRectSide(float x, float y, float w, float h, int sideIndex) {
-        switch(sideIndex){
-            case 0:{ // top
-                return new PVector(lerp(x,x+w,random(1)), y);
+
+        PVector result = new PVector();
+        switch (sideIndex) {
+            case 0: { // top
+                result = new PVector(lerp(x, x + w, random(1)), y);
+                break;
             }
-            case 1:{ // right
-                return new PVector(x+w, lerp(y, y+h, random(1)));
+            case 1: { // right
+                result = new PVector(x + w, lerp(y, y + h, random(1)));
+                break;
             }
-            case 2:{ // bottom
-                return new PVector(lerp(x,x+w,random(1)), y+h);
+            case 2: { // bottom
+                result = new PVector(lerp(x, x + w, random(1)), y + h);
+                break;
             }
-            case 3:{ // left
-                return new PVector(x, lerp(y, y+h, random(1)));
+            case 3: { // left
+                result = new PVector(x, lerp(y, y + h, random(1)));
+                break;
             }
         }
-        return new PVector();
+
+        return result;
     }
 
     private void drawRectangles() {
-        int xCount = gui.sliderInt("rect/count x", 10);
-        int yCount = gui.sliderInt("rect/count y", 10);
-        float sizeX = width / (float) xCount;
-        float sizeY = height / (float) yCount;
+        float sizeX = width;
+        float sizeY = height;
         pg.scale(gui.slider("scale", 1));
-        for (int xi = 0; xi < xCount; xi++) {
-            for (int yi = 0; yi < xCount; yi++) {
-                float x = map(xi, 0, xCount - 1, -width / 2f, width / 2f);
-                float y = map(yi, 0, yCount - 1, -height / 2f, height / 2f);
-                pg.stroke(gui.colorPicker("rect/stroke").hex);
-                pg.fill(gui.colorPicker("rect/fill").hex);
-                pg.strokeWeight(gui.slider("rect/weight", 1.99f));
-                pg.rect(x, y, sizeX, sizeY);
-                drawLineTexture(x-sizeX/2, y-sizeY/2, sizeX, sizeY);
-            }
-        }
+        pg.stroke(gui.colorPicker("rect/stroke").hex);
+        pg.fill(gui.colorPicker("rect/fill").hex);
+        pg.strokeWeight(gui.slider("rect/weight", 1.99f));
+        pg.rect(0, 0, sizeX, sizeY);
+        drawLineTexture(-sizeX / 2, -sizeY / 2, sizeX, sizeY);
+
     }
 
-    private void drawBackground() {
+private void drawBackground(){
         pg.fill(gui.colorPicker("background").hex);
         pg.noStroke();
         pg.rectMode(CORNER);
-        pg.rect(0, 0, width, height);
-    }
-}
+        pg.rect(0,0,width,height);
+        }
+        }

@@ -1,0 +1,85 @@
+{
+  "children": [
+    {
+      "children": [
+        {
+          "className": "ButtonNode",
+          "path": "/saved/save",
+          "type": "VALUE_ROW"
+        },
+        {
+          "className": "OpenFolderNode",
+          "path": "/saved/open folder",
+          "type": "TRANSIENT_ROW"
+        }
+      ],
+      "className": "StateListFolderNode",
+      "path": "/saved",
+      "type": "FOLDER_ROW"
+    },
+    {
+      "children": [
+        {
+          "filePath": "https://www.industrialempathy.com/img/remote/ZiClJf-1920w.jpg",
+          "className": "ImagePickerFilePathNode",
+          "path": "image/imagePath",
+          "type": "VALUE_ROW"
+        },
+        {
+          "valueBoolean": true,
+          "className": "ToggleNode",
+          "path": "image/show",
+          "type": "VALUE_ROW"
+        },
+        {
+          "valueFloat": 0.0,
+          "valueFloatPrecision": 0.1,
+          "className": "SliderNode",
+          "path": "image/x",
+          "type": "VALUE_ROW"
+        },
+        {
+          "valueFloat": 0.0,
+          "valueFloatPrecision": 0.1,
+          "className": "SliderNode",
+          "path": "image/y",
+          "type": "VALUE_ROW"
+        },
+        {
+          "valueFloat": 1.0,
+          "valueFloatPrecision": 0.1,
+          "className": "SliderNode",
+          "path": "image/scale",
+          "type": "VALUE_ROW"
+        }
+      ],
+      "className": "ImagePickerFolderNode",
+      "path": "image",
+      "type": "FOLDER_ROW"
+    },
+    {
+      "children": [
+        {
+          "valueFloat": 4.0,
+          "valueFloatPrecision": 0.1,
+          "className": "SliderIntNode",
+          "path": "blur/passes",
+          "type": "VALUE_ROW"
+        },
+        {
+          "valueFloat": 1.0,
+          "valueFloatPrecision": 0.1,
+          "className": "SliderNode",
+          "path": "blur/distance",
+          "type": "VALUE_ROW"
+        }
+      ],
+      "className": "FolderNode",
+      "path": "blur",
+      "type": "FOLDER_ROW"
+    }
+  ],
+  "className": "FolderNode",
+  "path": "",
+  "type": "FOLDER_ROW"
+}

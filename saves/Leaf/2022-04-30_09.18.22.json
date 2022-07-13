@@ -1,0 +1,251 @@
+{
+  "children": [
+    {
+      "children": [
+        {
+          "className": "ButtonNode",
+          "path": "/saved/save",
+          "type": "VALUE_NODE"
+        },
+        {
+          "className": "OpenFolderNode",
+          "path": "/saved/open folder",
+          "type": "TRANSIENT_NODE"
+        },
+        {
+          "className": "StateItemNode",
+          "path": "/saved/- 2022-04-30_08.57.51",
+          "type": "VALUE_NODE"
+        }
+      ],
+      "className": "StateListFolder",
+      "path": "/saved",
+      "type": "FOLDER"
+    },
+    {
+      "hexString": "FF2D2D2D",
+      "children": [
+        {
+          "className": "ColorPreviewNode",
+          "path": "background/preview",
+          "type": "VALUE_NODE"
+        },
+        {
+          "valueFloat": 0.0,
+          "valueFloatPrecision": 0.01,
+          "className": "HueNode",
+          "path": "background/hue",
+          "type": "VALUE_NODE"
+        },
+        {
+          "valueFloat": 0.0,
+          "valueFloatPrecision": 0.01,
+          "className": "SaturationNode",
+          "path": "background/sat",
+          "type": "VALUE_NODE"
+        },
+        {
+          "valueFloat": 0.17784312,
+          "valueFloatPrecision": 0.01,
+          "className": "BrightnessNode",
+          "path": "background/br",
+          "type": "VALUE_NODE"
+        },
+        {
+          "valueFloat": 1.0,
+          "valueFloatPrecision": 0.01,
+          "className": "AlphaNode",
+          "path": "background/a",
+          "type": "VALUE_NODE"
+        },
+        {
+          "className": "HexNode",
+          "path": "background/hex",
+          "type": "VALUE_NODE"
+        }
+      ],
+      "className": "ColorPickerFolder",
+      "path": "background",
+      "type": "FOLDER"
+    },
+    {
+      "children": [
+        {
+          "valueFloat": 540.2999,
+          "valueFloatPrecision": 0.1,
+          "className": "SliderNode",
+          "path": "leaf/x",
+          "type": "VALUE_NODE"
+        },
+        {
+          "valueFloat": 563.39935,
+          "valueFloatPrecision": 1.0,
+          "className": "SliderNode",
+          "path": "leaf/y",
+          "type": "VALUE_NODE"
+        },
+        {
+          "hexString": "00010101",
+          "children": [
+            {
+              "className": "ColorPreviewNode",
+              "path": "leaf/stroke/preview",
+              "type": "VALUE_NODE"
+            },
+            {
+              "valueFloat": 0.0,
+              "valueFloatPrecision": 0.01,
+              "className": "HueNode",
+              "path": "leaf/stroke/hue",
+              "type": "VALUE_NODE"
+            },
+            {
+              "valueFloat": 0.0,
+              "valueFloatPrecision": 0.01,
+              "className": "SaturationNode",
+              "path": "leaf/stroke/sat",
+              "type": "VALUE_NODE"
+            },
+            {
+              "valueFloat": 0.0,
+              "valueFloatPrecision": 0.01,
+              "className": "BrightnessNode",
+              "path": "leaf/stroke/br",
+              "type": "VALUE_NODE"
+            },
+            {
+              "valueFloat": 0.0,
+              "valueFloatPrecision": 0.01,
+              "className": "AlphaNode",
+              "path": "leaf/stroke/a",
+              "type": "VALUE_NODE"
+            },
+            {
+              "className": "HexNode",
+              "path": "leaf/stroke/hex",
+              "type": "VALUE_NODE"
+            }
+          ],
+          "className": "ColorPickerFolder",
+          "path": "leaf/stroke",
+          "type": "FOLDER"
+        },
+        {
+          "hexString": "33FFFFFF",
+          "children": [
+            {
+              "className": "ColorPreviewNode",
+              "path": "leaf/fill/preview",
+              "type": "VALUE_NODE"
+            },
+            {
+              "valueFloat": 0.0,
+              "valueFloatPrecision": 0.01,
+              "className": "HueNode",
+              "path": "leaf/fill/hue",
+              "type": "VALUE_NODE"
+            },
+            {
+              "valueFloat": 0.0,
+              "valueFloatPrecision": 0.01,
+              "className": "SaturationNode",
+              "path": "leaf/fill/sat",
+              "type": "VALUE_NODE"
+            },
+            {
+              "valueFloat": 1.0,
+              "valueFloatPrecision": 0.001,
+              "className": "BrightnessNode",
+              "path": "leaf/fill/br",
+              "type": "VALUE_NODE"
+            },
+            {
+              "valueFloat": 0.20099983,
+              "valueFloatPrecision": 0.001,
+              "className": "AlphaNode",
+              "path": "leaf/fill/a",
+              "type": "VALUE_NODE"
+            },
+            {
+              "className": "HexNode",
+              "path": "leaf/fill/hex",
+              "type": "VALUE_NODE"
+            }
+          ],
+          "className": "ColorPickerFolder",
+          "path": "leaf/fill",
+          "type": "FOLDER"
+        },
+        {
+          "valueFloat": 438.3,
+          "valueFloatPrecision": 1.0,
+          "className": "SliderNode",
+          "path": "leaf/size",
+          "type": "VALUE_NODE"
+        }
+      ],
+      "className": "NodeFolder",
+      "path": "leaf",
+      "type": "FOLDER"
+    },
+    {
+      "children": [
+        {
+          "valueFloat": 2.4,
+          "valueFloatPrecision": 0.1,
+          "className": "SliderIntNode",
+          "path": "fractal/child count",
+          "type": "VALUE_NODE"
+        },
+        {
+          "valueFloat": 7.9999948,
+          "valueFloatPrecision": 0.1,
+          "className": "SliderIntNode",
+          "path": "fractal/gen count",
+          "type": "VALUE_NODE"
+        },
+        {
+          "valueFloat": 22.795643,
+          "valueFloatPrecision": 0.01,
+          "className": "SliderNode",
+          "path": "fractal/angle range",
+          "type": "VALUE_NODE"
+        },
+        {
+          "valueFloat": 0.50700456,
+          "valueFloatPrecision": 0.001,
+          "className": "SliderNode",
+          "path": "fractal/scaling",
+          "type": "VALUE_NODE"
+        },
+        {
+          "children": [
+            {
+              "valueFloat": 0.0,
+              "valueFloatPrecision": 0.1,
+              "className": "SliderNode",
+              "path": "fractal/translate/x",
+              "type": "VALUE_NODE"
+            },
+            {
+              "valueFloat": 195.29993,
+              "valueFloatPrecision": 1.0,
+              "className": "SliderNode",
+              "path": "fractal/translate/y",
+              "type": "VALUE_NODE"
+            }
+          ],
+          "className": "NodeFolder",
+          "path": "fractal/translate",
+          "type": "FOLDER"
+        }
+      ],
+      "className": "NodeFolder",
+      "path": "fractal",
+      "type": "FOLDER"
+    }
+  ],
+  "className": "NodeFolder",
+  "path": "",
+  "type": "FOLDER"
+}

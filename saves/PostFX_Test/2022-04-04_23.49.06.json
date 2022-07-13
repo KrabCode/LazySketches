@@ -1,0 +1,645 @@
+{
+  "children": [
+    {
+      "children": [
+        {
+          "className": "ButtonNode",
+          "path": "/saved/save",
+          "type": "VALUE_NODE"
+        },
+        {
+          "className": "OpenFolderNode",
+          "path": "/saved/open folder",
+          "type": "TRANSIENT_NODE"
+        },
+        {
+          "className": "StateItemNode",
+          "path": "/saved/- 2022-04-04_23.38.31",
+          "type": "VALUE_NODE"
+        },
+        {
+          "className": "StateItemNode",
+          "path": "/saved/- 2022-04-04_23.30.39",
+          "type": "VALUE_NODE"
+        },
+        {
+          "className": "StateItemNode",
+          "path": "/saved/- 2022-04-04_23.10.32",
+          "type": "VALUE_NODE"
+        }
+      ],
+      "className": "StateListFolder",
+      "path": "/saved",
+      "type": "FOLDER"
+    },
+    {
+      "hexString": "00010101",
+      "children": [
+        {
+          "className": "ColorPreviewNode",
+          "path": "background/preview",
+          "type": "VALUE_NODE"
+        },
+        {
+          "valueFloat": 0.0,
+          "valueFloatPrecision": 0.01,
+          "className": "HueNode",
+          "path": "background/hue",
+          "type": "VALUE_NODE"
+        },
+        {
+          "valueFloat": 0.0,
+          "valueFloatPrecision": 0.01,
+          "className": "SaturationNode",
+          "path": "background/sat",
+          "type": "VALUE_NODE"
+        },
+        {
+          "valueFloat": 0.0,
+          "valueFloatPrecision": 0.01,
+          "className": "BrightnessNode",
+          "path": "background/br",
+          "type": "VALUE_NODE"
+        },
+        {
+          "valueFloat": 0.0,
+          "valueFloatPrecision": 0.01,
+          "className": "AlphaNode",
+          "path": "background/a",
+          "type": "VALUE_NODE"
+        },
+        {
+          "className": "HexNode",
+          "path": "background/hex",
+          "type": "VALUE_NODE"
+        }
+      ],
+      "className": "ColorPickerFolder",
+      "path": "background",
+      "type": "FOLDER"
+    },
+    {
+      "children": [
+        {
+          "valueBoolean": true,
+          "className": "StringPickerItem",
+          "path": "blend mode/add",
+          "type": "VALUE_NODE"
+        },
+        {
+          "valueBoolean": false,
+          "className": "StringPickerItem",
+          "path": "blend mode/blend",
+          "type": "VALUE_NODE"
+        }
+      ],
+      "className": "StringPickerFolder",
+      "path": "blend mode",
+      "type": "FOLDER"
+    },
+    {
+      "children": [
+        {
+          "filePath": "https://upload.wikimedia.org/wikipedia/en/7/7d/Lenna_%28test_image%29.png",
+          "className": "ImagePickerFilePathNode",
+          "path": "image/imagePath",
+          "type": "VALUE_NODE"
+        },
+        {
+          "valueBoolean": true,
+          "className": "ToggleNode",
+          "path": "image/show",
+          "type": "VALUE_NODE"
+        },
+        {
+          "valueFloat": 8.538365E-6,
+          "valueFloatPrecision": 0.1,
+          "className": "SliderNode",
+          "path": "image/x",
+          "type": "VALUE_NODE"
+        },
+        {
+          "valueFloat": 0.0,
+          "valueFloatPrecision": 0.1,
+          "className": "SliderNode",
+          "path": "image/y",
+          "type": "VALUE_NODE"
+        },
+        {
+          "hexString": "A5FFFFFF",
+          "children": [
+            {
+              "className": "ColorPreviewNode",
+              "path": "image/tint/preview",
+              "type": "VALUE_NODE"
+            },
+            {
+              "valueFloat": 0.0,
+              "valueFloatPrecision": 0.01,
+              "className": "HueNode",
+              "path": "image/tint/hue",
+              "type": "VALUE_NODE"
+            },
+            {
+              "valueFloat": 0.0,
+              "valueFloatPrecision": 0.01,
+              "className": "SaturationNode",
+              "path": "image/tint/sat",
+              "type": "VALUE_NODE"
+            },
+            {
+              "valueFloat": 1.0,
+              "valueFloatPrecision": 0.01,
+              "className": "BrightnessNode",
+              "path": "image/tint/br",
+              "type": "VALUE_NODE"
+            },
+            {
+              "valueFloat": 0.6500003,
+              "valueFloatPrecision": 0.01,
+              "className": "AlphaNode",
+              "path": "image/tint/a",
+              "type": "VALUE_NODE"
+            },
+            {
+              "className": "HexNode",
+              "path": "image/tint/hex",
+              "type": "VALUE_NODE"
+            }
+          ],
+          "className": "ColorPickerFolder",
+          "path": "image/tint",
+          "type": "FOLDER"
+        },
+        {
+          "valueFloat": 1.9999999,
+          "valueFloatPrecision": 0.1,
+          "className": "SliderNode",
+          "path": "image/scale",
+          "type": "VALUE_NODE"
+        }
+      ],
+      "className": "ImagePickerFolder",
+      "path": "image",
+      "type": "FOLDER"
+    },
+    {
+      "children": [
+        {
+          "valueBoolean": true,
+          "className": "ToggleNode",
+          "path": "fx/enabled",
+          "type": "VALUE_NODE"
+        },
+        {
+          "children": [
+            {
+              "valueBoolean": false,
+              "className": "ToggleNode",
+              "path": "fx/blur/enabled",
+              "type": "VALUE_NODE"
+            },
+            {
+              "valueFloat": 6.400017,
+              "valueFloatPrecision": 1.0,
+              "className": "SliderIntNode",
+              "path": "fx/blur/size",
+              "type": "VALUE_NODE"
+            },
+            {
+              "valueFloat": 1.6999893,
+              "valueFloatPrecision": 0.1,
+              "className": "SliderNode",
+              "path": "fx/blur/sigma",
+              "type": "VALUE_NODE"
+            }
+          ],
+          "className": "NodeFolder",
+          "path": "fx/blur",
+          "type": "FOLDER"
+        },
+        {
+          "children": [
+            {
+              "valueBoolean": false,
+              "className": "ToggleNode",
+              "path": "fx/glitch/enabled",
+              "type": "VALUE_NODE"
+            },
+            {
+              "valueFloat": 0.32000625,
+              "valueFloatPrecision": 0.01,
+              "className": "SliderNode",
+              "path": "fx/glitch/strength",
+              "type": "VALUE_NODE"
+            }
+          ],
+          "className": "NodeFolder",
+          "path": "fx/glitch",
+          "type": "FOLDER"
+        },
+        {
+          "children": [
+            {
+              "valueBoolean": true,
+              "className": "ToggleNode",
+              "path": "fx/noise/enabled",
+              "type": "VALUE_NODE"
+            },
+            {
+              "valueFloat": 0.20000002,
+              "valueFloatPrecision": 0.1,
+              "className": "SliderNode",
+              "path": "fx/noise/amount",
+              "type": "VALUE_NODE"
+            },
+            {
+              "valueFloat": 0.089999855,
+              "valueFloatPrecision": 0.01,
+              "className": "SliderNode",
+              "path": "fx/noise/speed",
+              "type": "VALUE_NODE"
+            }
+          ],
+          "className": "NodeFolder",
+          "path": "fx/noise",
+          "type": "FOLDER"
+        },
+        {
+          "children": [
+            {
+              "valueBoolean": true,
+              "className": "ToggleNode",
+              "path": "fx/bright pass/enabled",
+              "type": "VALUE_NODE"
+            },
+            {
+              "valueFloat": 0.049999744,
+              "valueFloatPrecision": 0.01,
+              "className": "SliderNode",
+              "path": "fx/bright pass/threshold",
+              "type": "VALUE_NODE"
+            }
+          ],
+          "className": "NodeFolder",
+          "path": "fx/bright pass",
+          "type": "FOLDER"
+        },
+        {
+          "children": [
+            {
+              "valueBoolean": true,
+              "className": "ToggleNode",
+              "path": "fx/bloom/enabled",
+              "type": "VALUE_NODE"
+            },
+            {
+              "valueFloat": 0.29999992,
+              "valueFloatPrecision": 0.1,
+              "className": "SliderNode",
+              "path": "fx/bloom/threshold",
+              "type": "VALUE_NODE"
+            },
+            {
+              "valueFloat": 6.100001,
+              "valueFloatPrecision": 0.1,
+              "className": "SliderIntNode",
+              "path": "fx/bloom/blur size",
+              "type": "VALUE_NODE"
+            },
+            {
+              "valueFloat": 8.0,
+              "valueFloatPrecision": 0.1,
+              "className": "SliderNode",
+              "path": "fx/bloom/sigma",
+              "type": "VALUE_NODE"
+            }
+          ],
+          "className": "NodeFolder",
+          "path": "fx/bloom",
+          "type": "FOLDER"
+        },
+        {
+          "children": [
+            {
+              "valueBoolean": true,
+              "className": "ToggleNode",
+              "path": "fx/rgb split/enabled",
+              "type": "VALUE_NODE"
+            },
+            {
+              "valueFloat": -190.3999,
+              "valueFloatPrecision": 100.0,
+              "className": "SliderNode",
+              "path": "fx/rgb split/delta",
+              "type": "VALUE_NODE"
+            }
+          ],
+          "className": "NodeFolder",
+          "path": "fx/rgb split",
+          "type": "FOLDER"
+        },
+        {
+          "children": [
+            {
+              "valueBoolean": false,
+              "className": "ToggleNode",
+              "path": "fx/chromab/enabled",
+              "type": "VALUE_NODE"
+            }
+          ],
+          "className": "NodeFolder",
+          "path": "fx/chromab",
+          "type": "FOLDER"
+        }
+      ],
+      "className": "NodeFolder",
+      "path": "fx",
+      "type": "FOLDER"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "valueBoolean": true,
+              "className": "StringPickerItem",
+              "path": "/palette picker/type/dark",
+              "type": "VALUE_NODE"
+            },
+            {
+              "valueBoolean": false,
+              "className": "StringPickerItem",
+              "path": "/palette picker/type/light",
+              "type": "VALUE_NODE"
+            },
+            {
+              "valueBoolean": false,
+              "className": "StringPickerItem",
+              "path": "/palette picker/type/pink",
+              "type": "VALUE_NODE"
+            },
+            {
+              "valueBoolean": false,
+              "className": "StringPickerItem",
+              "path": "/palette picker/type/blue",
+              "type": "VALUE_NODE"
+            },
+            {
+              "valueBoolean": false,
+              "className": "StringPickerItem",
+              "path": "/palette picker/type/custom",
+              "type": "VALUE_NODE"
+            }
+          ],
+          "className": "StringPickerFolder",
+          "path": "/palette picker/type",
+          "type": "FOLDER"
+        },
+        {
+          "children": [
+            {
+              "hexString": "FFFFFFFF",
+              "children": [
+                {
+                  "className": "ColorPreviewNode",
+                  "path": "/palette picker/custom definition/focus foreground/preview",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "valueFloat": 0.0,
+                  "valueFloatPrecision": 0.01,
+                  "className": "HueNode",
+                  "path": "/palette picker/custom definition/focus foreground/hue",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "valueFloat": 0.0,
+                  "valueFloatPrecision": 0.01,
+                  "className": "SaturationNode",
+                  "path": "/palette picker/custom definition/focus foreground/sat",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "valueFloat": 1.0,
+                  "valueFloatPrecision": 0.01,
+                  "className": "BrightnessNode",
+                  "path": "/palette picker/custom definition/focus foreground/br",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "valueFloat": 1.0,
+                  "valueFloatPrecision": 0.01,
+                  "className": "AlphaNode",
+                  "path": "/palette picker/custom definition/focus foreground/a",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "className": "HexNode",
+                  "path": "/palette picker/custom definition/focus foreground/hex",
+                  "type": "VALUE_NODE"
+                }
+              ],
+              "className": "ColorPickerFolder",
+              "path": "/palette picker/custom definition/focus foreground",
+              "type": "FOLDER"
+            },
+            {
+              "hexString": "FF2F2F2F",
+              "children": [
+                {
+                  "className": "ColorPreviewNode",
+                  "path": "/palette picker/custom definition/focus background/preview",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "valueFloat": 0.0,
+                  "valueFloatPrecision": 0.01,
+                  "className": "HueNode",
+                  "path": "/palette picker/custom definition/focus background/hue",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "valueFloat": 0.0,
+                  "valueFloatPrecision": 0.01,
+                  "className": "SaturationNode",
+                  "path": "/palette picker/custom definition/focus background/sat",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "valueFloat": 0.18431373,
+                  "valueFloatPrecision": 0.01,
+                  "className": "BrightnessNode",
+                  "path": "/palette picker/custom definition/focus background/br",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "valueFloat": 1.0,
+                  "valueFloatPrecision": 0.01,
+                  "className": "AlphaNode",
+                  "path": "/palette picker/custom definition/focus background/a",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "className": "HexNode",
+                  "path": "/palette picker/custom definition/focus background/hex",
+                  "type": "VALUE_NODE"
+                }
+              ],
+              "className": "ColorPickerFolder",
+              "path": "/palette picker/custom definition/focus background",
+              "type": "FOLDER"
+            },
+            {
+              "hexString": "FFB0B0B0",
+              "children": [
+                {
+                  "className": "ColorPreviewNode",
+                  "path": "/palette picker/custom definition/normal foreground/preview",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "valueFloat": 0.0,
+                  "valueFloatPrecision": 0.01,
+                  "className": "HueNode",
+                  "path": "/palette picker/custom definition/normal foreground/hue",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "valueFloat": 0.0,
+                  "valueFloatPrecision": 0.01,
+                  "className": "SaturationNode",
+                  "path": "/palette picker/custom definition/normal foreground/sat",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "valueFloat": 0.6901961,
+                  "valueFloatPrecision": 0.01,
+                  "className": "BrightnessNode",
+                  "path": "/palette picker/custom definition/normal foreground/br",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "valueFloat": 1.0,
+                  "valueFloatPrecision": 0.01,
+                  "className": "AlphaNode",
+                  "path": "/palette picker/custom definition/normal foreground/a",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "className": "HexNode",
+                  "path": "/palette picker/custom definition/normal foreground/hex",
+                  "type": "VALUE_NODE"
+                }
+              ],
+              "className": "ColorPickerFolder",
+              "path": "/palette picker/custom definition/normal foreground",
+              "type": "FOLDER"
+            },
+            {
+              "hexString": "FF0B0B0B",
+              "children": [
+                {
+                  "className": "ColorPreviewNode",
+                  "path": "/palette picker/custom definition/normal background/preview",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "valueFloat": 0.0,
+                  "valueFloatPrecision": 0.01,
+                  "className": "HueNode",
+                  "path": "/palette picker/custom definition/normal background/hue",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "valueFloat": 0.0,
+                  "valueFloatPrecision": 0.01,
+                  "className": "SaturationNode",
+                  "path": "/palette picker/custom definition/normal background/sat",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "valueFloat": 0.043137256,
+                  "valueFloatPrecision": 0.01,
+                  "className": "BrightnessNode",
+                  "path": "/palette picker/custom definition/normal background/br",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "valueFloat": 1.0,
+                  "valueFloatPrecision": 0.01,
+                  "className": "AlphaNode",
+                  "path": "/palette picker/custom definition/normal background/a",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "className": "HexNode",
+                  "path": "/palette picker/custom definition/normal background/hex",
+                  "type": "VALUE_NODE"
+                }
+              ],
+              "className": "ColorPickerFolder",
+              "path": "/palette picker/custom definition/normal background",
+              "type": "FOLDER"
+            },
+            {
+              "hexString": "FF787878",
+              "children": [
+                {
+                  "className": "ColorPreviewNode",
+                  "path": "/palette picker/custom definition/window border/preview",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "valueFloat": 0.0,
+                  "valueFloatPrecision": 0.01,
+                  "className": "HueNode",
+                  "path": "/palette picker/custom definition/window border/hue",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "valueFloat": 0.0,
+                  "valueFloatPrecision": 0.01,
+                  "className": "SaturationNode",
+                  "path": "/palette picker/custom definition/window border/sat",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "valueFloat": 0.47058824,
+                  "valueFloatPrecision": 0.01,
+                  "className": "BrightnessNode",
+                  "path": "/palette picker/custom definition/window border/br",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "valueFloat": 1.0,
+                  "valueFloatPrecision": 0.01,
+                  "className": "AlphaNode",
+                  "path": "/palette picker/custom definition/window border/a",
+                  "type": "VALUE_NODE"
+                },
+                {
+                  "className": "HexNode",
+                  "path": "/palette picker/custom definition/window border/hex",
+                  "type": "VALUE_NODE"
+                }
+              ],
+              "className": "ColorPickerFolder",
+              "path": "/palette picker/custom definition/window border",
+              "type": "FOLDER"
+            }
+          ],
+          "className": "NodeFolder",
+          "path": "/palette picker/custom definition",
+          "type": "FOLDER"
+        }
+      ],
+      "className": "NodeFolder",
+      "path": "/palette picker",
+      "type": "FOLDER"
+    }
+  ],
+  "className": "NodeFolder",
+  "path": "",
+  "type": "FOLDER"
+}
