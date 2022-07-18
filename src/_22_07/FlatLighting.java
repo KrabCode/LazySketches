@@ -20,7 +20,7 @@ public class FlatLighting extends PApplet {
 
     @Override
     public void settings() {
-        size(1080, 1080, P2D);
+        size(800,800, P2D);
     }
 
     @Override
@@ -33,6 +33,7 @@ public class FlatLighting extends PApplet {
     @Override
     public void draw() {
         canvas.beginDraw();
+        canvas.colorMode(RGB,1,1,1,1);
         if (frameCount == 1 || gui.toggle("background/active", false)) {
             drawBackground();
         }
@@ -44,8 +45,6 @@ public class FlatLighting extends PApplet {
         canvasLit.beginDraw();
         PShader lightShader = ShaderReloader.getShader(lightShaderPath);
         lightShader.set("canvas", canvas);
-        lightShader.set("strength", gui.slider("shader/strength", 1));
-        lightShader.set("height", gui.slider("shader/height", 0.5f));
         lightShader.set("lightDir",
                 gui.slider("shader/light x"),
                 gui.slider("shader/light y"),
@@ -64,26 +63,33 @@ public class FlatLighting extends PApplet {
 
     private void updateBrush() {
         canvas.noStroke();
-        Color colorA = gui.colorPicker("brush/color A", color(0));
-        Color colorB = gui.colorPicker("brush/color B", color(255));
         int detail = gui.sliderInt("brush/detail", 16);
-        float brushRadius = gui.slider("brush/weight", 5);
-        if (!mousePressed) {
+        float brushRadius = gui.slider("brush/weight", 50);
+        float alpha = gui.slider("brush/alpha", 1);
+        if (!mousePressed || !gui.mousePressedOutsideGui()) {
             return;
         }
         float distance = dist(pmouseX, pmouseY, mouseX, mouseY);
+        distance = max(1, distance);
         for (int i = 0; i < distance; i++) {
             float percent = norm(i, 0, distance);
             float x = lerp(pmouseX, mouseX, percent);
             float y = lerp(pmouseY, mouseY, percent);
 
             canvas.beginShape(TRIANGLE_FAN);
-            canvas.fill(colorA.hex);
+            canvas.fill(0,0,1, alpha);
             canvas.vertex(x, y);
-            canvas.fill(colorB.hex);
             for (int cornerIndex = 0; cornerIndex < detail; cornerIndex++) {
-                float theta = map(cornerIndex, 0, detail - 1, 0, TAU);
-                canvas.vertex(x + brushRadius * cos(theta), y + brushRadius * sin(theta));
+                float norm = norm(cornerIndex, 0, detail - 1);
+                float theta = norm * TAU;
+                float offX = cos(theta);
+                float offY = sin(theta);
+
+                float red = map(offX, -1, 1, 0, 1);
+                float green = map(offY, -1, 1, 0, 1);
+                canvas.fill(red, green, 0.5f, alpha);
+                canvas.vertex(x + brushRadius * offX, y + brushRadius * offY);
+                // TODO extend gradient to match background color with another triangle strip
             }
             canvas.endShape(CLOSE);
         }

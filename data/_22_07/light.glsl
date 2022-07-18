@@ -13,25 +13,9 @@ float col(float x, float y){
     return br;
 }
 
-vec3 nkingNormalFromSobel(){
-    vec3 sobel = vec3(1.0, 2.0, 1.0);
-    mat3 values = mat3(
-        col(-1.0,-1.0), col( 0.0,-1.0), col( 1.0,-1.0),
-        col(-1.0, 0.0), col( 0.0, 0.0), col( 1.0, 0.0),
-        col(-1.0, 1.0), col( 0.0, 1.0), col( 1.0, 1.0)
-    );
-    vec3 normal = vec3(strength, strength, height);
-    normal.y *= dot(values[0], sobel) - dot(values[2], sobel);
-    values = transpose(values);
-    normal.x = dot(values[2], sobel) - dot(values[0], sobel);
-    normal = normalize(normal);
-    return normal;
-}
-
 void main(){
     vec2 uv = gl_FragCoord.xy / resolution.xy;
     vec3 col = texture(canvas, uv).rgb;
-    vec3 normal = nkingNormalFromSobel();
-    float lit = dot(normal, lightDir);
+    float lit = dot(col, lightDir);
     gl_FragColor = vec4(vec3(lit), 1.);
 }

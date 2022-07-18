@@ -189,21 +189,21 @@
               "type": "VALUE_NODE"
             },
             {
-              "valueFloat": 0.5680004,
+              "valueFloat": 0.57142854,
               "valueFloatPrecision": 0.001,
               "className": "HueNode",
               "path": "leaf/base fill/hue",
               "type": "VALUE_NODE"
             },
             {
-              "valueFloat": 0.4900005,
+              "valueFloat": 0.4883721,
               "valueFloatPrecision": 0.01,
               "className": "SaturationNode",
               "path": "leaf/base fill/sat",
               "type": "VALUE_NODE"
             },
             {
-              "valueFloat": 0.17000069,
+              "valueFloat": 0.16862746,
               "valueFloatPrecision": 0.01,
               "className": "BrightnessNode",
               "path": "leaf/base fill/br",
@@ -300,6 +300,13 @@
       "type": "FOLDER"
     },
     {
+      "valueFloat": 21.799915,
+      "valueFloatPrecision": 0.1,
+      "className": "SliderIntNode",
+      "path": "mirrors",
+      "type": "VALUE_NODE"
+    },
+    {
       "children": [
         {
           "valueBoolean": true,
@@ -314,20 +321,6 @@
               "className": "ToggleNode",
               "path": "fx/blur/enabled",
               "type": "VALUE_NODE"
-            },
-            {
-              "valueFloat": 0.0,
-              "valueFloatPrecision": 0.1,
-              "className": "SliderIntNode",
-              "path": "fx/blur/size",
-              "type": "VALUE_NODE"
-            },
-            {
-              "valueFloat": 0.0,
-              "valueFloatPrecision": 0.1,
-              "className": "SliderNode",
-              "path": "fx/blur/sigma",
-              "type": "VALUE_NODE"
             }
           ],
           "className": "NodeFolder",
@@ -340,20 +333,6 @@
               "valueBoolean": false,
               "className": "ToggleNode",
               "path": "fx/noise/enabled",
-              "type": "VALUE_NODE"
-            },
-            {
-              "valueFloat": 0.48999998,
-              "valueFloatPrecision": 0.01,
-              "className": "SliderNode",
-              "path": "fx/noise/amount",
-              "type": "VALUE_NODE"
-            },
-            {
-              "valueFloat": 0.39999992,
-              "valueFloatPrecision": 0.1,
-              "className": "SliderNode",
-              "path": "fx/noise/speed",
               "type": "VALUE_NODE"
             }
           ],
@@ -380,13 +359,6 @@
               "valueBoolean": false,
               "className": "ToggleNode",
               "path": "fx/denoise/enabled",
-              "type": "VALUE_NODE"
-            },
-            {
-              "valueFloat": 4.999997,
-              "valueFloatPrecision": 0.1,
-              "className": "SliderNode",
-              "path": "fx/denoise/exponent",
               "type": "VALUE_NODE"
             }
           ],
@@ -804,13 +776,6 @@
       "className": "NodeFolder",
       "path": "/themes",
       "type": "FOLDER"
-    },
-    {
-      "valueFloat": 21.799915,
-      "valueFloatPrecision": 0.1,
-      "className": "SliderIntNode",
-      "path": "mirrors",
-      "type": "VALUE_NODE"
     }
   ],
   "className": "NodeFolder",
