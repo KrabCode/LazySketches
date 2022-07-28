@@ -16,6 +16,6 @@ float col(float x, float y){
 void main(){
     vec2 uv = gl_FragCoord.xy / resolution.xy;
     vec3 col = texture(canvas, uv).rgb;
-    float lit = dot(col, lightDir);
+    float lit = dot(col, normalize(lightDir));
     gl_FragColor = vec4(vec3(lit), 1.);
 }
