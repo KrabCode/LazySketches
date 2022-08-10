@@ -39,7 +39,7 @@ public class LineSpiral extends PApplet {
         if(gui.toggle("saving 2", false)){
             pg.save("out/spirals 2/" + frame++ + ".jpg");
         }
-        gui.themePicker();
+
         gui.draw();
     }
 

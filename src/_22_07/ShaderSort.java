@@ -38,7 +38,7 @@ public class ShaderSort extends PApplet {
         pg.endDraw();
         clear();
         image(pg, 0, 0);
-        gui.themePicker();
+
         gui.draw();
     }
 

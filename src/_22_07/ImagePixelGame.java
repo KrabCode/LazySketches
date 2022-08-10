@@ -50,7 +50,7 @@ public class ImagePixelGame extends PApplet {
         pg.endDraw();
         clear();
         image(pg, 0, 0);
-        gui.themePicker();
+
         gui.draw();
         if(gui.button("save image")){
             pg.save("out/screenshots/ImagePixelGame_"+frameCount+".png");

@@ -38,7 +38,7 @@ public class LineTexture extends PApplet {
         if (gui.button("capture") || key == 's') {
             saveFrame("out/LineTexture/####.jpg");
         }
-        gui.themePicker();
+
         gui.draw();
 
     }

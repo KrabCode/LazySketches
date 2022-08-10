@@ -40,7 +40,7 @@ public class PostFX_Test extends PApplet {
         pg.endDraw();
         PostFxAdapter.apply(this, gui, pg);
         image(pg, 0, 0);
-        gui.themePicker();
+
         gui.draw();
 
     }

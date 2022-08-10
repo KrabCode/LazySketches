@@ -73,7 +73,7 @@ public class SakuraSnow extends PApplet {
         }
         imageMode(CORNER);
         image(pg, 0, 0, width, height);
-        gui.themePicker();
+
         gui.draw();
     }
 

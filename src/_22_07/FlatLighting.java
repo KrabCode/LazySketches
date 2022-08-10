@@ -57,7 +57,7 @@ public class FlatLighting extends PApplet {
         }else{
             image(canvas, 0, 0);
         }
-        gui.themePicker();
+
         gui.draw();
     }
 

@@ -37,7 +37,7 @@ public class Leaf extends PApplet {
         drawLeaf();
         pg.endDraw();
         image(pg, 0, 0);
-//        gui.themePicker();
+//
         gui.draw();
     }
 
