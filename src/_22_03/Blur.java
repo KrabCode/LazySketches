@@ -2,13 +2,13 @@ package _22_03;
 
 import processing.core.PApplet;
 import processing.core.PGraphics;
-import toolbox.Gui;
+import toolbox.LazyGui;
 import toolbox.ShaderReloader;
 
 import java.util.ArrayList;
 
 public class Blur extends PApplet {
-    Gui gui;
+    LazyGui gui;
     PGraphics canvas;
     ArrayList<PGraphics> graphics = new ArrayList<>();
 
@@ -23,7 +23,7 @@ public class Blur extends PApplet {
 
     @Override
     public void setup() {
-        gui = new Gui(this);
+        gui = new LazyGui(this);
         canvas = createGraphics(width, height, P2D);
     }
 
@@ -62,6 +62,5 @@ public class Blur extends PApplet {
             image(canvas, 0, 0);
         }
 
-        gui.draw();
     }
 }

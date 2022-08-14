@@ -1,9 +1,9 @@
 import processing.core.PApplet;
 import processing.core.PGraphics;
-import toolbox.Gui;
+import toolbox.LazyGui;
 
 public class Template extends PApplet {
-    Gui gui;
+    LazyGui gui;
     PGraphics pg;
 
     public static void main(String[] args) {
@@ -17,7 +17,7 @@ public class Template extends PApplet {
 
     @Override
     public void setup() {
-        gui = new Gui(this);
+        gui = new LazyGui(this);
         pg = createGraphics(width, height, P2D);
     }
 
@@ -28,7 +28,6 @@ public class Template extends PApplet {
 
         pg.endDraw();
         image(pg, 0, 0);
-        gui.draw();
     }
 
     private void drawBackground() {

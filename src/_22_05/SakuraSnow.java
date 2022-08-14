@@ -4,14 +4,14 @@ import _22_03.PostFxAdapter;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PVector;
-import toolbox.Gui;
+import toolbox.LazyGui;
 import toolbox.global.Utils;
-import toolbox.windows.nodes.colorPicker.Color;
+import toolbox.windows.nodes.colorPicker.PickerColor;
 
 import java.util.ArrayList;
 
 public class SakuraSnow extends PApplet {
-    Gui gui;
+    LazyGui gui;
     PGraphics pg;
     ArrayList<Leaf> leaves = new ArrayList<>();
     ArrayList<Leaf> leavesToRemove = new ArrayList<>();
@@ -29,7 +29,7 @@ public class SakuraSnow extends PApplet {
 
     @Override
     public void setup() {
-        gui = new Gui(this);
+        gui = new LazyGui(this);
         pg = createGraphics(width, height, P2D);
 
     }
@@ -74,7 +74,6 @@ public class SakuraSnow extends PApplet {
         imageMode(CORNER);
         image(pg, 0, 0, width, height);
 
-        gui.draw();
     }
 
     private void updateLeaves() {
@@ -145,7 +144,7 @@ public class SakuraSnow extends PApplet {
             spd.mult(gui.slider("leaf/move/drag", .98f));
             spd.add(acc);
             pos.add(spd);
-            Color baseFill = gui.colorPicker("leaf/base fill", color(255));
+            PickerColor baseFill = gui.colorPicker("leaf/base fill", color(255));
             float fade = constrain(norm(frameCount, frameBorn, frameBorn + gui.slider("leaf/fade in time", 60)), 0, 1);
             float fadeOutDuration = gui.slider("leaf/fade out time", 60);
             if(frameCount >= frameBorn + lifeDuration - fadeOutDuration){
@@ -157,7 +156,7 @@ public class SakuraSnow extends PApplet {
                 pg.rotate(TAU * norm(mirrorIndex, 0, mirrorCount));
                 pg.translate(pos.x, pos.y);
                 pg.rotate(spd.heading());
-                pg.fill(Utils.hueModulo(baseFill.hue + hueModifier  * gui.slider("leaf/hue variation", 0)),
+                pg.fill((baseFill.hue + hueModifier  * gui.slider("leaf/hue variation", 0)),
                         constrain(baseFill.saturation + satModifier  * gui.slider("leaf/sat variation", 0), 0, 1),
                         constrain(baseFill.brightness + brModifier * gui.slider("leaf/br variation", 0), 0, 1),
                         lerp(0, baseFill.alpha, fade));

@@ -3,12 +3,11 @@ package _22_07;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.opengl.PShader;
-import toolbox.Gui;
+import toolbox.LazyGui;
 import toolbox.ShaderReloader;
-import toolbox.windows.nodes.colorPicker.Color;
+import toolbox.windows.nodes.colorPicker.PickerColor;
 
-public class ImagePixelGame extends PApplet {
-    Gui gui;
+public class ImagePixelGame extends PApplet {LazyGui gui;
     PGraphics pg;
     String shaderPath = "_22_07/imagePixels.glsl";
     float time = 0;
@@ -25,7 +24,7 @@ public class ImagePixelGame extends PApplet {
 
     @Override
     public void setup() {
-        gui = new Gui(this);
+        gui = new LazyGui(this);
         pg = createGraphics(width, height, P2D);
         colorMode(HSB,1,1,1,1);
 //        surface.setLocation(2560, 0);
@@ -41,7 +40,7 @@ public class ImagePixelGame extends PApplet {
         PShader shader = ShaderReloader.getShader(shaderPath);
         shader.set("time", time += radians(gui.slider("time speed", 1)));
         shader.set("strength", gui.slider("shader/strength", 1));
-        Color targetColor = gui.colorPicker("shader/target", color(1));
+        PickerColor targetColor = gui.colorPicker("shader/target", color(1));
         shader.set("targetColorRGB", red(targetColor.hex), green(targetColor.hex), blue(targetColor.hex));
         shader.set("targetSmoothstepLow", gui.slider("shader/smooth low", 0));
         shader.set("targetSmoothstepHigh", gui.slider("shader/smooth high", 1));
@@ -51,7 +50,6 @@ public class ImagePixelGame extends PApplet {
         clear();
         image(pg, 0, 0);
 
-        gui.draw();
         if(gui.button("save image")){
             pg.save("out/screenshots/ImagePixelGame_"+frameCount+".png");
         }

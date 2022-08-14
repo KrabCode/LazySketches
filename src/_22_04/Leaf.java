@@ -2,10 +2,9 @@ package _22_04;
 
 import processing.core.PApplet;
 import processing.core.PGraphics;
-import toolbox.Gui;
+import toolbox.LazyGui;
 
-public class Leaf extends PApplet {
-    Gui gui;
+public class Leaf extends PApplet {LazyGui gui;
     PGraphics pg;
     private float shapeSize;
     private int childCount;
@@ -24,7 +23,7 @@ public class Leaf extends PApplet {
     @Override
     public void setup() {
         frameRate(144);
-        gui = new Gui(this);
+        gui = new LazyGui(this);
         pg = createGraphics(width, height, P2D);
     }
 
@@ -38,7 +37,6 @@ public class Leaf extends PApplet {
         pg.endDraw();
         image(pg, 0, 0);
 //
-        gui.draw();
     }
 
     @Override

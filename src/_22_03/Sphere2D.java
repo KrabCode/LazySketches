@@ -3,7 +3,7 @@ package _22_03;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PVector;
-import toolbox.Gui;
+import toolbox.LazyGui;
 import toolbox.global.State;
 import toolbox.global.Utils;
 
@@ -12,9 +12,9 @@ import java.util.UUID;
 
 public class Sphere2D extends PApplet {
 
-    Gui gui;
     PGraphics pg;
     private ArrayList<PVector> gaussPoints = new ArrayList<>();
+    private LazyGui gui;
 
     public static void main(String[] args) {
         PApplet.main(java.lang.invoke.MethodHandles.lookup().lookupClass());
@@ -27,7 +27,7 @@ public class Sphere2D extends PApplet {
 
     @Override
     public void setup() {
-        gui = new Gui(this);
+        gui = new LazyGui(this);
         pg = createGraphics(width, height, P2D);
         colorMode(HSB, 1, 1, 1, 1);
     }
@@ -41,7 +41,6 @@ public class Sphere2D extends PApplet {
         pg.endDraw();
         image(pg, 0, 0);
 
-        gui.draw();
 
     }
 

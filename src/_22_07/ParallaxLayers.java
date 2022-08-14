@@ -3,12 +3,12 @@ package _22_07;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PVector;
-import toolbox.Gui;
+import toolbox.LazyGui;
 
 import java.util.ArrayList;
 
 public class ParallaxLayers extends PApplet {
-    Gui gui;
+    LazyGui gui;
     PGraphics pg;
     float time;
 
@@ -25,7 +25,7 @@ public class ParallaxLayers extends PApplet {
 
     @Override
     public void setup() {
-        gui = new Gui(this);
+        gui = new LazyGui(this);
         pg = createGraphics(width, height, P2D);
     }
 
@@ -38,7 +38,6 @@ public class ParallaxLayers extends PApplet {
         drawLayers();
         pg.endDraw();
         image(pg, 0, 0);
-        gui.draw();
     }
 
     private void drawLayers() {

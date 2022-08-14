@@ -4,12 +4,12 @@ import ch.bildspur.postfx.builder.PostFX;
 import ch.bildspur.postfx.builder.PostFXBuilder;
 import processing.core.PApplet;
 import processing.core.PGraphics;
-import toolbox.Gui;
+import toolbox.LazyGui;
 
 public class PostFxAdapter {
     static PostFX fx;
 
-    public static void apply(PApplet sketch, Gui gui, PGraphics pg){
+    public static void apply(PApplet sketch, LazyGui gui, PGraphics pg){
         if(fx == null){
             fx = new PostFX(sketch);
         }

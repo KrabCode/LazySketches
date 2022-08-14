@@ -4,13 +4,13 @@ import ch.bildspur.postfx.builder.PostFX;
 import ch.bildspur.postfx.builder.PostFXBuilder;
 import processing.core.PApplet;
 import processing.core.PGraphics;
-import toolbox.Gui;
+import toolbox.LazyGui;
 
 public class PostFX_Test extends PApplet {
 
     // TODO expand and move GUI-PostFX adapter into global static class
 
-    Gui gui;
+    LazyGui gui;
     PGraphics pg;
     String testImagePath = "https://upload.wikimedia.org/wikipedia/en/7/7d/Lenna_%28test_image%29.png";
     PostFX fx;
@@ -27,7 +27,7 @@ public class PostFX_Test extends PApplet {
 
     @Override
     public void setup() {
-        gui = new Gui(this);
+        gui = new LazyGui(this);
         pg = createGraphics(width, height, P2D);
         fx = new PostFX(this);
     }
@@ -41,7 +41,6 @@ public class PostFX_Test extends PApplet {
         PostFxAdapter.apply(this, gui, pg);
         image(pg, 0, 0);
 
-        gui.draw();
 
     }
 

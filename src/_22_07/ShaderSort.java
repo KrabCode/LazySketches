@@ -3,12 +3,13 @@ package _22_07;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.opengl.PShader;
-import toolbox.Gui;
+import toolbox.LazyGui;
 import toolbox.ShaderReloader;
 
 public class ShaderSort extends PApplet {
-    Gui gui;
+
     PGraphics pg;
+    private LazyGui gui;
 
     public static void main(String[] args) {
         PApplet.main(java.lang.invoke.MethodHandles.lookup().lookupClass());
@@ -21,7 +22,7 @@ public class ShaderSort extends PApplet {
 
     @Override
     public void setup() {
-        gui = new Gui(this);
+        gui = new LazyGui(this);
         pg = createGraphics(width, height, P2D);
     }
 
@@ -39,7 +40,6 @@ public class ShaderSort extends PApplet {
         clear();
         image(pg, 0, 0);
 
-        gui.draw();
     }
 
     private void drawBackground() {

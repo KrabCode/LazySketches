@@ -3,10 +3,9 @@ package _22_05;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PVector;
-import toolbox.Gui;
+import toolbox.LazyGui;
 
-public class LineTexture extends PApplet {
-    Gui gui;
+public class LineTexture extends PApplet {LazyGui gui;
     PGraphics pg;
 
     public static void main(String[] args) {
@@ -20,7 +19,7 @@ public class LineTexture extends PApplet {
 
     @Override
     public void setup() {
-        gui = new Gui(this);
+        gui = new LazyGui(this);
         pg = createGraphics(width, height, P2D);
     }
 
@@ -39,7 +38,6 @@ public class LineTexture extends PApplet {
             saveFrame("out/LineTexture/####.jpg");
         }
 
-        gui.draw();
 
     }
 
