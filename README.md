@@ -1,2 +1,2 @@
-# Sketchbook
-Processing sketches using the LazyGui library
+# LazySketchbook
+Processing sketches made using the LazyGui library
