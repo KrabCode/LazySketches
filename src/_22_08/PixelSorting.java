@@ -24,30 +24,35 @@ public class PixelSorting extends PApplet {
     private float darkValue = 223;
 
     private int recStarted = -1;
-    private int saveIndex = 0;
+    private int saveIndex = 1;
+    private int recLength = 0;
 
     public static void main(String[] args) {
         PApplet.main(java.lang.invoke.MethodHandles.lookup().lookupClass());
     }
 
+    // TODO use a saved image series from your other sketches as input!
+
     @Override
     public void settings() {
-        size(800, 800, P2D);
+        size(1200, 1200, P2D);
+//        fullScreen(P2D);
     }
 
     @Override
     public void setup() {
         gui = new LazyGui(this);
         pg = createGraphics(width, height, P2D);
-        sourceImage = loadImage("_22_08/rocks.jpg");
-        colorMode(RGB, 1, 1, 1, 1);
+//        sourceImage = loadImage("_22_08/rocks.jpg");
+        sourceImage = loadImage("C:\\Users\\Krab\\Downloads\\kai-cheng-wce-mhX7BuQ-unsplash (1).jpg");
+        colorMode(RGB, 255,255,255, 1);
     }
 
     @Override
     public void draw() {
         pg.beginDraw();
         pg.translate(pg.width / 2f, pg.height / 2f);
-        pg.tint(gui.colorPicker("image/tint", color(1)).hex);
+        pg.tint(gui.colorPicker("image/tint", color(255)).hex);
         pg.scale(gui.slider("image/scale", 1));
         pg.imageMode(CENTER);
         pg.image(sourceImage, 0, 0);
@@ -60,12 +65,27 @@ public class PixelSorting extends PApplet {
     }
 
     private void record() {
-        int recLength = gui.sliderInt("rec/frames");
+        recLength = gui.sliderInt("rec/frames", 600);
         if(gui.button("rec/start")){
             recStarted = frameCount;
         }
+        if(gui.button("rec/stop")){
+            sketchInstanceId = Utils.generateRandomShortId();
+            recStarted = -1;
+        }
+        int recordRectPosX = gui.sliderInt("rec/rect pos x");
+        int recordRectPosY = gui.sliderInt("rec/rect pos y");
+        int recordRectSizeX = gui.sliderInt("rec/rect size x", width);
+        int recordRectSizeY = gui.sliderInt("rec/rect size y", height);
         if(recStarted != -1 && frameCount < recStarted + recLength){
-            save("out/recorded images/" + sketchInstanceId + "/" + saveIndex++ + ".jpg");
+            println("rec " + saveIndex + " / " + recLength);
+            PImage cutout = pg.get(recordRectPosX, recordRectPosY, recordRectSizeX, recordRectSizeY);
+            cutout.save("out/recorded images/" + sketchInstanceId + "/" + saveIndex++ + ".jpg");
+        }
+        if(gui.toggle("rec/show rect")){
+            stroke(255);
+            noFill();
+            rect(recordRectPosX, recordRectPosY, recordRectSizeX, recordRectSizeY);
         }
     }
 
@@ -78,8 +98,8 @@ public class PixelSorting extends PApplet {
         int loops = gui.sliderInt("pixel sort/loops", 1, 1, 100);
         whiteValue = gui.colorPicker("pixel sort/thresholds/white", -12345678).hex;
         blackValue = gui.colorPicker("pixel sort/thresholds/black", -3456789).hex;
-        brightValue = gui.slider("pixel sort/thresholds/bright value", 127);
-        darkValue  = gui.slider("pixel sort/thresholds/dark value", 223);
+        brightValue = gui.slider("pixel sort/thresholds/bright value", 127, 0, 255);
+        darkValue  = gui.slider("pixel sort/thresholds/dark value", 223, 0, 255);
         int column = 0;
         int row = 0;
         for (int i = 0; i < loops; i++) {
@@ -101,10 +121,8 @@ public class PixelSorting extends PApplet {
     void sortRow(int y) {
         // where to start sorting
         int x = 0;
-
         // where to stop sorting
         int xEnd = 0;
-
         while (xEnd < pg.width-1) {
             switch (mode) {
                 case 0:
@@ -126,24 +144,17 @@ public class PixelSorting extends PApplet {
                 default:
                     break;
             }
-
             if (x < 0) break;
-
             int sortingLength = xEnd-x;
-
             int[] unsorted = new int[sortingLength];
             int[] sorted;
-
             for (int i = 0; i < sortingLength; i++) {
                 unsorted[i] = pg.pixels[x + i + y * pg.width];
             }
-
             sorted = sort(unsorted);
-
             for (int i = 0; i < sortingLength; i++) {
                 pg.pixels[x + i + y * pg.width] = sorted[i];
             }
-
             x = xEnd+1;
         }
     }
