@@ -1,5 +1,6 @@
 package _22_08;
 
+import lazy.global.Utils;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import lazy.LazyGui;
@@ -11,15 +12,19 @@ import java.util.Arrays;
 // Adapted for LazyGui by Krab based on: https://github.com/kimasendorf/ASDFPixelSort/blob/master/ASDFPixelSort.pde
 
 public class PixelSorting extends PApplet {
-    LazyGui gui;
-    PGraphics pg;
-    PImage sourceImage;
-    int mode = 0;
+    private LazyGui gui;
+    private PGraphics pg;
+    private PImage sourceImage;
+    String sketchInstanceId = Utils.generateRandomShortId();
 
-    int whiteValue = -12345678;
-    int blackValue = -3456789;
-    float brightValue = 127;
-    float darkValue = 223;
+    private int mode = 0;
+    private int whiteValue = -12345678;
+    private int blackValue = -3456789;
+    private float brightValue = 127;
+    private float darkValue = 223;
+
+    private int recStarted = -1;
+    private int saveIndex = 0;
 
     public static void main(String[] args) {
         PApplet.main(java.lang.invoke.MethodHandles.lookup().lookupClass());
@@ -38,23 +43,30 @@ public class PixelSorting extends PApplet {
         colorMode(RGB, 1, 1, 1, 1);
     }
 
-
     @Override
     public void draw() {
         pg.beginDraw();
-
         pg.translate(pg.width / 2f, pg.height / 2f);
         pg.tint(gui.colorPicker("image/tint", color(1)).hex);
         pg.scale(gui.slider("image/scale", 1));
         pg.imageMode(CENTER);
         pg.image(sourceImage, 0, 0);
-
         selectMode();
         applyPixelSortEffect();
-
         pg.endDraw();
         clear();
         image(pg, 0, 0);
+        record();
+    }
+
+    private void record() {
+        int recLength = gui.sliderInt("rec/frames");
+        if(gui.button("rec/start")){
+            recStarted = frameCount;
+        }
+        if(recStarted != -1 && frameCount < recStarted + recLength){
+            save("out/recorded images/" + sketchInstanceId + "/" + saveIndex++ + ".jpg");
+        }
     }
 
     private void selectMode() {
