@@ -3,7 +3,7 @@ package _22_05;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PVector;
-import toolbox.LazyGui;
+import lazy.LazyGui;
 
 public class LineTexture extends PApplet {LazyGui gui;
     PGraphics pg;

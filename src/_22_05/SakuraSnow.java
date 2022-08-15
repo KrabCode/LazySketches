@@ -4,9 +4,9 @@ import _22_03.PostFxAdapter;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PVector;
-import toolbox.LazyGui;
-import toolbox.global.Utils;
-import toolbox.windows.nodes.colorPicker.PickerColor;
+import lazy.LazyGui;
+import lazy.global.Utils;
+import lazy.windows.nodes.colorPicker.PickerColor;
 
 import java.util.ArrayList;
 

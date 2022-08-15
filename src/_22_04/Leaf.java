@@ -2,7 +2,7 @@ package _22_04;
 
 import processing.core.PApplet;
 import processing.core.PGraphics;
-import toolbox.LazyGui;
+import lazy.LazyGui;
 
 public class Leaf extends PApplet {LazyGui gui;
     PGraphics pg;

@@ -2,8 +2,8 @@ package _22_03;
 
 import processing.core.PApplet;
 import processing.core.PGraphics;
-import toolbox.LazyGui;
-import toolbox.ShaderReloader;
+import lazy.LazyGui;
+import lazy.ShaderReloader;
 
 import java.util.ArrayList;
 

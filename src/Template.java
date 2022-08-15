@@ -1,6 +1,6 @@
 import processing.core.PApplet;
 import processing.core.PGraphics;
-import toolbox.LazyGui;
+import lazy.LazyGui;
 
 public class Template extends PApplet {
     LazyGui gui;

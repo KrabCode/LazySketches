@@ -4,7 +4,7 @@ import ch.bildspur.postfx.builder.PostFX;
 import ch.bildspur.postfx.builder.PostFXBuilder;
 import processing.core.PApplet;
 import processing.core.PGraphics;
-import toolbox.LazyGui;
+import lazy.LazyGui;
 
 public class PostFX_Test extends PApplet {
 

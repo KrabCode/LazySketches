@@ -3,7 +3,7 @@ package _22_07;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PVector;
-import toolbox.LazyGui;
+import lazy.LazyGui;
 
 import java.util.ArrayList;
 

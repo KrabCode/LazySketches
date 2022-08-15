@@ -3,9 +3,9 @@ package _22_03;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PVector;
-import toolbox.LazyGui;
-import toolbox.global.State;
-import toolbox.global.Utils;
+import lazy.LazyGui;
+import lazy.global.State;
+import lazy.global.Utils;
 
 import java.util.ArrayList;
 import java.util.UUID;

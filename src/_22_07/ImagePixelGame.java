@@ -3,9 +3,9 @@ package _22_07;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.opengl.PShader;
-import toolbox.LazyGui;
-import toolbox.ShaderReloader;
-import toolbox.windows.nodes.colorPicker.PickerColor;
+import lazy.LazyGui;
+import lazy.ShaderReloader;
+import lazy.windows.nodes.colorPicker.PickerColor;
 
 public class ImagePixelGame extends PApplet {LazyGui gui;
     PGraphics pg;

@@ -4,9 +4,9 @@ import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.opengl.PShader;
-import toolbox.LazyGui;
-import toolbox.ShaderReloader;
-import toolbox.windows.nodes.colorPicker.PickerColor;
+import lazy.LazyGui;
+import lazy.ShaderReloader;
+import lazy.windows.nodes.colorPicker.PickerColor;
 
 public class FlatLighting extends PApplet {LazyGui gui;
     PGraphics canvas;

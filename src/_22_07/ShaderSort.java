@@ -3,8 +3,8 @@ package _22_07;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.opengl.PShader;
-import toolbox.LazyGui;
-import toolbox.ShaderReloader;
+import lazy.LazyGui;
+import lazy.ShaderReloader;
 
 public class ShaderSort extends PApplet {
 
