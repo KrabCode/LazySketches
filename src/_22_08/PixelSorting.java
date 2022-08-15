@@ -8,6 +8,8 @@ import processing.core.PImage;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 
 // Adapted for LazyGui by Krab based on: https://github.com/kimasendorf/ASDFPixelSort/blob/master/ASDFPixelSort.pde
 
@@ -35,7 +37,7 @@ public class PixelSorting extends PApplet {
 
     @Override
     public void settings() {
-        size(1200, 1200, P2D);
+        size(1000,1000, P2D);
 //        fullScreen(P2D);
     }
 
@@ -126,19 +128,19 @@ public class PixelSorting extends PApplet {
         while (xEnd < pg.width-1) {
             switch (mode) {
                 case 0:
-                    x = getFirstNoneWhiteX(x, y);
+                    x = getFirstNonWhiteX(x, y);
                     xEnd = getNextWhiteX(x, y);
                     break;
                 case 1:
-                    x = getFirstNoneBlackX(x, y);
+                    x = getFirstNonBlackX(x, y);
                     xEnd = getNextBlackX(x, y);
                     break;
                 case 2:
-                    x = getFirstNoneBrightX(x, y);
+                    x = getFirstNonBrightX(x, y);
                     xEnd = getNextBrightX(x, y);
                     break;
                 case 3:
-                    x = getFirstNoneDarkX(x, y);
+                    x = getFirstNonDarkX(x, y);
                     xEnd = getNextDarkX(x, y);
                     break;
                 default:
@@ -171,19 +173,19 @@ public class PixelSorting extends PApplet {
         while (yEnd < pg.height-1) {
             switch (mode) {
                 case 0:
-                    y = getFirstNoneWhiteY(x, y);
+                    y = getFirstNonWhiteY(x, y);
                     yEnd = getNextWhiteY(x, y);
                     break;
                 case 1:
-                    y = getFirstNoneBlackY(x, y);
+                    y = getFirstNonBlackY(x, y);
                     yEnd = getNextBlackY(x, y);
                     break;
                 case 2:
-                    y = getFirstNoneBrightY(x, y);
+                    y = getFirstNonBrightY(x, y);
                     yEnd = getNextBrightY(x, y);
                     break;
                 case 3:
-                    y = getFirstNoneDarkY(x, y);
+                    y = getFirstNonDarkY(x, y);
                     yEnd = getNextDarkY(x, y);
                     break;
                 default:
@@ -213,7 +215,7 @@ public class PixelSorting extends PApplet {
 
 
     // white x
-    int getFirstNoneWhiteX(int x, int y) {
+    int getFirstNonWhiteX(int x, int y) {
         while (pg.pixels[x + y * pg.width] < whiteValue) {
             x++;
             if (x >= pg.width) return -1;
@@ -231,7 +233,7 @@ public class PixelSorting extends PApplet {
     }
 
     // black x
-    int getFirstNoneBlackX(int x, int y) {
+    int getFirstNonBlackX(int x, int y) {
         while (pg.pixels[x + y * pg.width] > blackValue) {
             x++;
             if (x >= pg.width) return -1;
@@ -249,7 +251,7 @@ public class PixelSorting extends PApplet {
     }
 
     // bright x
-    int getFirstNoneBrightX(int x, int y) {
+    int getFirstNonBrightX(int x, int y) {
         while (brightness(pg.pixels[x + y * pg.width]) < brightValue) {
             x++;
             if (x >= pg.width) return -1;
@@ -267,7 +269,7 @@ public class PixelSorting extends PApplet {
     }
 
     // dark x
-    int getFirstNoneDarkX(int x, int y) {
+    int getFirstNonDarkX(int x, int y) {
         while (brightness(pg.pixels[x + y * pg.width]) > darkValue) {
             x++;
             if (x >= pg.width) return -1;
@@ -285,7 +287,7 @@ public class PixelSorting extends PApplet {
     }
 
     // white y
-    int getFirstNoneWhiteY(int x, int y) {
+    int getFirstNonWhiteY(int x, int y) {
         if (y < pg.height) {
             while (pg.pixels[x + y * pg.width] < whiteValue) {
                 y++;
@@ -308,7 +310,7 @@ public class PixelSorting extends PApplet {
 
 
     // black y
-    int getFirstNoneBlackY(int x, int y) {
+    int getFirstNonBlackY(int x, int y) {
         if (y < pg.height) {
             while (pg.pixels[x + y * pg.width] > blackValue) {
                 y++;
@@ -330,7 +332,7 @@ public class PixelSorting extends PApplet {
     }
 
     // bright y
-    int getFirstNoneBrightY(int x, int y) {
+    int getFirstNonBrightY(int x, int y) {
         if (y < pg.height) {
             while (brightness(pg.pixels[x + y * pg.width]) < brightValue) {
                 y++;
@@ -352,7 +354,7 @@ public class PixelSorting extends PApplet {
     }
 
     // dark y
-    int getFirstNoneDarkY(int x, int y) {
+    int getFirstNonDarkY(int x, int y) {
         if (y < pg.height) {
             while (brightness(pg.pixels[x + y * pg.width]) > darkValue) {
                 y++;
