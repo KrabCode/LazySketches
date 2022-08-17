@@ -11,7 +11,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 
-// Adapted for LazyGui by Krab based on: https://github.com/kimasendorf/ASDFPixelSort/blob/master/ASDFPixelSort.pde
+// Adapted for LazyGui
+// All credit for the effect goes to the original creator kimasendorf
+// https://github.com/kimasendorf/ASDFPixelSort/blob/master/ASDFPixelSort.pde
 
 public class PixelSorting extends PApplet {
     private LazyGui gui;
@@ -34,6 +36,7 @@ public class PixelSorting extends PApplet {
     }
 
     // TODO use a saved image series from your other sketches as input!
+    // TODO try changing sort direction
 
     @Override
     public void settings() {
@@ -59,11 +62,18 @@ public class PixelSorting extends PApplet {
         pg.imageMode(CENTER);
         pg.image(sourceImage, 0, 0);
         selectMode();
-        applyPixelSortEffect();
+        int sortEveryNthFrame = gui.sliderInt("pixel sort/sort every n frames", 1,1, Integer.MAX_VALUE);
+        if(frameCount % sortEveryNthFrame == 0){
+            applyPixelSortEffect();
+        }
         pg.endDraw();
         clear();
         image(pg, 0, 0);
         record();
+    }
+
+    float easeInOutCubic(float x){
+        return x < 0.5 ? 4 * x * x * x : 1 - pow(-2 * x + 2, 3) / 2;
     }
 
     private void record() {
@@ -82,7 +92,7 @@ public class PixelSorting extends PApplet {
         if(recStarted != -1 && frameCount < recStarted + recLength){
             println("rec " + saveIndex + " / " + recLength);
             PImage cutout = pg.get(recordRectPosX, recordRectPosY, recordRectSizeX, recordRectSizeY);
-            cutout.save("out/recorded images/" + sketchInstanceId + "/" + saveIndex++ + ".jpg");
+            cutout.save("out/recorded images/PixelSorting_" + sketchInstanceId + "/" + saveIndex++ + ".png");
         }
         if(gui.toggle("rec/show rect")){
             stroke(255);
@@ -97,21 +107,27 @@ public class PixelSorting extends PApplet {
     }
 
     private void applyPixelSortEffect() {
-        int loops = gui.sliderInt("pixel sort/loops", 1, 1, 100);
+        int loopCols = gui.sliderInt("pixel sort/loop columns", 1, 0, 100);
+        int loopRows = gui.sliderInt("pixel sort/loop rows", 1, 0, 100);
         whiteValue = gui.colorPicker("pixel sort/thresholds/white", -12345678).hex;
         blackValue = gui.colorPicker("pixel sort/thresholds/black", -3456789).hex;
-        brightValue = gui.slider("pixel sort/thresholds/bright value", 127, 0, 255);
-        darkValue  = gui.slider("pixel sort/thresholds/dark value", 223, 0, 255);
+        brightValue = gui.slider("pixel sort/thresholds/bright value", 127, 0, 256);
+        darkValue  = gui.slider("pixel sort/thresholds/dark value", 223, 0, 256);
+        float recNorm = norm(frameCount, recStarted, recStarted+recLength);
+        recNorm = 1-abs(1 - recNorm * 2);
+        if(recStarted != -1){
+            darkValue = 255 * easeInOutCubic(recNorm);
+        }
         int column = 0;
         int row = 0;
-        for (int i = 0; i < loops; i++) {
-            while (column < pg.width-1) {
+        for (int i = 0; i < max(loopCols, loopRows); i++) {
+            while (column < pg.width-1 && i < loopCols) {
                 pg.loadPixels();
                 sortColumn(column);
                 column++;
                 pg.updatePixels();
             }
-            while (row < pg.height-1) {
+            while (row < pg.height-1 && i <loopRows) {
                 pg.loadPixels();
                 sortRow(row);
                 row++;
@@ -125,7 +141,7 @@ public class PixelSorting extends PApplet {
         int x = 0;
         // where to stop sorting
         int xEnd = 0;
-        while (xEnd < pg.width-1) {
+        while (xEnd < pg.width - 1) {
             switch (mode) {
                 case 0:
                     x = getFirstNonWhiteX(x, y);
@@ -170,7 +186,7 @@ public class PixelSorting extends PApplet {
         // where to stop sorting
         int yEnd = 0;
 
-        while (yEnd < pg.height-1) {
+        while (yEnd < pg.height - 1) {
             switch (mode) {
                 case 0:
                     y = getFirstNonWhiteY(x, y);
