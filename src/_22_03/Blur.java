@@ -4,6 +4,7 @@ import processing.core.PApplet;
 import processing.core.PGraphics;
 import lazy.LazyGui;
 import lazy.ShaderReloader;
+import processing.core.PImage;
 
 import java.util.ArrayList;
 
@@ -11,6 +12,7 @@ public class Blur extends PApplet {
     LazyGui gui;
     PGraphics canvas;
     ArrayList<PGraphics> graphics = new ArrayList<>();
+    PImage img;
 
     public static void main(String[] args) {
         PApplet.main(java.lang.invoke.MethodHandles.lookup().lookupClass());
@@ -25,13 +27,14 @@ public class Blur extends PApplet {
     public void setup() {
         gui = new LazyGui(this);
         canvas = createGraphics(width, height, P2D);
+        img = loadImage("https://www.industrialempathy.com/img/remote/ZiClJf-1920w.jpg");
     }
 
     @Override
     public void draw() {
         canvas.beginDraw();
         canvas.background(0);
-        canvas.image(gui.imagePicker("image", "https://www.industrialempathy.com/img/remote/ZiClJf-1920w.jpg"), 0, 0);
+        canvas.image(img, 0, 0);
         canvas.endDraw();
         int passes = gui.sliderInt("blur/passes", 4, 0, 100);
         int w = width;
