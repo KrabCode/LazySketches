@@ -5,7 +5,6 @@ import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PVector;
 import lazy.LazyGui;
-import lazy.global.Utils;
 import lazy.windows.nodes.colorPicker.PickerColor;
 
 import java.util.ArrayList;

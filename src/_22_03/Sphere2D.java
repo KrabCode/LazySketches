@@ -4,8 +4,6 @@ import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PVector;
 import lazy.LazyGui;
-import lazy.global.State;
-import lazy.global.Utils;
 
 import java.util.ArrayList;
 import java.util.UUID;

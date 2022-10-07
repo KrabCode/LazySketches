@@ -1,6 +1,6 @@
 package _22_08;
 
-import lazy.global.Utils;
+import lazy.Utils;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import lazy.LazyGui;
@@ -8,8 +8,6 @@ import processing.core.PImage;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 
 // Adapted for LazyGui
 // All credit for the effect goes to the original creator kimasendorf

@@ -73,6 +73,7 @@ public class AsciiArt extends PApplet {
         pg.pushStyle();
         pg.imageMode(CENTER);
         pg.translate(gui.slider("photo/x", width / 2f), gui.slider("photo/y", height / 2f));
+        pg.rotate(gui.slider("photo/rotate"));
         pg.scale(gui.slider("photo/scale", 1));
         pg.tint(gui.colorPicker("photo/original tint", color(255)).hex);
         if(gui.toggle("photo/display original")){
