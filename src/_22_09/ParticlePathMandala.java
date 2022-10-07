@@ -2,9 +2,11 @@ package _22_09;
 
 import _22_03.PostFxAdapter;
 import lazy.LazyGui;
+import lazy.Utils;
 import lazy.windows.nodes.colorPicker.PickerColor;
 import processing.core.PApplet;
 import processing.core.PGraphics;
+import processing.core.PImage;
 import processing.core.PVector;
 
 import java.util.ArrayList;
@@ -16,6 +18,11 @@ public class ParticlePathMandala extends PApplet {
     ArrayList<Particle> particles = new ArrayList<Particle>();
     ArrayList<Particle> particlesBin = new ArrayList<Particle>();
     PVector center = new PVector();
+
+    private int recStarted = -1;
+    private int saveIndex = 1;
+    private int recLength = 0;
+    private String sketchInstanceId;
 
     public static void main(String[] args) {
         PApplet.main(java.lang.invoke.MethodHandles.lookup().lookupClass());
@@ -49,6 +56,7 @@ public class ParticlePathMandala extends PApplet {
         PostFxAdapter.apply(this, gui, pg);
         clear();
         image(pg, 0, 0);
+        record();
     }
 
     private void drawParticles() {
@@ -136,6 +144,31 @@ public class ParticlePathMandala extends PApplet {
             }
             default:
                 throw new IllegalStateException("Unexpected blend mode");
+        }
+    }
+
+    private void record() {
+        recLength = gui.sliderInt("rec/frames", 600);
+        if(gui.button("rec/start")){
+            recStarted = frameCount;
+        }
+        if(gui.button("rec/stop")){
+            sketchInstanceId = Utils.generateRandomShortId();
+            recStarted = -1;
+        }
+        int recordRectPosX = gui.sliderInt("rec/rect pos x");
+        int recordRectPosY = gui.sliderInt("rec/rect pos y");
+        int recordRectSizeX = gui.sliderInt("rec/rect size x", width);
+        int recordRectSizeY = gui.sliderInt("rec/rect size y", height);
+        if(recStarted != -1 && frameCount < recStarted + recLength){
+            println("rec " + saveIndex + " / " + recLength);
+            PImage cutout = pg.get(recordRectPosX, recordRectPosY, recordRectSizeX, recordRectSizeY);
+            cutout.save("out/recorded images/PixelSorting_" + sketchInstanceId + "/" + saveIndex++ + ".png");
+        }
+        if(gui.toggle("rec/show rect")){
+            stroke(255);
+            noFill();
+            rect(recordRectPosX, recordRectPosY, recordRectSizeX, recordRectSizeY);
         }
     }
 
