@@ -1,9 +1,12 @@
 package _0_utils;
 
 import lazy.LazyGui;
+import lazy.ShaderReloader;
 import lazy.State;
 import processing.core.PApplet;
+import processing.core.PGraphics;
 import processing.core.PImage;
+import processing.opengl.PShader;
 
 import java.awt.*;
 import java.io.File;
@@ -12,12 +15,14 @@ import java.nio.file.Paths;
 import java.util.Scanner;
 
 import static processing.core.PApplet.println;
+import static processing.core.PApplet.radians;
 import static processing.core.PConstants.CENTER;
 
 public class Utils {
     private static int recStarted = -1;
     private static int saveIndex = 1;
     private static String recordingId = lazy.Utils.generateRandomShortId();
+    private static float moveShaderTime = 0;
 
     public static void record(PApplet pApplet, LazyGui gui){
         int recLength = gui.sliderInt("rec/frames", 600);
@@ -108,5 +113,33 @@ public class Utils {
         if(onTop){
             pApplet.getSurface().setAlwaysOnTop(true);
         }
+    }
+
+    public static void drawImage(PGraphics pg, PImage img, LazyGui gui){
+        pg.imageMode(CENTER);
+        pg.translate(
+                pg.width/2f + gui.slider("img/x"),
+                pg.height/2f + gui.slider("img/y")
+        );
+        pg.rotate(gui.slider("img/rotate"));
+        pg.scale(gui.slider("img/scale", 1));
+        pg.image(img, 0, 0);
+    }
+
+    public static void shaderMove(PGraphics pg, LazyGui gui) {
+        String moveShaderPath = "_0_utils/move.glsl";
+        moveShaderTime += radians(gui.sliderInt("move/time speed", 1));
+        PShader moveShader = ShaderReloader.getShader(moveShaderPath);
+        moveShader.set("time", moveShaderTime);
+        moveShader.set("timeRadius", gui.slider("move/time radius", 1));
+        moveShader.set("baseAngle", gui.slider("move/base angle", 1));
+        moveShader.set("angleRange", gui.slider("move/angle range", 8));
+        moveShader.set("frequency", gui.slider("move/frequency", 2));
+        moveShader.set("octaves", gui.sliderInt("move/octaves", 4));
+        moveShader.set("freqMult", gui.slider("move/freqMult", 2.5f));
+        moveShader.set("ampMult", gui.slider("move/ampMult", 0.5f));
+        moveShader.set("strength", gui.slider("move/strength", 0.1f, 0, 1));
+        moveShader.set("centerForce", gui.slider("move/center force"));
+        ShaderReloader.filter(moveShaderPath, pg);
     }
 }

@@ -1,8 +1,8 @@
 package _22_09;
 
+import _0_utils.Utils;
 import _22_03.PostFxAdapter;
 import lazy.LazyGui;
-import lazy.Utils;
 import lazy.windows.nodes.colorPicker.PickerColor;
 import processing.core.PApplet;
 import processing.core.PGraphics;
@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class ParticlePathMandala extends PApplet {
     LazyGui gui;
     PGraphics pg;
-    ArrayList<Particle> particles = new ArrayList<Particle>();
+    ArrayList<Particle> particles = new ArrayList<>();
     ArrayList<Particle> particlesBin = new ArrayList<Particle>();
     PVector center = new PVector();
 
@@ -52,11 +52,12 @@ public class ParticlePathMandala extends PApplet {
         pg.translate(width / 2f, height / 2f);
         drawCircles();
         drawParticles();
+        Utils.shaderMove(pg, gui);
         pg.endDraw();
         PostFxAdapter.apply(this, gui, pg);
         clear();
         image(pg, 0, 0);
-        record();
+        Utils.record(this, gui);
     }
 
     private void drawParticles() {
@@ -153,7 +154,7 @@ public class ParticlePathMandala extends PApplet {
             recStarted = frameCount;
         }
         if(gui.button("rec/stop")){
-            sketchInstanceId = Utils.generateRandomShortId();
+            sketchInstanceId = lazy.Utils.generateRandomShortId();
             recStarted = -1;
         }
         int recordRectPosX = gui.sliderInt("rec/rect pos x");
@@ -174,8 +175,10 @@ public class ParticlePathMandala extends PApplet {
 
     class Particle {
         PVector pos = new PVector();
+        PVector spd = new PVector();
         int frameCreated = frameCount;
         int clr;
+        float weightRandom = abs(randomGaussian());
 
         Particle(float x, float y, int clr) {
             this.clr = clr;
@@ -189,10 +192,19 @@ public class ParticlePathMandala extends PApplet {
                 particlesBin.add(this);
             }
             pg.stroke(clr);
-            pg.strokeWeight(gui.slider("particles/weight", 1));
+            pg.strokeWeight(gui.slider("particles/weight", 1) + weightRandom * gui.slider("particles/weight random", 1));
             pg.point(pos.x, pos.y);
             PVector awayFromCenter = PVector.div(pos, pos.mag()).normalize();
-            pos.add(awayFromCenter.mult(gui.slider("particles/speed", 1)));
+            pos.add(awayFromCenter.mult(gui.slider("particles/center force", 1)));
+            float noiseFreq = gui.slider("particles/noise freq");
+            float noiseTime = gui.slider("particles/noise time");
+            float t = radians(frameCount);
+            float noiseX = -1+2*noise(pos.x*noiseFreq, pos.y*noiseFreq, 3271.2131f + t * noiseTime);
+            float noiseY = -1+2*noise(pos.x*noiseFreq, pos.y*noiseFreq, 1327.1243f + t * noiseTime);
+            PVector acc = new PVector(noiseX, noiseY).mult(gui.slider("particles/noise strength", 0.1f));
+            spd.add(acc);
+            spd.mult(gui.slider("particles/drag", 0.95f));
+            pos.add(spd);
         }
     }
 }
