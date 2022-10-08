@@ -1,11 +1,17 @@
 package _0_utils;
 
 import lazy.LazyGui;
+import lazy.State;
 import processing.core.PApplet;
 import processing.core.PImage;
 
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.Scanner;
 
+import static processing.core.PApplet.println;
 import static processing.core.PConstants.CENTER;
 
 public class Utils {
@@ -24,6 +30,22 @@ public class Utils {
             recordingId = lazy.Utils.generateRandomShortId();
             recStarted = -1;
         }
+
+        String sketchMainClassName = pApplet.getClass().getSimpleName();
+        String recDir = "out/rec/" + sketchMainClassName +"_" + recordingId;
+        String recDirAbsolute = Paths.get(recDir).toAbsolutePath().toString();
+        if(gui.button("rec/open folder")){
+            Desktop desktop = Desktop.getDesktop();
+            File dir = new File(recDirAbsolute + "\\");
+            if(!dir.exists()){
+                dir.mkdirs();
+            }
+            try {
+                desktop.open(dir);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         int recordRectPosX = pApplet.width / 2 + gui.sliderInt("rec/rect center x", 0);
         int recordRectPosY = pApplet.height / 2 + gui.sliderInt("rec/rect center y", 0);
         int recordRectSizeX = gui.sliderInt("rec/rect size x div 2", pApplet.width / 4);
@@ -34,21 +56,19 @@ public class Utils {
         if(recordRectSizeY % 2 != 0){
             recordRectSizeY += 1;
         }
-        String sketchMainClassName = pApplet.getClass().getSimpleName();
-        String recDir = "out/rec/" + sketchMainClassName +"_" + recordingId;
+        String recImageFormat = ".jpg";
         if (recStarted != -1 && pApplet.frameCount < recStarted + recLength) {
-            PApplet.println("saved " + saveIndex + " / " + recLength);
+            println("saved " + saveIndex + " / " + recLength);
             PImage cutout = pApplet.get(
                     recordRectPosX - recordRectSizeX / 2,
                     recordRectPosY - recordRectSizeY / 2,
                     recordRectSizeX,
                     recordRectSizeY
             );
-            cutout.save( recDir + "/" + saveIndex++ + ".png");
+            cutout.save( recDir + "/" + saveIndex++ + recImageFormat);
         }
         if(stopCommand || (recStarted != -1 && pApplet.frameCount == recStarted + recLength)){
-
-            PApplet.println("Recorded image series folder: " + Paths.get(recDir).toAbsolutePath());
+            println("Recorded image series folder: " + recDirAbsolute);
         }
         if (gui.toggle("rec/show rect")) {
             pApplet.pushStyle();
@@ -59,7 +79,25 @@ public class Utils {
             pApplet.popStyle();
         }
 
-        // TODO call ffmpeg on last series with gui button, uuid filename, allow to choose playback framerate with slider
+        int ffmpegFramerate = gui.sliderInt("rec/ffmpeg fps", 60, 1, Integer.MAX_VALUE);
+        if(gui.button("rec/ffmpeg make mp4")){
+            String outMovieFilename = recDirAbsolute + "/_" + lazy.Utils.generateRandomShortId();
+            String inputFormat = recDirAbsolute + "/%01d" + recImageFormat;
+            String command = String.format("ffmpeg  -r " + ffmpegFramerate +" -i %s -start_number_range 100000 -an %s.mp4",
+                    inputFormat, outMovieFilename);
+            println("running ffmpeg: " + command);
+            try {
+                Process proc = Runtime.getRuntime().exec(command);
+                new Thread(() -> {
+                    Scanner sc = new Scanner(proc.getErrorStream());
+                    while (sc.hasNextLine()) {
+                        println(sc.nextLine());
+                    }
+                }).start();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public static void initSurface(PApplet pApplet, boolean onTop) {
