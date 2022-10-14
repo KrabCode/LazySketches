@@ -53,8 +53,8 @@ public class AsciiArt extends PApplet {
         pg = createGraphics(width, height, P2D);
         gui = new LazyGui(this);
         font = createFont(currentFontSize);
-        photo = loadImage("C:\\cat.jpg");
-        asciiPhoto = createGraphics(photo.width, photo.height);
+        photo = loadImage("C:\\Users\\jakub Rak\\Desktop\\cat.JPG");
+        asciiPhoto = createGraphics(photo.width, photo.height, P2D);
     }
 
     public void draw() {

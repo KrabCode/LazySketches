@@ -1,14 +1,24 @@
 uniform sampler2D texture;
 uniform vec2 resolution;
 uniform float time;
-uniform float speed;
-uniform float alpha;
+
+// colors
+uniform int colorCount;
+const int maxArraySize = 100;
+uniform float[maxArraySize] colorStops;
+uniform float[maxArraySize] colorsRGBA;
+
+// noise
+uniform vec2 noiseOffset;
 uniform float baseValue;
 uniform float baseAmp;
 uniform float baseFreq;
 uniform float fbmFreqMult;
 uniform float fbmAmpMult;
 uniform int octaves;
+
+uniform float distSmoothStart;
+uniform float distSmoothEnd;
 
 
 vec4 permute(vec4 x){ return mod(((x*34.0)+1.0)*x, 289.0); }
@@ -108,21 +118,29 @@ float fbm (vec4 p) {
         sum += amp*snoise(p*freq);
         freq *= fbmFreqMult;
         amp *= fbmAmpMult;
-        p += vec4(3.123, 2.456, 1.121, 2.4545);
+        p += vec4(32.123, 27.456, 14.121, 20.4545);
     }
     return sum;
 }
 
-float noise(vec2 p, vec2 t, float amp, float freq){
-    return amp*snoise(vec4(p*freq, t));
-}
-
 void main(){
     vec2 uv = gl_FragCoord.xy / resolution.xy;
-    float t = time * speed;
-    float pct = fbm(vec4(uv, t, 0.));
-    vec3 origColor = texture2D(texture, gl_FragCoord.xy / resolution.xy).rgb;
-    vec3 noiseColor = origColor + vec3(pct);
-    vec3 final = mix(origColor, noiseColor, alpha).rgb;
-    gl_FragColor = vec4(final, 1.);
+    float tr = 0.5;
+    vec2 t = tr * vec2(cos(time), sin(time));
+    float noiseVal = fbm(vec4(uv+noiseOffset, t));
+    float d = length(uv - vec2(0.5, 0.5));
+    d = smoothstep(distSmoothStart, distSmoothEnd, d);
+    noiseVal += d;
+    noiseVal = clamp(noiseVal, 0., 1.);
+    vec3 flatColor = vec3(0);
+    for(int i = 0;  i < colorCount; i++){
+        float colStop = colorStops[i];
+        int c = i * 4;
+        flatColor = vec3(colorsRGBA[c], colorsRGBA[c+1], colorsRGBA[c+2]);
+        if(colStop > noiseVal){
+            break;
+        }
+    }
+    vec3 col = vec3(flatColor);
+    gl_FragColor = vec4(col, 1.);
 }

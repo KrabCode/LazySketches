@@ -77,7 +77,7 @@ public class Utils {
         }
         if (gui.toggle("rec/show rect")) {
             pApplet.pushStyle();
-            pApplet.stroke(255);
+            pApplet.stroke(pApplet.color(0xFFFFFFFF));
             pApplet.noFill();
             pApplet.rectMode(CENTER);
             pApplet.rect(recordRectPosX, recordRectPosY, recordRectSizeX, recordRectSizeY);
