@@ -1,6 +1,6 @@
 package _22_08;
 
-import lazy.Utils;
+import _0_utils.Utils;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import lazy.LazyGui;

@@ -125,13 +125,14 @@ float fbm (vec4 p) {
 
 void main(){
     vec2 uv = gl_FragCoord.xy / resolution.xy;
+    vec2 cv = (gl_FragCoord.xy - resolution.xy *0.5) / resolution.y;
     float tr = 0.5;
     vec2 t = tr * vec2(cos(time), sin(time));
-    float noiseVal = fbm(vec4(uv+noiseOffset, t));
-    float d = length(uv - vec2(0.5, 0.5));
+    float noiseVal = fbm(vec4(cv+noiseOffset, t));
+    float d = length(cv);
     d = smoothstep(distSmoothStart, distSmoothEnd, d);
     noiseVal += d;
-    noiseVal = clamp(noiseVal, 0., 1.);
+//    noiseVal = clamp(noiseVal, 0., 1.);
     vec3 flatColor = vec3(0);
     for(int i = 0;  i < colorCount; i++){
         float colStop = colorStops[i];

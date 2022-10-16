@@ -20,7 +20,8 @@ public class FlatFlame extends PApplet {
     }
 
     public void settings() {
-        size(1000, 1000, P2D);
+//        size(1000, 1000, P2D);
+        fullScreen(P2D);
     }
 
     public void setup() {
@@ -41,7 +42,7 @@ public class FlatFlame extends PApplet {
         for (int i = 0; i < colorCount; i++) {
             String letter = "" + alphabet.charAt(i);
             float norm = norm(i, 0, colorCount-1);
-            colorStops[i] = gui.slider("colors/stops/"+i, norm);
+            colorStops[i] = gui.slider("colors/stops/" + letter, norm);
             int hex = gui.colorPicker("colors/" + letter, color(norm)).hex;
             int j = i * 4 - 1;
             colorData[++j] = red(hex);
@@ -62,9 +63,9 @@ public class FlatFlame extends PApplet {
         shader.set("baseValue", gui.slider("noise/base val", 0));
         shader.set("baseAmp", gui.slider("noise/base amp", 0.5f));
         shader.set("baseFreq", gui.slider("noise/base frq", 0.5f));
-        shader.set("fbmFreqMult", gui.slider("noise/mult frq", 0.1f));
-        shader.set("fbmAmpMult", gui.slider("noise/mult amp", 2f));
-        shader.set("octaves", gui.sliderInt("noise/octaves", 4));
+        shader.set("fbmFreqMult", gui.slider("noise/mult frq", 2));
+        shader.set("fbmAmpMult", gui.slider("noise/mult amp", 0.5f));
+        shader.set("octaves", gui.sliderInt("noise/octaves", 8));
         shader.set("distSmoothStart", gui.slider("noise/dist smooth start", 0.1f));
         shader.set("distSmoothEnd", gui.slider("noise/dist smooth end", 0.5f));
         ShaderReloader.filter(shaderPath, pg);

@@ -2,7 +2,6 @@ package _0_utils;
 
 import lazy.LazyGui;
 import lazy.ShaderReloader;
-import lazy.State;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PImage;
@@ -13,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Scanner;
+import java.util.UUID;
 
 import static processing.core.PApplet.println;
 import static processing.core.PApplet.radians;
@@ -21,18 +21,22 @@ import static processing.core.PConstants.CENTER;
 public class Utils {
     private static int recStarted = -1;
     private static int saveIndex = 1;
-    private static String recordingId = lazy.Utils.generateRandomShortId();
+    private static String recordingId = generateRandomShortId();
     private static float moveShaderTime = 0;
+
+    public static String generateRandomShortId() {
+        return UUID.randomUUID().toString().replace("-", "").substring(0, 8);
+    }
 
     public static void record(PApplet pApplet, LazyGui gui){
         int recLength = gui.sliderInt("rec/frames", 600);
         if (gui.button("rec/start")) {
+            recordingId = generateRandomShortId();
             recStarted = pApplet.frameCount;
             saveIndex = 1;
         }
         boolean stopCommand = gui.button("rec/stop");
         if (stopCommand) {
-            recordingId = lazy.Utils.generateRandomShortId();
             recStarted = -1;
         }
 
@@ -86,7 +90,7 @@ public class Utils {
 
         int ffmpegFramerate = gui.sliderInt("rec/ffmpeg fps", 60, 1, Integer.MAX_VALUE);
         if(gui.button("rec/ffmpeg make mp4")){
-            String outMovieFilename = recDirAbsolute + "/_" + lazy.Utils.generateRandomShortId();
+            String outMovieFilename = recDirAbsolute + "/_" + generateRandomShortId();
             String inputFormat = recDirAbsolute + "/%01d" + recImageFormat;
             String command = String.format("ffmpeg  -r " + ffmpegFramerate +" -i %s -start_number_range 100000 -an %s.mp4",
                     inputFormat, outMovieFilename);

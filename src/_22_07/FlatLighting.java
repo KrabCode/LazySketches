@@ -1,12 +1,10 @@
 package _22_07;
 
 import processing.core.PApplet;
-import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.opengl.PShader;
 import lazy.LazyGui;
 import lazy.ShaderReloader;
-import lazy.windows.nodes.colorPicker.PickerColor;
 
 public class FlatLighting extends PApplet {LazyGui gui;
     PGraphics canvas;

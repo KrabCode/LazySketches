@@ -1,11 +1,11 @@
 package _22_05;
 
 import _22_03.PostFxAdapter;
+import lazy.PickerColor;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PVector;
 import lazy.LazyGui;
-import lazy.windows.nodes.colorPicker.PickerColor;
 
 import java.util.ArrayList;
 
@@ -116,7 +116,6 @@ public class SakuraSnow extends PApplet {
         float hueModifier = randomGaussian();
         float satModifier = randomGaussian();
         float brModifier = randomGaussian();
-        private int lifeLength;
 
         Leaf(){
             float x = gui.slider("leaf/spawn/x", 0);

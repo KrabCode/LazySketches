@@ -1,28 +1,22 @@
-package _22_09;
+package _22_10;
 
 import _0_utils.Utils;
 import _22_03.PostFxAdapter;
 import lazy.LazyGui;
-import lazy.windows.nodes.colorPicker.PickerColor;
+import lazy.PickerColor;
 import processing.core.PApplet;
 import processing.core.PGraphics;
-import processing.core.PImage;
 import processing.core.PVector;
 
 import java.util.ArrayList;
 
 
-public class ParticlePathMandala extends PApplet {
+public class MirroredEmitters extends PApplet {
     LazyGui gui;
     PGraphics pg;
     ArrayList<Particle> particles = new ArrayList<>();
     ArrayList<Particle> particlesBin = new ArrayList<Particle>();
     PVector center = new PVector();
-
-    private int recStarted = -1;
-    private int saveIndex = 1;
-    private int recLength = 0;
-    private String sketchInstanceId;
 
     public static void main(String[] args) {
         PApplet.main(java.lang.invoke.MethodHandles.lookup().lookupClass());
@@ -50,7 +44,7 @@ public class ParticlePathMandala extends PApplet {
         pg.beginDraw();
         drawBackground();
         pg.translate(width / 2f, height / 2f);
-        drawCircles();
+        drawEmitterCircles();
         drawParticles();
         Utils.shaderMove(pg, gui);
         pg.endDraw();
@@ -68,7 +62,7 @@ public class ParticlePathMandala extends PApplet {
         particlesBin.clear();
     }
 
-    private void drawCircles() {
+    private void drawEmitterCircles() {
         String path = "foreground/circles/";
         chooseBlendMode("foreground");
         int circleCount = gui.sliderInt(path + "count", 1);
@@ -145,31 +139,6 @@ public class ParticlePathMandala extends PApplet {
             }
             default:
                 throw new IllegalStateException("Unexpected blend mode");
-        }
-    }
-
-    private void record() {
-        recLength = gui.sliderInt("rec/frames", 600);
-        if(gui.button("rec/start")){
-            recStarted = frameCount;
-        }
-        if(gui.button("rec/stop")){
-            sketchInstanceId = lazy.Utils.generateRandomShortId();
-            recStarted = -1;
-        }
-        int recordRectPosX = gui.sliderInt("rec/rect pos x");
-        int recordRectPosY = gui.sliderInt("rec/rect pos y");
-        int recordRectSizeX = gui.sliderInt("rec/rect size x", width);
-        int recordRectSizeY = gui.sliderInt("rec/rect size y", height);
-        if(recStarted != -1 && frameCount < recStarted + recLength){
-            println("rec " + saveIndex + " / " + recLength);
-            PImage cutout = pg.get(recordRectPosX, recordRectPosY, recordRectSizeX, recordRectSizeY);
-            cutout.save("out/recorded images/PixelSorting_" + sketchInstanceId + "/" + saveIndex++ + ".png");
-        }
-        if(gui.toggle("rec/show rect")){
-            stroke(255);
-            noFill();
-            rect(recordRectPosX, recordRectPosY, recordRectSizeX, recordRectSizeY);
         }
     }
 

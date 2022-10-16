@@ -1,7 +1,7 @@
 package _22_10;
 
+import _0_utils.Utils;
 import lazy.LazyGui;
-import lazy.Utils;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PImage;
