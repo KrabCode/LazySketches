@@ -3,15 +3,18 @@ package _22_10;
 import _0_utils.Utils;
 import lazy.LazyGui;
 import lazy.PickerColor;
+import lazy.ShaderReloader;
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PGraphics;
+import processing.opengl.PShader;
 
 public class StaticMaskedRect extends PApplet {
     PGraphics pg;
     PGraphics noiseMask;
-    PGraphics lineCanvas;
+    PGraphics formCanvas;
     LazyGui gui;
+    private float noiseTime;
 
     public static void main(String[] args) {
         PApplet.main(java.lang.invoke.MethodHandles.lookup().lookupClass());
@@ -25,7 +28,7 @@ public class StaticMaskedRect extends PApplet {
         gui = new LazyGui(this);
         pg = createGraphics(width, height, P2D);
         noiseMask = createGraphics(width, height, P2D);
-        lineCanvas = createGraphics(width, height, P2D);
+        formCanvas = createGraphics(width, height, P2D);
         colorMode(HSB,1,1,1,1);
     }
 
@@ -33,13 +36,15 @@ public class StaticMaskedRect extends PApplet {
         pg.beginDraw();
         pg.background(gui.colorPicker("background/color").hex);
         drawNoiseMaskRectangle();
-        drawCentralCircle();
         pg.endDraw();
         image(pg, 0, 0);
         Utils.record(this, gui);
     }
 
-    private void drawCentralCircle() {
+    private void drawCentralCircle(PGraphics pg) {
+        if(!gui.toggle("frame/ellipse/visible", true)){
+            return;
+        }
         pg.pushMatrix();
         pg.translate(gui.slider("frame/ellipse/x", width/2f), gui.slider("frame/ellipse/y", height / 2f));
         pg.noStroke();
@@ -64,72 +69,59 @@ public class StaticMaskedRect extends PApplet {
     }
 
     private void drawNoiseMaskRectangle() {
-        String mode = gui.stringPicker("frame/mode", new String[]{ "masked line", "noise debug", "line debug"});
-        if(gui.button("frame/regen once") || frameCount == 1 ||
-                (gui.toggle("frame/regen always") && 0 == frameCount % gui.sliderInt("frame/regen speed", 5, 1, Integer.MAX_VALUE))){
+        String modeMaskedForm = "masked form";
+        String modeFormDebug = "form debug";
+        String modeNoiseDebug = "noise debug";
+        String mode = gui.stringPicker("frame/mode", new String[]{ modeMaskedForm, modeNoiseDebug, modeFormDebug});
+        if(frameCount == 1 || gui.button("frame/regen once") || gui.toggle("frame/regen always", true)){
             regenerateNoiseMask();
         }
-        if(mode.equals("noise debug")){
+        if(mode.equals(modeNoiseDebug)){
             pg.image(noiseMask, 0, 0);
         }
-        if(mode.equals("line debug") || mode.equals("masked line")){
-            lineCanvas.beginDraw();
-            drawLine(lineCanvas);
-            if(mode.equals("masked line")){
-                lineCanvas.mask(noiseMask);
+        if(mode.equals(modeFormDebug) || mode.equals(modeMaskedForm)){
+            formCanvas.beginDraw();
+            formCanvas.background(gui.colorPicker("frame/background").hex);
+            drawCentralCircle(formCanvas);
+            drawRect(formCanvas);
+            if(mode.equals(modeMaskedForm)){
+                formCanvas.mask(noiseMask);
             }
-            lineCanvas.endDraw();
-            pg.image(lineCanvas, 0, 0);
+            formCanvas.endDraw();
+            pg.image(formCanvas, 0, 0);
         }
     }
 
-    private void drawLine(PGraphics pg) {
-        pg.background(gui.colorPicker("frame/line/background").hex);
+    private void drawRect(PGraphics pg) {
         pg.noFill();
         pg.strokeWeight(gui.slider("frame/line/weight", 5));
         pg.stroke(gui.colorPicker("frame/line/stroke", color(0)).hex);
         pg.rectMode(CENTER);
-        pg.pushMatrix();
         float size = gui.slider("frame/line/size", 200);
         pg.rect(width / 2f, height / 2f, size, size);
-        pg.popMatrix();
     }
 
     private void regenerateNoiseMask() {
         noiseMask.beginDraw();
-        float globalFreq = gui.slider("frame/noise/freq", 0.01f);
-        float freqMult = gui.slider("frame/noise/freq mult", 2);
-        float globalAmp = gui.slider("frame/noise/base amp", 1);
-        float ampMult = gui.slider("frame/noise/amp mult", 0.5f);
-        float ampConst = gui.slider("frame/noise/amp const", 0);
-        float offsetX = gui.slider("frame/noise/x", 0);
-        float offsetY = gui.slider("frame/noise/y", 0);
-        int octaves = gui.sliderInt("frame/noise/octaves", 1);
-        noiseMask.loadPixels();
-        int pixelate = gui.sliderInt("frame/noise/pixelate", 10, 1, Integer.MAX_VALUE);
-        for (int y = 0; y < noiseMask.height; y+= pixelate) {
-            for(int x = 0; x < noiseMask.width; x+= pixelate){
-                float sum = 0;
-                float amp = globalAmp;
-                float freq = globalFreq;
-                for (int octaveIndex = 0; octaveIndex < octaves; octaveIndex++) {
-                    sum += amp * (-1 + 2 * noise(offsetX + x * freq,offsetY + y * freq));
-                    amp *= ampMult;
-                    freq *= freqMult;
-                }
-                sum = 0.5f + 0.5f * sum;
-                sum += ampConst;
-                sum = constrain(sum, 0, 1);
-                for (int xi = x; xi < x + pixelate; xi++) {
-                    for (int yi = y; yi < y + pixelate; yi++) {
-                        if(xi < noiseMask.width && yi < noiseMask.height){
-                            noiseMask.pixels[xi + yi * noiseMask.width] = color(sum);
-                        }
-                    }
-                }
-            }
-        }
-        noiseMask.updatePixels();
+        String path = "frame/noise/";
+        noiseTime += radians(gui.slider(path + "time speed"));
+        String noiseShaderPath = "_22_10/StaticMaskedRect_noise.glsl";
+        PShader shader = ShaderReloader.getShader(noiseShaderPath);
+        shader.set("time", noiseTime);
+        shader.set("offset", gui.slider(path + "x", 0), gui.slider(path + "y", 0));
+        shader.set("alpha", gui.slider(path + "alpha"));
+        shader.set("baseValue", gui.slider(path + "amp const", 0));
+        shader.set("baseAmp",gui.slider(path + "base amp", 1));
+        shader.set("baseFreqX", gui.slider(path + "freq x", 0.01f));
+        shader.set("baseFreqY", gui.slider(path + "freq y", 0.01f));
+        shader.set("fbmFreqMultX", gui.slider(path + "freq mult x", 2));
+        shader.set("fbmFreqMultY", gui.slider(path + "freq mult y", 2));
+        shader.set("fbmTimeFreqMult", gui.slider(path + "time freq mult"));
+        shader.set("fbmAmpMult", gui.slider(path + "amp mult", 0.5f));
+        shader.set("pixelate", gui.slider(path + "pixelate", 10, 1, Integer.MAX_VALUE));
+        shader.set("inverter", gui.slider(path + "inverter", 1));
+        shader.set("octaves", gui.sliderInt(path + "octaves", 1));
+        ShaderReloader.filter(noiseShaderPath, noiseMask);
         noiseMask.endDraw();
     }
 }
