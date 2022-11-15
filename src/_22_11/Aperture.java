@@ -26,7 +26,7 @@ public class Aperture extends PApplet {
 
     public void draw() {
         pg.beginDraw();
-        pg.background(gui.colorPicker("background", color(255)).hex);
+        pg.background(gui.colorPicker("background", color(255*0.15f)).hex);
         pg.translate(width/2f, height/2f);
         drawLines();
         pg.endDraw();
@@ -35,14 +35,14 @@ public class Aperture extends PApplet {
 
     private void drawLines() {
         String p = "lines/";
-        pg.stroke(gui.colorPicker(p + "stroke", color(255)).hex);
         pg.strokeWeight(gui.slider(p + "weight", 1.99f));
-        int detail = gui.sliderInt(p + "count");
+        int detail = gui.sliderInt(p + "count", 24);
         pg.noFill();
         float thetaOffsetA = gui.slider(p + "angle a");
         float thetaOffsetB = gui.slider(p + "angle b");
         gui.sliderSet(p + "angle a", thetaOffsetA + radians(gui.slider(p + "angle a +")));
         gui.sliderSet(p + "angle b", thetaOffsetB + radians(gui.slider(p + "angle b +")));
+        pg.beginShape(LINES);
         for (int i = 0; i < detail; i++) {
             float theta = map(i, 0, detail, 0, TAU);
             float thetaA = theta + thetaOffsetA;
@@ -53,7 +53,11 @@ public class Aperture extends PApplet {
             float aY = radiusA * sin(thetaA);
             float bX = radiusB * cos(thetaB);
             float bY = radiusB * sin(thetaB);
-            pg.line(aX, aY, bX, bY);
+            pg.stroke(gui.colorPicker(p + "stroke a", color(255)).hex);
+            pg.vertex(aX, aY);
+            pg.stroke(gui.colorPicker(p + "stroke b", color(255)).hex);
+            pg.vertex(bX, bY);
         }
+        pg.endShape();
     }
 }

@@ -73,9 +73,7 @@ public class StaticMaskedRect extends PApplet {
         String modeFormDebug = "form debug";
         String modeNoiseDebug = "noise debug";
         String mode = gui.stringPicker("frame/mode", new String[]{ modeMaskedForm, modeNoiseDebug, modeFormDebug});
-        if(frameCount == 1 || gui.button("frame/regen once") || gui.toggle("frame/regen always", true)){
-            regenerateNoiseMask();
-        }
+
         if(mode.equals(modeNoiseDebug)){
             pg.image(noiseMask, 0, 0);
         }
@@ -101,9 +99,9 @@ public class StaticMaskedRect extends PApplet {
         pg.rect(width / 2f, height / 2f, size, size);
     }
 
-    private void regenerateNoiseMask() {
+    private void regenerateNoiseMask(String pathSuffix) {
+        String path = "frame/noise" + pathSuffix + "/";
         noiseMask.beginDraw();
-        String path = "frame/noise/";
         noiseTime += radians(gui.slider(path + "time speed"));
         String noiseShaderPath = "_22_10/StaticMaskedRect_noise.glsl";
         PShader shader = ShaderReloader.getShader(noiseShaderPath);
