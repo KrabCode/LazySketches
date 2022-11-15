@@ -1,3 +1,5 @@
+package _0_templates;
+
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import lazy.LazyGui;

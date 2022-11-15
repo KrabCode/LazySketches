@@ -1,3 +1,5 @@
+package _0_templates;
+
 import lazy.LazyGui;
 import lazy.PickerColor;
 import processing.core.PApplet;
