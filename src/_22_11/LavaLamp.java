@@ -17,7 +17,7 @@ public class LavaLamp extends PApplet {
     LazyGui gui;
     PGraphics pg;
     private final ArrayList<Particle> particles = new ArrayList<>();
-    private float t = 0;
+    float t;
 
     public static void main(String[] args) {
         PApplet.main(java.lang.invoke.MethodHandles.lookup().lookupClass());
@@ -36,6 +36,7 @@ public class LavaLamp extends PApplet {
     }
 
     public void draw() {
+        t = radians(frameCount);
         pg.beginDraw();
         pg.colorMode(HSB, 1, 1, 1, 1);
         drawBackground();
