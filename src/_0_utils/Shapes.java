@@ -1,16 +1,21 @@
-package _22_11;
+package _0_utils;
 
-import _0_utils.Utils;
 import lazy.LazyGui;
 import lazy.PickerColor;
 import lazy.ShaderReloader;
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PGraphics;
+import processing.core.PVector;
 
 
+@SuppressWarnings("SuspiciousNameCombination")
 public class Shapes extends PApplet {
     LazyGui gui;
     PGraphics pg;
+    private static float gridPosX, gridPosY;
+
+    private static int backgroundFrameCount;
 
     public static void main(String[] args) {
         PApplet.main(java.lang.invoke.MethodHandles.lookup().lookupClass());
@@ -25,31 +30,33 @@ public class Shapes extends PApplet {
     public void setup() {
         gui = new LazyGui(this);
         pg = createGraphics(width, height, P3D);
+        pg.colorMode(HSB,1,1,1,1);
     }
 
     @Override
     public void draw() {
         pg.beginDraw();
         pg.ortho();
-        drawBackground();
-        drawGrid("grid/");
-        drawShapes("shapes/");
-        drawSinewaves("sines/");
-        drawString("string/");
+        drawBackground("bg/", gui, pg);
+        drawGrid("grid/", gui, pg);
+        drawShapes("shapes/", gui, pg);
+        drawPyramids("pyramids/", gui, pg);
+        drawSinewaves("sines/", gui, pg);
+        drawString("string/", gui, pg);
         pg.endDraw();
         image(pg, 0, 0);
         Utils.record(this, gui);
     }
 
-    private void drawString(String path) {
+    public static void drawString(String path, LazyGui gui, PGraphics pg) {
         pg.pushMatrix();
-        String content = gui.stringInput( path + "content", "カニサラダとても寒い");
+        String content = gui.stringInput( path + "content", "...");
         int count = content.length();
         float time = gui.slider( path + "time");
         float speed = radians(gui.slider( path + "speed"));
         gui.sliderSet( path + "time", time + speed);
-        float x = width / 2f + gui.slider( path + "x");
-        float y = height / 2f + gui.slider( path + "y");
+        float x = pg.width / 2f + gui.slider( path + "x");
+        float y = pg.height / 2f + gui.slider( path + "y");
         float w = gui.slider( path + "width", 300);
         float h = gui.slider( path + "text size", 256);
         if(gui.toggle( path + "display rect")){
@@ -76,11 +83,110 @@ public class Shapes extends PApplet {
         pg.popMatrix();
     }
 
-    private String getLetter(String content, int letterIndex) {
+    private static String getLetter(String content, int letterIndex) {
         return String.valueOf(content.charAt(letterIndex % content.length()));
     }
 
-    private void drawSinewaves(String path) {
+    public static void drawPyramids(String path, LazyGui gui, PGraphics pg) {
+        gui.pushFolder(path);
+        pg.pushStyle();
+        pg.pushMatrix();
+        pg.translate(pg.width/2f, pg.height/2f);
+        gui.pushFolder("Δ global transform");
+        translate(gui, pg);
+        rotateXYZ(gui, pg);
+        gui.popFolder();
+        pg.rectMode(CENTER);
+        int count = gui.sliderInt("count", 1);
+        for (int i = 0; i < count; i++) {
+            pg.pushStyle();
+            pg.pushMatrix();
+
+            gui.pushFolder("pyramids[" + i + "]");
+            float topHeight = gui.slider("top ■ height", 80);
+            float footSize = gui.slider("bot ■ size", 100);
+            float cutoffSize = gui.slider("top ■ size", 30);
+            pg.stroke(gui.colorPicker( "stroke", pg.color(255)).hex);
+            pg.strokeWeight(gui.slider( "weight", 5));
+            pg.fill(gui.colorPicker("fill").hex);
+            boolean triangleFanMode = gui.toggle("triangle fan | quads");
+            gui.pushFolder("Δ[" + i + "].transform");
+            pg.translate(0, topHeight, 0);
+            translate(gui, pg);
+            pg.rotateX(HALF_PI);
+            rotateXYZ(gui, pg);
+            pg.scale(gui.slider("scale x", 1), gui.slider("scale y", 1));
+
+            if(triangleFanMode){
+                pg.beginShape(PConstants.TRIANGLE_FAN);
+                pg.vertex(0,0,topHeight);
+                pg.vertex(footSize, -footSize);
+                pg.vertex(-footSize, -footSize);
+                pg.vertex(-footSize, footSize);
+                pg.vertex(footSize, footSize);
+                pg.vertex(footSize, -footSize);
+                pg.endShape();
+                gui.popFolder();
+            }else{
+                pg.beginShape(PConstants.QUAD_STRIP);
+                pg.vertex(cutoffSize, -cutoffSize, topHeight);
+                pg.vertex(footSize, -footSize, 0);
+
+                pg.vertex(-cutoffSize, -cutoffSize, topHeight);
+                pg.vertex(-footSize, -footSize, 0);
+
+                pg.vertex(-cutoffSize, cutoffSize, topHeight);
+                pg.vertex(-footSize, footSize, 0);
+
+                pg.vertex(cutoffSize, cutoffSize,  topHeight);
+                pg.vertex(footSize, footSize, 0);
+
+                pg.vertex(cutoffSize, -cutoffSize, topHeight);
+                pg.vertex(footSize, -footSize, 0);
+                pg.endShape();
+
+                gui.popFolder();
+            }
+
+            gui.pushFolder("bot ■[" + i + "].transform");
+            translate(gui, pg);
+            rotateXYZ(gui, pg);
+            pg.rect(0, 0, footSize*2, footSize*2);
+            gui.popFolder();
+
+            if(!triangleFanMode){
+
+                gui.pushFolder("top ■[" + i + "].transform");
+                pg.translate(0,0,topHeight);
+                translate(gui, pg);
+                rotateXYZ(gui, pg);
+                pg.rect(0, 0, cutoffSize*2, cutoffSize*2);
+                gui.popFolder();
+            }
+
+            pg.popStyle();
+            pg.popMatrix();
+            gui.popFolder();
+        }
+        gui.popFolder();
+        pg.popStyle();
+        pg.popMatrix();
+    }
+
+    private static void translate(LazyGui gui, PGraphics pg){
+        pg.translate(gui.slider("pos x"), gui.slider("pos y"), gui.slider("pos z"));
+    }
+
+    private static void rotateXYZ(LazyGui gui, PGraphics pg) {
+        pg.rotateX(gui.slider("rot x"));
+        gui.sliderAdd("rot x", radians(gui.slider("rot x +")));
+        pg.rotateY(gui.slider("rot y"));
+        gui.sliderAdd("rot y", radians(gui.slider("rot y +")));
+        pg.rotateZ(gui.slider("rot z"));
+        gui.sliderAdd("rot z", radians(gui.slider("rot z +")));
+    }
+
+    public static void drawSinewaves(String path, LazyGui gui, PGraphics pg) {
         int count = gui.sliderInt(path + "count", 1);
         if (gui.button(path + "add new")) {
             gui.sliderAdd(path + "count", 1);
@@ -93,11 +199,11 @@ public class Shapes extends PApplet {
             float sineTime = gui.slider( iPath + "time", 0);
             float sineTimeDelta = radians(gui.slider( iPath + "time +", 1));
             gui.sliderSet( iPath + "time", sineTime + sineTimeDelta);
-            pg.translate(width / 2f + gui.slider( iPath + "x"), height / 2f + +gui.slider( iPath + "y"));
+            pg.translate(pg.width / 2f + gui.slider( iPath + "x"), pg.height / 2f + +gui.slider( iPath + "y"));
             float w = gui.slider( iPath + "width", 400);
             float h = gui.slider( iPath + "height", 200);
             pg.noFill();
-            pg.stroke(gui.colorPicker( iPath + "stroke", color(255)).hex);
+            pg.stroke(gui.colorPicker( iPath + "stroke", pg.color(255)).hex);
             pg.strokeWeight(gui.slider( iPath + "weight", 5));
             float z = gui.slider( iPath + "pos z");
             pg.beginShape();
@@ -113,7 +219,7 @@ public class Shapes extends PApplet {
         }
     }
 
-    private void drawShapes(String path) {
+    public static void drawShapes(String path, LazyGui gui, PGraphics pg) {
         int count = gui.sliderInt(path + "count", 1);
         if (gui.button(path + "add new")) {
             gui.sliderAdd(path + "count", 1);
@@ -141,8 +247,8 @@ public class Shapes extends PApplet {
             if (gui.toggle( iPath + "no fill")) {
                 pg.noFill();
             }
-            float x = width / 2f + gui.slider( iPath + "pos x");
-            float y = height / 2f + gui.slider( iPath + "pos y");
+            float x = pg.width / 2f + gui.slider( iPath + "pos x");
+            float y = pg.height / 2f + gui.slider( iPath + "pos y");
             float z = gui.slider( iPath + "pos z", 1);
             float w = gui.slider( iPath + "size x", 100);
             float h = gui.slider( iPath + "size y", 100);
@@ -160,10 +266,10 @@ public class Shapes extends PApplet {
             } else {
                 pg.beginShape();
                 float edgeSize = 3;
-                pg.vertex(-width * edgeSize, -height * edgeSize);
-                pg.vertex(width * edgeSize, -height * edgeSize);
-                pg.vertex(width * edgeSize, height * edgeSize);
-                pg.vertex(-width * edgeSize, height * edgeSize);
+                pg.vertex(-pg.width * edgeSize, -pg.height * edgeSize);
+                pg.vertex(pg.width * edgeSize, -pg.height * edgeSize);
+                pg.vertex(pg.width * edgeSize, pg.height * edgeSize);
+                pg.vertex(-pg.width * edgeSize, pg.height * edgeSize);
                 pg.beginContour();
                 if (isRect) {
                     pg.vertex(-w / 2, -h / 2);
@@ -185,22 +291,21 @@ public class Shapes extends PApplet {
         }
     }
 
-    float gridPosX, gridPosY;
-
-    private void drawGrid(String path) {
+    public static void drawGrid(String path, LazyGui gui, PGraphics pg) {
+        gui.pushFolder(path);
         String fragPath = "_22_11/grid.glsl";
-        PickerColor fg = gui.colorPicker(path + "fg", 0xFFFFFFFF);
+        PickerColor fg = gui.colorPicker("fg", 0xFFFFFFFF);
         int w = pg.width;
         int h = pg.height;
-        float z = gui.slider(path + "pos z");
+        float z = gui.slider("pos z");
         ShaderReloader.shader(fragPath, pg);
         pg.pushMatrix();
         pg.pushStyle();
-        pg.strokeWeight(gui.slider(path + "point weight", 3));
+        pg.strokeWeight(gui.slider("point weight", 3));
         pg.translate(w / 2f, h / 2f, z);
-        int step = gui.sliderInt(path + "step", 20);
-        float speedX = gui.slider(path + "speed x");
-        float speedY = gui.slider(path + "speed y");
+        int step = gui.sliderInt("step", 20);
+        float speedX = gui.slider("speed x");
+        float speedY = gui.slider("speed y");
         gridPosX += speedX * step / 360f;
         gridPosY += speedY * step / 360f;
         if (abs(gridPosX) > step) {
@@ -209,11 +314,11 @@ public class Shapes extends PApplet {
         if (abs(gridPosY) > step) {
             gridPosY %= step;
         }
-        pg.rotate(gui.slider(path + "rotate"));
+        pg.rotate(gui.slider("rotate"));
         pg.translate(gridPosX, gridPosY);
         pg.beginShape(POINTS);
         pg.stroke(fg.hex);
-        int overshoot = gui.sliderInt(path + "overshoot", 1);
+        int overshoot = gui.sliderInt("overshoot", 1);
         for (int x = -w * overshoot; x <= w * overshoot; x += step) {
             for (int y = -h * overshoot; y <= h * overshoot; y += step) {
                 pg.vertex(x, y);
@@ -223,12 +328,31 @@ public class Shapes extends PApplet {
         pg.popStyle();
         pg.popMatrix();
         pg.resetShader();
+        gui.popFolder();
     }
 
-    private void drawBackground() {
-        pg.fill(gui.colorPicker("background", color(0xFF303030)).hex);
+    public static void drawBackground(String path, LazyGui gui, PGraphics pg) {
+        gui.pushFolder(path);
+        PickerColor bg = gui.colorPicker("solid background", pg.color(0xFF303030));
+        pg.pushStyle();
         pg.noStroke();
         pg.rectMode(CORNER);
-        pg.rect(0, 0, width, height);
+        if(gui.toggle("nice fade", false)){
+            int subEveryNFrames = gui.sliderInt("subtract skip frames", 3);
+            PickerColor sub = gui.colorPicker("nice subtract", pg.color(0xFF010101));
+            PickerColor min = gui.colorPicker("nice minimum", pg.color(0xFF232323));
+            if(subEveryNFrames != 0 && backgroundFrameCount++ % subEveryNFrames == 0){
+                pg.blendMode(PConstants.SUBTRACT);
+                pg.fill(sub.hex);
+                pg.rect(0, 0, pg.width, pg.height);
+            }
+            pg.blendMode(PConstants.LIGHTEST);
+            pg.fill(min.hex);
+        }else{
+            pg.fill(bg.hex);
+        }
+        pg.rect(0, 0, pg.width, pg.height);
+        pg.popStyle();
+        gui.popFolder();
     }
 }
