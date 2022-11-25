@@ -17,7 +17,8 @@ public class PyramidHead extends PApplet {
     @Override
     public void settings() {
 //        size(1080, 1080, P3D);
-        fullScreen(P3D);
+        fullScreen(P3D);s
+        smooth(16);
     }
 
     @Override
