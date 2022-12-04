@@ -25,6 +25,7 @@ public class PyramidHead extends PApplet {
     public void setup() {
         gui = new LazyGui(this);
         pg = createGraphics(width, height, P3D);
+        smooth(16);
     }
 
     @Override
@@ -35,6 +36,7 @@ public class PyramidHead extends PApplet {
         Shapes.drawPyramids("pyramids ΔΔΔ", gui, pg);
         pg.endDraw();
         image(pg, 0, 0);
+        gui.draw();
         Utils.record(this, gui);
     }
 

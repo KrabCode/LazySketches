@@ -1,4 +1,4 @@
-package _0_templates;
+package _0_templates_java;
 
 import lazy.LazyGui;
 import lazy.PickerColor;
@@ -28,6 +28,7 @@ public class TemplateParticles extends PApplet {
         pg = createGraphics(width, height, P2D);
         pg.smooth(16);
         colorMode(HSB, 1, 1, 1, 1);
+        frameRate(144);
     }
 
     public void draw() {

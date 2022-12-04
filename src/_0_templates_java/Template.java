@@ -1,4 +1,4 @@
-package _0_templates;
+package _0_templates_java;
 
 import processing.core.PApplet;
 import processing.core.PGraphics;
@@ -21,6 +21,7 @@ public class Template extends PApplet {
     public void setup() {
         gui = new LazyGui(this);
         pg = createGraphics(width, height, P2D);
+        frameRate(144);
     }
 
     @Override
