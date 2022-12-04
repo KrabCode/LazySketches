@@ -11,6 +11,7 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.UUID;
 
@@ -159,4 +160,32 @@ public class Utils {
             return hue % 1f;
         }
     }
+
+
+    private static final ArrayList<Float> frameRateHistory = new ArrayList<>();
+    private static int frameRateTarget = 144;
+
+    public static void updateGetFrameRateAverage(PApplet app, LazyGui gui) {
+        int frameRateStackSize = gui.sliderInt("framesToAverage", 256);
+        frameRateHistory.add(app.frameRate);
+        if(frameRateHistory.size() > frameRateStackSize) {
+            frameRateHistory.remove(0);
+        }
+        float frameRateAverage = 0;
+        if(!frameRateHistory.isEmpty()){
+            float sum = 0;
+            for (float n : frameRateHistory) {
+                sum += n;
+            }
+            frameRateAverage = sum / frameRateHistory.size();
+        }
+        gui.sliderSet("frameRate avg", frameRateAverage);
+        int frameRateTargetTemp = gui.sliderInt("frameRate target", frameRateTarget);
+        if(frameRateTargetTemp != frameRateTarget){
+            app.frameRate(frameRateTarget);
+        }
+        frameRateTarget = frameRateTargetTemp;
+    }
+
+
 }

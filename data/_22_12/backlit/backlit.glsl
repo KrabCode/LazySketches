@@ -5,7 +5,6 @@ uniform sampler2D texture;
 uniform vec2 resolution;
 uniform float time;
 uniform float layer;
-uniform float layerNext;
 
 float sdBox( in vec2 p, in vec2 b ){
     vec2 d = abs(p)-b;

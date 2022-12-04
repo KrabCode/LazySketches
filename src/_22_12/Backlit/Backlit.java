@@ -7,8 +7,6 @@ import processing.core.PGraphics;
 import lazy.LazyGui;
 import processing.opengl.PShader;
 
-import java.util.ArrayList;
-
 public class Backlit extends PApplet {
     LazyGui gui;
     PGraphics pg;
@@ -39,8 +37,7 @@ public class Backlit extends PApplet {
         int shaderPasses = gui.sliderInt("shader/passes", 4, 0, Integer.MAX_VALUE);
         for (int i = 0; i < shaderPasses; i++) {
             float iNorm = norm(i, 0, shaderPasses-1);
-            float iNormNext = norm(i+1, 0, shaderPasses-1);
-            drawFragShader(iNorm, iNormNext);
+            drawFragShader(iNorm);
         }
         drawGuiStats();
         pg.endDraw();
@@ -53,37 +50,11 @@ public class Backlit extends PApplet {
         gui.pushFolder("stats");
         gui.sliderIntSet("frameCount", frameCount);
         gui.sliderSet("rad(frameCount)", radians(frameCount));
-        updateGetFrameRateAverage();
+        Utils.updateGetFrameRateAverage(this, gui);
         gui.popFolder();
     }
 
-    ArrayList<Float> frameRateHistory = new ArrayList<>();
-    int frameRateTarget = 144;
-
-    public void updateGetFrameRateAverage() {
-        int frameRateStackSize = gui.sliderInt("framesToAverage", 256);
-        frameRateHistory.add(frameRate);
-        if(frameRateHistory.size() > frameRateStackSize) {
-            frameRateHistory.remove(0);
-        }
-        float frameRateAverage = 0;
-        if(!frameRateHistory.isEmpty()){
-            float sum = 0;
-            for (float n : frameRateHistory) {
-                sum += n;
-            }
-            frameRateAverage = sum / frameRateHistory.size();
-        }
-        gui.sliderSet("frameRate avg", frameRateAverage);
-        int frameRateTargetTemp = gui.sliderInt("frameRate target", frameRateTarget);
-        if(frameRateTargetTemp != frameRateTarget){
-            frameRate(frameRateTarget);
-        }
-        frameRateTarget = frameRateTargetTemp;
-    }
-
-
-    private void drawFragShader(float iNorm, float iNormNext) {
+    private void drawFragShader(float iNorm) {
         gui.pushFolder("shader");
         PShader shader = ShaderReloader.getShader(fragPath);
         float shaderTime = gui.slider("time");
@@ -91,7 +62,6 @@ public class Backlit extends PApplet {
         gui.sliderSet("time", shaderTime + timeSpeed);
         shader.set("time", shaderTime);
         shader.set("layer", iNorm);
-        shader.set("layerNext", iNormNext);
         ShaderReloader.filter(fragPath, pg);
         gui.popFolder();
     }
