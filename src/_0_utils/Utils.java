@@ -15,8 +15,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.UUID;
 
-import static processing.core.PApplet.println;
-import static processing.core.PApplet.radians;
+import static processing.core.PApplet.*;
 import static processing.core.PConstants.CENTER;
 
 public class Utils {
@@ -186,6 +185,4 @@ public class Utils {
         }
         frameRateTarget = frameRateTargetTemp;
     }
-
-
 }

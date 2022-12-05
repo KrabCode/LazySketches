@@ -48,7 +48,7 @@ public class Shapes extends PApplet {
 
     public static void drawString(String path, LazyGui gui, PGraphics pg) {
         pg.pushMatrix();
-        String content = gui.stringInput( path + "content", "...");
+        String content = gui.textInput( path + "content", "...");
         int count = content.length();
         float time = gui.slider( path + "time");
         float speed = radians(gui.slider( path + "speed"));
@@ -218,6 +218,9 @@ public class Shapes extends PApplet {
     }
 
     public static void drawShapes(String path, LazyGui gui, PGraphics pg) {
+        if(!path.endsWith("/")){
+            path += "/";
+        }
         int count = gui.sliderInt(path + "count", 1);
         if (gui.button(path + "add new")) {
             gui.sliderAdd(path + "count", 1);

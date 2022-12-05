@@ -1,10 +1,21 @@
 #version 120
 #define tau 6.28
+precision highp int;
 
 uniform sampler2D texture;
 uniform vec2 resolution;
 uniform float time;
 uniform float layer;
+uniform vec3 rectSize;
+uniform vec3 rectPos;
+uniform float layerFreq;
+uniform float layerAmp;
+uniform vec3 layerPosXY;
+
+uniform float blurOpaque;
+uniform float blurShine;
+uniform vec3 glowColor;
+uniform vec3 rectColor;
 
 float sdBox( in vec2 p, in vec2 b ){
     vec2 d = abs(p)-b;
@@ -21,7 +32,7 @@ float foreRect(vec2 uv, float n, bool absolute){
     float edgeBlurPixels = 5.;
     if(absolute){
         box = abs(box);
-        edgeBlurPixels = 50.;
+        edgeBlurPixels = blurShine;
     }
     float normBox = clamp(smoothstep(edgeBlurPixels / resolution.y, 0., box), 0., 1.);
     return normBox;

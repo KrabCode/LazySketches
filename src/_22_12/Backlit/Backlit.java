@@ -26,12 +26,14 @@ public class Backlit extends PApplet {
         gui = new LazyGui(this);
         gui.toggleSet("options/saves/autosave on exit", true);
         pg = createGraphics(width, height, P2D);
+        colorMode(HSB,1,1,1,1);
         ShaderReloader.getShader(fragPath);
         frameRate(144);
     }
 
     @Override
     public void draw() {
+
         pg.beginDraw();
         drawBackground();
         int shaderPasses = gui.sliderInt("shader/passes", 4, 0, Integer.MAX_VALUE);
@@ -62,6 +64,17 @@ public class Backlit extends PApplet {
         gui.sliderSet("time", shaderTime + timeSpeed);
         shader.set("time", shaderTime);
         shader.set("layer", iNorm);
+        shader.set("blurOpaque", gui.slider("blur opaque", 3));
+        shader.set("blurShine", gui.slider("blur shine", 40));
+        shader.set("layerFreq", gui.slider("layer freq", 0.1f));
+        shader.set("layerAmp",  gui.slider("layer amp", 1));
+        shader.set("layerPosXY", gui.plotXY("layer pos", 0.1f, -0.15f));
+        shader.set("rectPos", gui.plotXY("rect pos", 0, 0));
+        shader.set("rectSize", gui.plotXY("rect size", 0.3f, 0.05f));
+        int glow = gui.colorPicker("glow fill").hex;
+        int rect = gui.colorPicker("glow fill").hex;
+        shader.set("glowColor",red(glow),green(glow),blue(glow));
+        shader.set("rectColor",red(rect),green(rect),blue(rect));
         ShaderReloader.filter(fragPath, pg);
         gui.popFolder();
     }
