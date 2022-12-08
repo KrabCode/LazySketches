@@ -72,7 +72,7 @@ public class StaticMaskedRect extends PApplet {
         String modeMaskedForm = "masked form";
         String modeFormDebug = "form debug";
         String modeNoiseDebug = "noise debug";
-        String mode = gui.stringPicker("frame/mode", new String[]{ modeMaskedForm, modeNoiseDebug, modeFormDebug});
+        String mode = gui.radio("frame/mode", new String[]{ modeMaskedForm, modeNoiseDebug, modeFormDebug});
 
         if(mode.equals(modeNoiseDebug)){
             pg.image(noiseMask, 0, 0);

@@ -43,7 +43,7 @@ public class Seafoam extends PApplet {
         if(gui.toggle("bg/draw gradient")){
             pg.image(gui.gradient("bg/gradient"), 0, 0);
         }else{
-            pg.blendMode(gui.stringPicker("bg/blend mode", new String[]{"blend", "sub"}).equals("blend") ? BLEND : SUBTRACT);
+            pg.blendMode(gui.radio("bg/blend mode", new String[]{"blend", "sub"}).equals("blend") ? BLEND : SUBTRACT);
             pg.fill(gui.colorPicker("bg/color").hex);
             pg.noStroke();
             pg.rect(0, 0, width, height);

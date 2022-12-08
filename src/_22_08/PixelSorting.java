@@ -101,7 +101,7 @@ public class PixelSorting extends PApplet {
 
     private void selectMode() {
         ArrayList<String> modeOptions = new ArrayList<>(Arrays.asList("white", "black", "bright", "dark"));
-        mode = modeOptions.indexOf(gui.stringPicker("pixel sort/mode", modeOptions));
+        mode = modeOptions.indexOf(gui.radio("pixel sort/mode", modeOptions));
     }
 
     private void applyPixelSortEffect() {

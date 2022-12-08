@@ -82,7 +82,7 @@ public class Leaf extends PApplet {LazyGui gui;
             pg.translate(x, y);
             pg.scale(gui.slider("fractal/steps/" + i + "/scale", 1));
             pg.fill(gui.colorPicker("fractal/steps/" + i + "/color", color(255)).hex);
-            if(gui.stringPicker("leaf/shape", new String[]{"rect", "ellipse"}).equals("rect")){
+            if(gui.radio("leaf/shape", new String[]{"rect", "ellipse"}).equals("rect")){
 
                 pg.rect(0, 0, shapeSize, shapeSize);
             }else{

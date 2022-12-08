@@ -86,7 +86,7 @@ public class SakuraSnow extends PApplet {
             }
         }
         pg.rectMode(CENTER);
-        if("blend".equals(gui.stringPicker("leaf/blend mode", new String[]{"blend", "add"}))){
+        if("blend".equals(gui.radio("leaf/blend mode", new String[]{"blend", "add"}))){
             pg.blendMode(BLEND);
         }else{
             pg.blendMode(ADD);
@@ -160,7 +160,7 @@ public class SakuraSnow extends PApplet {
                         lerp(0, baseFill.alpha, fade));
                 pg.noStroke();
                 float size = gui.slider("leaf/size", 2) + sizeModifier  * gui.slider("leaf/size variation", 1);
-                if (gui.stringPicker("leaf/shape", new String[]{"rectangle", "circle"}).equals("rectangle")) {
+                if (gui.radio("leaf/shape", new String[]{"rectangle", "circle"}).equals("rectangle")) {
                     pg.rect(0, 0, size, size);
                 } else {
                     pg.ellipse(0, 0, size, size);
