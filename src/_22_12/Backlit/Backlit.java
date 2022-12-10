@@ -72,7 +72,7 @@ public class Backlit extends PApplet {
         shader.set("rectPos", gui.plotXY("rect pos", 0, 0));
         shader.set("rectSize", gui.plotXY("rect size", 0.3f, 0.05f));
         int glow = gui.colorPicker("glow fill").hex;
-        int rect = gui.colorPicker("glow fill").hex;
+        int rect = gui.colorPicker("rect fill").hex;
         shader.set("glowColor",red(glow),green(glow),blue(glow));
         shader.set("rectColor",red(rect),green(rect),blue(rect));
         ShaderReloader.filter(fragPath, pg);

@@ -57,8 +57,8 @@ public class Utils {
         }
         int recordRectPosX = pApplet.width / 2 + gui.sliderInt("rec/rect center x", 0);
         int recordRectPosY = pApplet.height / 2 + gui.sliderInt("rec/rect center y", 0);
-        int recordRectSizeX = gui.sliderInt("rec/rect size x div 2", pApplet.width / 4);
-        int recordRectSizeY = gui.sliderInt("rec/rect size y div 2", pApplet.height / 4);
+        int recordRectSizeX = gui.sliderInt("rec/rect width", pApplet.width / 4);
+        int recordRectSizeY = gui.sliderInt("rec/rect height", pApplet.height / 4);
         if(recordRectSizeX % 2 != 0){
             recordRectSizeX += 1;
         }
@@ -131,7 +131,7 @@ public class Utils {
     }
 
     public static void shaderMove(PGraphics pg, LazyGui gui) {
-        String moveShaderPath = "_0_utils/move.glsl";
+        String moveShaderPath = "_0_templates_glsl/move.glsl";
         moveShaderTime += radians(gui.sliderInt("move/time speed", 1));
         PShader moveShader = ShaderReloader.getShader(moveShaderPath);
         moveShader.set("time", moveShaderTime);

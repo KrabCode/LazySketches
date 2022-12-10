@@ -22,12 +22,19 @@ float sdBox( in vec2 p, in vec2 b ){
     return length(max(d,0.0)) + min(max(d.x,d.y),0.0);
 }
 
+float rand(vec2 x){
+    return fract(sin(dot(x, vec2(12.9898, 78.233))) * 43758.5453);
+}
+
+float getYfromX(float x){
+
+    return 0.1*rand(vec2(x*.1, 0.1*time));
+}
+
 float foreRect(vec2 uv, float n, bool absolute){
     float t = time*0.1;
     vec2 rectSize = vec2(0.3, 0.05);
-    float nx = 0.1;
-    float ny = -0.15;
-    vec2 pos = vec2(0., -0.5*ny+ny*n + 0.01*sin(uv.x*26. + (0.2+n)*t + n*tau));
+    vec2 pos = vec2(0., getYfromX(uv.x));
     float box = sdBox(uv-pos, rectSize);
     float edgeBlurPixels = 5.;
     if(absolute){
@@ -42,8 +49,8 @@ void main(){
     vec2 uv = (gl_FragCoord.xy - .5 * resolution) / resolution.y;
     vec3 pRGB = texture2D(texture, gl_FragCoord.xy / resolution.xy).rgb;
     vec3 col = vec3(pRGB);
+    col.rgb +=  glowColor * foreRect(uv, layer, true);
     float rect = foreRect(uv, layer, false);
-    col.rgb += foreRect(uv, layer, true);
-    col.rgb *= smoothstep(1., 0.0, rect);
+    col.rgb = mix(col.rgb, rectColor, clamp(smoothstep(0., 1.0, rect), 0., 1.));
     gl_FragColor = vec4(col, 1.);
 }
