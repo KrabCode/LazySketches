@@ -29,7 +29,7 @@ public class LineSpiral extends PApplet {LazyGui gui;
         pg.beginDraw();
         pg.blendMode(BLEND);
         drawBackground();
-        if(gui.stringPicker("blend mode", new String[]{"add", "blend"}).equals("add")){
+        if(gui.radio("blend mode", new String[]{"add", "blend"}).equals("add")){
             pg.blendMode(ADD);
         }
         drawSpiral();

@@ -55,7 +55,7 @@ public class DoubleOrbitMandala extends PApplet {
         speedB *= speedAB* TAU;
         float radiusA = gui.slider(path + "/a radius", 327.3601f);
         float radiusB = gui.slider(path + "/b radius",  1566.3936f);
-        pg.blendMode(gui.stringPicker(path + "/blendMode", new String[]{"blend", "add"}).equals("blend") ? BLEND : ADD);
+        pg.blendMode(gui.radio(path + "/blendMode", new String[]{"blend", "add"}).equals("blend") ? BLEND : ADD);
         pg.stroke(gui.colorPicker(path +  "/stroke", color(255)).hex);
         pg.strokeWeight(gui.slider(path + "/weight", 1.5f));
         int linesPerFrame = gui.sliderInt(path + "/lines per frame", 3);

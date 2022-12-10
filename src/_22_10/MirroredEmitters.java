@@ -124,7 +124,7 @@ public class MirroredEmitters extends PApplet {
     }
 
     private void chooseBlendMode(String path) {
-        switch (gui.stringPicker(path + "/blend mode", new String[]{"blend", "add", "sub"})) {
+        switch (gui.radio(path + "/blend mode", new String[]{"blend", "add", "sub"})) {
             case "blend": {
                 pg.blendMode(BLEND);
                 break;

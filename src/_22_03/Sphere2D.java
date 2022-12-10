@@ -85,7 +85,7 @@ public class Sphere2D extends PApplet {
         if (gui.toggle("points/draw gauss", true)) {
             pg.stroke(gui.colorPicker("points/stroke", color(1)).hex);
             pg.strokeWeight(gui.slider("points/weight", 1));
-            if(gui.stringPicker("points/blend mode", new String[]{"blend", "add"}).equals("add")){
+            if(gui.radio("points/blend mode", new String[]{"blend", "add"}).equals("add")){
                 pg.blendMode(ADD);
             }else{
                 pg.blendMode(BLEND);
