@@ -3,7 +3,6 @@ package _22_12.Crosses;
 import _0_utils.Shapes;
 import _0_utils.Utils;
 import processing.core.PApplet;
-import processing.core.PConstants;
 import processing.core.PGraphics;
 import lazy.LazyGui;
 import processing.core.PVector;
