@@ -19,14 +19,14 @@ public class RaymarchPlanet extends PApplet {
 
     @Override
     public void settings() {
-//        fullScreen(P2D);
-        size(1400, 1400, P2D);
+        fullScreen(P2D);
+//        size(1400, 1400, P2D);
     }
 
     @Override
     public void setup() {
         gui = new LazyGui(this);
-        pg = createGraphics(width, height, P2D);
+        pg = createGraphics(min(width, height), min(width, height), P2D);
         colorMode(HSB, 1, 1, 1, 1);
         frameRate(144);
     }
@@ -34,9 +34,11 @@ public class RaymarchPlanet extends PApplet {
     @Override
     public void draw() {
         pg.beginDraw();
-        drawBackground();
+        drawBackground(g);
         applyRaymarchShader();
         pg.endDraw();
+        translate(width/2f, height/2f);
+        imageMode(CENTER);
         image(pg, 0, 0);
         gui.draw();
         Utils.record(this, gui);
@@ -66,7 +68,7 @@ public class RaymarchPlanet extends PApplet {
         gui.popFolder();
     }
 
-    private void drawBackground() {
+    private void drawBackground(PGraphics pg) {
         pg.fill(gui.colorPicker("background").hex);
         pg.noStroke();
         pg.rectMode(CORNER);
