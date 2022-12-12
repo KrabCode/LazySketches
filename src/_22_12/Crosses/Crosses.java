@@ -54,7 +54,7 @@ public class Crosses extends PApplet {
         pg.stroke(gui.colorPicker("stroke").hex);
         pg.strokeWeight(gui.slider("weight", 1.75f));
         pg.fill(gui.colorPicker("fill").hex);
-        PVector step = gui.plotXY("step", sideShort*2, sideShort);
+        PVector step = gui.plotXY("step", sideShort*4, sideShort * 2);
         PVector stepDown = step.copy().rotate(-HALF_PI);
         PVector colPos = new PVector();
         for (int xi = 0; xi < count; xi++) {
@@ -62,8 +62,20 @@ public class Crosses extends PApplet {
             for(int yi = 0; yi < count; yi++){
                 pg.pushMatrix();
                 pg.translate(rowPos.x, rowPos.y);
-                pg.rect(0,0,sideLong, sideShort);
-                pg.rect(0,0,sideShort, sideLong);
+                pg.beginShape();
+                pg.vertex(sideShort, sideLong);
+                pg.vertex(sideShort, sideShort);
+                pg.vertex(sideLong, sideShort);
+                pg.vertex(sideLong, -sideShort);
+                pg.vertex(sideShort, -sideShort);
+                pg.vertex(sideShort, -sideLong);
+                pg.vertex(-sideShort, -sideLong);
+                pg.vertex(-sideShort, -sideShort);
+                pg.vertex(-sideLong, -sideShort);
+                pg.vertex(-sideLong, sideShort);
+                pg.vertex(-sideShort, sideShort);
+                pg.vertex(-sideShort, sideLong);
+                pg.endShape(CLOSE);
                 pg.popMatrix();
                 rowPos.add(stepDown);
             }
