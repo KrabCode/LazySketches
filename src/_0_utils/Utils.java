@@ -92,8 +92,8 @@ public class Utils {
         if(gui.button("rec/ffmpeg make mp4")){
             String outMovieFilename = recDirAbsolute + "/_" + generateRandomShortId();
             String inputFormat = recDirAbsolute + "/%01d" + recImageFormat;
-            String command = String.format("ffmpeg  -r " + ffmpegFramerate +" -i %s -start_number_range 100000 -an %s.mp4",
-                    inputFormat, outMovieFilename);
+            String command = String.format("ffmpeg  -r %s -i %s -start_number_range 100000 -an %s.mp4",
+                    ffmpegFramerate, inputFormat, outMovieFilename);
             println("running ffmpeg: " + command);
             try {
                 Process proc = Runtime.getRuntime().exec(command);
