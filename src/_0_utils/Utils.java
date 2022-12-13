@@ -23,6 +23,8 @@ public class Utils {
     private static int saveIndex = 1;
     private static String recordingId = generateRandomShortId();
     private static float moveShaderTime = 0;
+    private static int frameRateTargetLastFrame = -1;
+    private static final ArrayList<Float> frameRateHistory = new ArrayList<>();
 
     public static String generateRandomShortId() {
         return UUID.randomUUID().toString().replace("-", "").substring(0, 8);
@@ -161,10 +163,8 @@ public class Utils {
     }
 
 
-    private static final ArrayList<Float> frameRateHistory = new ArrayList<>();
-    private static int frameRateTarget = 144;
-
-    public static void updateGetFrameRateAverage(PApplet app, LazyGui gui) {
+    public static void updateGetFrameRateAverage(PApplet app, LazyGui gui, int frameRateTargetDefault) {
+        gui.pushFolder("fps");
         int frameRateStackSize = gui.sliderInt("framesToAverage", 256);
         frameRateHistory.add(app.frameRate);
         if(frameRateHistory.size() > frameRateStackSize) {
@@ -179,10 +179,11 @@ public class Utils {
             frameRateAverage = sum / frameRateHistory.size();
         }
         gui.sliderSet("frameRate avg", frameRateAverage);
-        int frameRateTargetTemp = gui.sliderInt("frameRate target", frameRateTarget);
-        if(frameRateTargetTemp != frameRateTarget){
-            app.frameRate(frameRateTarget);
+        int frameRateTargetTemp = gui.sliderInt("frameRate target", frameRateTargetDefault);
+        if(frameRateTargetTemp != frameRateTargetLastFrame){
+            app.frameRate(frameRateTargetTemp);
         }
-        frameRateTarget = frameRateTargetTemp;
+        frameRateTargetLastFrame = frameRateTargetTemp;
+        gui.popFolder();
     }
 }

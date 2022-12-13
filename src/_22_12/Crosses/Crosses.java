@@ -17,14 +17,15 @@ public class Crosses extends PApplet {
 
     @Override
     public void settings() {
-//        size(1080, 1080, P2D);
-        fullScreen(P2D);
+        size(1000,1000, P2D);
+//        fullScreen(P2D, 0);
     }
 
     @Override
     public void setup() {
         gui = new LazyGui(this);
         pg = createGraphics(width, height, P2D);
+        pg.smooth(16);
         colorMode(HSB, 1, 1, 1, 1);
         frameRate(60);
     }
@@ -32,7 +33,7 @@ public class Crosses extends PApplet {
     @Override
     public void draw() {
         pg.beginDraw();
-        rotateFrames = gui.sliderInt("crosses/rot frames", 360);
+        rotateFrames = gui.sliderInt("crosses/rot frames", 180);
         boolean aTurn = frameCount % rotateFrames <= rotateFrames / 2;
         gui.pushFolder("colors");
         int colorA = gui.colorPicker("a", color(0xFF0F0F0F)).hex;
@@ -48,6 +49,7 @@ public class Crosses extends PApplet {
         pg.endDraw();
         image(pg, 0, 0);
         gui.draw();
+        Utils.updateGetFrameRateAverage(this, gui, 60);
         Utils.record(this, gui);
     }
 

@@ -52,7 +52,7 @@ public class Backlit extends PApplet {
         gui.pushFolder("stats");
         gui.sliderIntSet("frameCount", frameCount);
         gui.sliderSet("rad(frameCount)", radians(frameCount));
-        Utils.updateGetFrameRateAverage(this, gui);
+        Utils.updateGetFrameRateAverage(this, gui, 144);
         gui.popFolder();
     }
 
