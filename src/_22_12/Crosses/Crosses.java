@@ -76,8 +76,6 @@ public class Crosses extends PApplet {
             fieldPos.add(PVector.div(stepDown, 2));
             fieldPos.add(PVector.div(stepRight, 2));
         }
-
-
         pg.translate(fieldPos.x, fieldPos.y);
         for (int xi = 0; xi < count; xi++) {
             PVector rowPos = colPos.copy();
@@ -92,20 +90,7 @@ public class Crosses extends PApplet {
                 pg.pushMatrix();
                 pg.translate(rowPos.x, rowPos.y);
                 pg.rotate(rotation);
-                pg.beginShape();
-                pg.vertex(sideShort, sideLong);
-                pg.vertex(sideShort, sideShort);
-                pg.vertex(sideLong, sideShort);
-                pg.vertex(sideLong, -sideShort);
-                pg.vertex(sideShort, -sideShort);
-                pg.vertex(sideShort, -sideLong);
-                pg.vertex(-sideShort, -sideLong);
-                pg.vertex(-sideShort, -sideShort);
-                pg.vertex(-sideLong, -sideShort);
-                pg.vertex(-sideLong, sideShort);
-                pg.vertex(-sideShort, sideShort);
-                pg.vertex(-sideShort, sideLong);
-                pg.endShape(CLOSE);
+                drawCross(sideShort, sideLong);
                 pg.popMatrix();
                 rowPos.add(stepDown);
             }
@@ -113,6 +98,23 @@ public class Crosses extends PApplet {
         }
         gui.popFolder();
         pg.popMatrix();
+    }
+
+    private void drawCross(float a, float b) {
+        pg.beginShape();
+        pg.vertex(a, b);
+        pg.vertex(a, a);
+        pg.vertex(b, a);
+        pg.vertex(b, -a);
+        pg.vertex(a, -a);
+        pg.vertex(a, -b);
+        pg.vertex(-a, -b);
+        pg.vertex(-a, -a);
+        pg.vertex(-b, -a);
+        pg.vertex(-b, a);
+        pg.vertex(-a, a);
+        pg.vertex(-a, b);
+        pg.endShape(CLOSE);
     }
 
     float easeInOutQuad(float x) {
