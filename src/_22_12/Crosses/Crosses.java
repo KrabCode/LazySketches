@@ -60,7 +60,7 @@ public class Crosses extends PApplet {
         pg.translate(width/2f, height/2f);
         int count = gui.sliderInt("count", 20, 0, Integer.MAX_VALUE);
         float sideShort = gui.slider("rect size", 10);
-        PVector stepRight = gui.plotXY("step", 1, 1);
+        PVector stepRight = gui.plotXY("step", 1.5f, 1);
         float sideLong = sideShort * 3;
         PVector fieldPos = gui.plotXY("field pos");
         pg.noStroke();
