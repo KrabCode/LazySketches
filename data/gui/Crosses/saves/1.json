@@ -1,0 +1,1025 @@
+{
+  "children": [
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "className": "ButtonNode",
+              "path": "options/saves/create new save",
+              "type": "TRANSIENT"
+            },
+            {
+              "className": "ButtonNode",
+              "path": "options/saves/print folder path",
+              "type": "TRANSIENT"
+            },
+            {
+              "className": "ButtonNode",
+              "path": "options/saves/open save folder",
+              "type": "TRANSIENT"
+            },
+            {
+              "valueBoolean": false,
+              "className": "ToggleNode",
+              "path": "options/saves/autosave on exit",
+              "type": "VALUE"
+            }
+          ],
+          "className": "SaveFolderNode",
+          "path": "options/saves",
+          "type": "FOLDER"
+        },
+        {
+          "children": [
+            {
+              "valueString": "dark",
+              "children": [
+                {
+                  "valueBoolean": true,
+                  "className": "StringPickerItem",
+                  "path": "options/themes/preset/dark",
+                  "type": "TRANSIENT"
+                },
+                {
+                  "valueBoolean": false,
+                  "className": "StringPickerItem",
+                  "path": "options/themes/preset/light",
+                  "type": "TRANSIENT"
+                },
+                {
+                  "valueBoolean": false,
+                  "className": "StringPickerItem",
+                  "path": "options/themes/preset/pink",
+                  "type": "TRANSIENT"
+                },
+                {
+                  "valueBoolean": false,
+                  "className": "StringPickerItem",
+                  "path": "options/themes/preset/blue",
+                  "type": "TRANSIENT"
+                },
+                {
+                  "valueBoolean": false,
+                  "className": "StringPickerItem",
+                  "path": "options/themes/preset/custom",
+                  "type": "TRANSIENT"
+                }
+              ],
+              "className": "RadioFolderNode",
+              "path": "options/themes/preset",
+              "type": "FOLDER"
+            },
+            {
+              "children": [
+                {
+                  "hexString": "FFFFFFFF",
+                  "children": [
+                    {
+                      "className": "ColorPreviewNode",
+                      "path": "options/themes/editor/focus foreground/preview",
+                      "type": "TRANSIENT"
+                    },
+                    {
+                      "valueFloat": 0.0,
+                      "currentPrecisionIndex": 2,
+                      "valueFloatPrecision": 0.01,
+                      "className": "HueNode",
+                      "path": "options/themes/editor/focus foreground/hue",
+                      "type": "VALUE"
+                    },
+                    {
+                      "valueFloat": 0.0,
+                      "currentPrecisionIndex": 2,
+                      "valueFloatPrecision": 0.01,
+                      "className": "SaturationNode",
+                      "path": "options/themes/editor/focus foreground/sat",
+                      "type": "VALUE"
+                    },
+                    {
+                      "valueFloat": 1.0,
+                      "currentPrecisionIndex": 2,
+                      "valueFloatPrecision": 0.01,
+                      "className": "BrightnessNode",
+                      "path": "options/themes/editor/focus foreground/br",
+                      "type": "VALUE"
+                    },
+                    {
+                      "valueFloat": 1.0,
+                      "currentPrecisionIndex": 2,
+                      "valueFloatPrecision": 0.01,
+                      "className": "AlphaNode",
+                      "path": "options/themes/editor/focus foreground/alpha",
+                      "type": "VALUE"
+                    },
+                    {
+                      "className": "ColorPickerHexNode",
+                      "path": "options/themes/editor/focus foreground/hex",
+                      "type": "VALUE"
+                    }
+                  ],
+                  "className": "ColorPickerFolderNode",
+                  "path": "options/themes/editor/focus foreground",
+                  "type": "FOLDER"
+                },
+                {
+                  "hexString": "FF2F2F2F",
+                  "children": [
+                    {
+                      "className": "ColorPreviewNode",
+                      "path": "options/themes/editor/focus background/preview",
+                      "type": "TRANSIENT"
+                    },
+                    {
+                      "valueFloat": 0.0,
+                      "currentPrecisionIndex": 2,
+                      "valueFloatPrecision": 0.01,
+                      "className": "HueNode",
+                      "path": "options/themes/editor/focus background/hue",
+                      "type": "VALUE"
+                    },
+                    {
+                      "valueFloat": 0.0,
+                      "currentPrecisionIndex": 2,
+                      "valueFloatPrecision": 0.01,
+                      "className": "SaturationNode",
+                      "path": "options/themes/editor/focus background/sat",
+                      "type": "VALUE"
+                    },
+                    {
+                      "valueFloat": 0.18431373,
+                      "currentPrecisionIndex": 2,
+                      "valueFloatPrecision": 0.01,
+                      "className": "BrightnessNode",
+                      "path": "options/themes/editor/focus background/br",
+                      "type": "VALUE"
+                    },
+                    {
+                      "valueFloat": 1.0,
+                      "currentPrecisionIndex": 2,
+                      "valueFloatPrecision": 0.01,
+                      "className": "AlphaNode",
+                      "path": "options/themes/editor/focus background/alpha",
+                      "type": "VALUE"
+                    },
+                    {
+                      "className": "ColorPickerHexNode",
+                      "path": "options/themes/editor/focus background/hex",
+                      "type": "VALUE"
+                    }
+                  ],
+                  "className": "ColorPickerFolderNode",
+                  "path": "options/themes/editor/focus background",
+                  "type": "FOLDER"
+                },
+                {
+                  "hexString": "FFB0B0B0",
+                  "children": [
+                    {
+                      "className": "ColorPreviewNode",
+                      "path": "options/themes/editor/normal foreground/preview",
+                      "type": "TRANSIENT"
+                    },
+                    {
+                      "valueFloat": 0.0,
+                      "currentPrecisionIndex": 2,
+                      "valueFloatPrecision": 0.01,
+                      "className": "HueNode",
+                      "path": "options/themes/editor/normal foreground/hue",
+                      "type": "VALUE"
+                    },
+                    {
+                      "valueFloat": 0.0,
+                      "currentPrecisionIndex": 2,
+                      "valueFloatPrecision": 0.01,
+                      "className": "SaturationNode",
+                      "path": "options/themes/editor/normal foreground/sat",
+                      "type": "VALUE"
+                    },
+                    {
+                      "valueFloat": 0.6901961,
+                      "currentPrecisionIndex": 2,
+                      "valueFloatPrecision": 0.01,
+                      "className": "BrightnessNode",
+                      "path": "options/themes/editor/normal foreground/br",
+                      "type": "VALUE"
+                    },
+                    {
+                      "valueFloat": 1.0,
+                      "currentPrecisionIndex": 2,
+                      "valueFloatPrecision": 0.01,
+                      "className": "AlphaNode",
+                      "path": "options/themes/editor/normal foreground/alpha",
+                      "type": "VALUE"
+                    },
+                    {
+                      "className": "ColorPickerHexNode",
+                      "path": "options/themes/editor/normal foreground/hex",
+                      "type": "VALUE"
+                    }
+                  ],
+                  "className": "ColorPickerFolderNode",
+                  "path": "options/themes/editor/normal foreground",
+                  "type": "FOLDER"
+                },
+                {
+                  "hexString": "FF0B0B0B",
+                  "children": [
+                    {
+                      "className": "ColorPreviewNode",
+                      "path": "options/themes/editor/normal background/preview",
+                      "type": "TRANSIENT"
+                    },
+                    {
+                      "valueFloat": 0.0,
+                      "currentPrecisionIndex": 2,
+                      "valueFloatPrecision": 0.01,
+                      "className": "HueNode",
+                      "path": "options/themes/editor/normal background/hue",
+                      "type": "VALUE"
+                    },
+                    {
+                      "valueFloat": 0.0,
+                      "currentPrecisionIndex": 2,
+                      "valueFloatPrecision": 0.01,
+                      "className": "SaturationNode",
+                      "path": "options/themes/editor/normal background/sat",
+                      "type": "VALUE"
+                    },
+                    {
+                      "valueFloat": 0.043137256,
+                      "currentPrecisionIndex": 2,
+                      "valueFloatPrecision": 0.01,
+                      "className": "BrightnessNode",
+                      "path": "options/themes/editor/normal background/br",
+                      "type": "VALUE"
+                    },
+                    {
+                      "valueFloat": 1.0,
+                      "currentPrecisionIndex": 2,
+                      "valueFloatPrecision": 0.01,
+                      "className": "AlphaNode",
+                      "path": "options/themes/editor/normal background/alpha",
+                      "type": "VALUE"
+                    },
+                    {
+                      "className": "ColorPickerHexNode",
+                      "path": "options/themes/editor/normal background/hex",
+                      "type": "VALUE"
+                    }
+                  ],
+                  "className": "ColorPickerFolderNode",
+                  "path": "options/themes/editor/normal background",
+                  "type": "FOLDER"
+                },
+                {
+                  "hexString": "FF787878",
+                  "children": [
+                    {
+                      "className": "ColorPreviewNode",
+                      "path": "options/themes/editor/window border/preview",
+                      "type": "TRANSIENT"
+                    },
+                    {
+                      "valueFloat": 0.0,
+                      "currentPrecisionIndex": 2,
+                      "valueFloatPrecision": 0.01,
+                      "className": "HueNode",
+                      "path": "options/themes/editor/window border/hue",
+                      "type": "VALUE"
+                    },
+                    {
+                      "valueFloat": 0.0,
+                      "currentPrecisionIndex": 2,
+                      "valueFloatPrecision": 0.01,
+                      "className": "SaturationNode",
+                      "path": "options/themes/editor/window border/sat",
+                      "type": "VALUE"
+                    },
+                    {
+                      "valueFloat": 0.47058824,
+                      "currentPrecisionIndex": 2,
+                      "valueFloatPrecision": 0.01,
+                      "className": "BrightnessNode",
+                      "path": "options/themes/editor/window border/br",
+                      "type": "VALUE"
+                    },
+                    {
+                      "valueFloat": 1.0,
+                      "currentPrecisionIndex": 2,
+                      "valueFloatPrecision": 0.01,
+                      "className": "AlphaNode",
+                      "path": "options/themes/editor/window border/alpha",
+                      "type": "VALUE"
+                    },
+                    {
+                      "className": "ColorPickerHexNode",
+                      "path": "options/themes/editor/window border/hex",
+                      "type": "VALUE"
+                    }
+                  ],
+                  "className": "ColorPickerFolderNode",
+                  "path": "options/themes/editor/window border",
+                  "type": "FOLDER"
+                }
+              ],
+              "className": "FolderNode",
+              "path": "options/themes/editor",
+              "type": "FOLDER"
+            }
+          ],
+          "className": "FolderNode",
+          "path": "options/themes",
+          "type": "FOLDER"
+        },
+        {
+          "children": [
+            {
+              "valueFloat": 22.0,
+              "currentPrecisionIndex": 4,
+              "valueFloatPrecision": 1.0,
+              "className": "SliderIntNode",
+              "path": "options/windows/cell size",
+              "type": "VALUE"
+            },
+            {
+              "valueFloat": 16.0,
+              "currentPrecisionIndex": 4,
+              "valueFloatPrecision": 1.0,
+              "className": "SliderIntNode",
+              "path": "options/windows/font size",
+              "type": "VALUE"
+            },
+            {
+              "valueFloat": 5.0,
+              "currentPrecisionIndex": 4,
+              "valueFloatPrecision": 1.0,
+              "className": "SliderNode",
+              "path": "options/windows/font x offset",
+              "type": "VALUE"
+            },
+            {
+              "valueFloat": 14.0,
+              "currentPrecisionIndex": 4,
+              "valueFloatPrecision": 1.0,
+              "className": "SliderNode",
+              "path": "options/windows/font y offset",
+              "type": "VALUE"
+            },
+            {
+              "valueBoolean": true,
+              "className": "ToggleNode",
+              "path": "options/windows/show path tooltips",
+              "type": "VALUE"
+            },
+            {
+              "valueBoolean": true,
+              "className": "ToggleNode",
+              "path": "options/windows/keep in bounds",
+              "type": "VALUE"
+            },
+            {
+              "children": [
+                {
+                  "valueBoolean": true,
+                  "className": "ToggleNode",
+                  "path": "options/windows/resize/allow resize",
+                  "type": "VALUE"
+                },
+                {
+                  "valueBoolean": true,
+                  "className": "ToggleNode",
+                  "path": "options/windows/resize/show indicator",
+                  "type": "VALUE"
+                },
+                {
+                  "valueFloat": 4.0,
+                  "currentPrecisionIndex": 4,
+                  "valueFloatPrecision": 1.0,
+                  "className": "SliderNode",
+                  "path": "options/windows/resize/indicator width",
+                  "type": "VALUE"
+                }
+              ],
+              "className": "FolderNode",
+              "path": "options/windows/resize",
+              "type": "FOLDER"
+            }
+          ],
+          "className": "FolderNode",
+          "path": "options/windows",
+          "type": "FOLDER"
+        },
+        {
+          "children": [
+            {
+              "valueBoolean": true,
+              "className": "ToggleNode",
+              "path": "options/grid/snap to grid",
+              "type": "VALUE"
+            },
+            {
+              "valueString": "on drag",
+              "children": [
+                {
+                  "valueBoolean": false,
+                  "className": "StringPickerItem",
+                  "path": "options/grid/show grid/always",
+                  "type": "TRANSIENT"
+                },
+                {
+                  "valueBoolean": true,
+                  "className": "StringPickerItem",
+                  "path": "options/grid/show grid/on drag",
+                  "type": "TRANSIENT"
+                },
+                {
+                  "valueBoolean": false,
+                  "className": "StringPickerItem",
+                  "path": "options/grid/show grid/never",
+                  "type": "TRANSIENT"
+                }
+              ],
+              "className": "RadioFolderNode",
+              "path": "options/grid/show grid",
+              "type": "FOLDER"
+            },
+            {
+              "hexString": "FF7F7F7F",
+              "children": [
+                {
+                  "className": "ColorPreviewNode",
+                  "path": "options/grid/point color/preview",
+                  "type": "TRANSIENT"
+                },
+                {
+                  "valueFloat": 0.0,
+                  "currentPrecisionIndex": 2,
+                  "valueFloatPrecision": 0.01,
+                  "className": "HueNode",
+                  "path": "options/grid/point color/hue",
+                  "type": "VALUE"
+                },
+                {
+                  "valueFloat": 0.0,
+                  "currentPrecisionIndex": 2,
+                  "valueFloatPrecision": 0.01,
+                  "className": "SaturationNode",
+                  "path": "options/grid/point color/sat",
+                  "type": "VALUE"
+                },
+                {
+                  "valueFloat": 0.49803922,
+                  "currentPrecisionIndex": 2,
+                  "valueFloatPrecision": 0.01,
+                  "className": "BrightnessNode",
+                  "path": "options/grid/point color/br",
+                  "type": "VALUE"
+                },
+                {
+                  "valueFloat": 1.0,
+                  "currentPrecisionIndex": 2,
+                  "valueFloatPrecision": 0.01,
+                  "className": "AlphaNode",
+                  "path": "options/grid/point color/alpha",
+                  "type": "VALUE"
+                },
+                {
+                  "className": "ColorPickerHexNode",
+                  "path": "options/grid/point color/hex",
+                  "type": "VALUE"
+                }
+              ],
+              "className": "ColorPickerFolderNode",
+              "path": "options/grid/point color",
+              "type": "FOLDER"
+            },
+            {
+              "valueFloat": 4.0,
+              "currentPrecisionIndex": 4,
+              "valueFloatPrecision": 1.0,
+              "className": "SliderNode",
+              "path": "options/grid/point weight",
+              "type": "VALUE"
+            },
+            {
+              "valueFloat": 0.25,
+              "currentPrecisionIndex": 2,
+              "valueFloatPrecision": 0.01,
+              "className": "SliderNode",
+              "path": "options/grid/point range",
+              "type": "VALUE"
+            }
+          ],
+          "window": {
+            "posX": 506.0,
+            "posY": 22.0,
+            "closed": false,
+            "windowSizeX": 220.0
+          },
+          "className": "FolderNode",
+          "path": "options/grid",
+          "type": "FOLDER"
+        },
+        {
+          "children": [
+            {
+              "valueString": "on hover",
+              "children": [
+                {
+                  "valueBoolean": false,
+                  "className": "StringPickerItem",
+                  "path": "options/context lines/visibility/never",
+                  "type": "TRANSIENT"
+                },
+                {
+                  "valueBoolean": true,
+                  "className": "StringPickerItem",
+                  "path": "options/context lines/visibility/on hover",
+                  "type": "TRANSIENT"
+                },
+                {
+                  "valueBoolean": false,
+                  "className": "StringPickerItem",
+                  "path": "options/context lines/visibility/always",
+                  "type": "TRANSIENT"
+                }
+              ],
+              "className": "RadioFolderNode",
+              "path": "options/context lines/visibility",
+              "type": "FOLDER"
+            },
+            {
+              "valueBoolean": false,
+              "className": "ToggleNode",
+              "path": "options/context lines/shortest line",
+              "type": "VALUE"
+            },
+            {
+              "hexString": "FF7F7F7F",
+              "children": [
+                {
+                  "className": "ColorPreviewNode",
+                  "path": "options/context lines/color/preview",
+                  "type": "TRANSIENT"
+                },
+                {
+                  "valueFloat": 0.0,
+                  "currentPrecisionIndex": 2,
+                  "valueFloatPrecision": 0.01,
+                  "className": "HueNode",
+                  "path": "options/context lines/color/hue",
+                  "type": "VALUE"
+                },
+                {
+                  "valueFloat": 0.0,
+                  "currentPrecisionIndex": 2,
+                  "valueFloatPrecision": 0.01,
+                  "className": "SaturationNode",
+                  "path": "options/context lines/color/sat",
+                  "type": "VALUE"
+                },
+                {
+                  "valueFloat": 0.49803922,
+                  "currentPrecisionIndex": 2,
+                  "valueFloatPrecision": 0.01,
+                  "className": "BrightnessNode",
+                  "path": "options/context lines/color/br",
+                  "type": "VALUE"
+                },
+                {
+                  "valueFloat": 1.0,
+                  "currentPrecisionIndex": 2,
+                  "valueFloatPrecision": 0.01,
+                  "className": "AlphaNode",
+                  "path": "options/context lines/color/alpha",
+                  "type": "VALUE"
+                },
+                {
+                  "className": "ColorPickerHexNode",
+                  "path": "options/context lines/color/hex",
+                  "type": "VALUE"
+                }
+              ],
+              "className": "ColorPickerFolderNode",
+              "path": "options/context lines/color",
+              "type": "FOLDER"
+            },
+            {
+              "valueFloat": 1.2,
+              "currentPrecisionIndex": 3,
+              "valueFloatPrecision": 0.1,
+              "className": "SliderNode",
+              "path": "options/context lines/weight",
+              "type": "VALUE"
+            },
+            {
+              "valueFloat": 3.5,
+              "currentPrecisionIndex": 3,
+              "valueFloatPrecision": 0.1,
+              "className": "SliderNode",
+              "path": "options/context lines/end size",
+              "type": "VALUE"
+            }
+          ],
+          "className": "FolderNode",
+          "path": "options/context lines",
+          "type": "FOLDER"
+        },
+        {
+          "children": [
+            {
+              "valueBoolean": true,
+              "className": "ToggleNode",
+              "path": "options/hotkeys/h: hide\\/show gui",
+              "type": "VALUE"
+            },
+            {
+              "valueBoolean": true,
+              "className": "ToggleNode",
+              "path": "options/hotkeys/d: close windows",
+              "type": "VALUE"
+            },
+            {
+              "valueBoolean": true,
+              "className": "ToggleNode",
+              "path": "options/hotkeys/i: screenshot",
+              "type": "VALUE"
+            },
+            {
+              "valueBoolean": true,
+              "className": "ToggleNode",
+              "path": "options/hotkeys/ctrl + s: new save",
+              "type": "VALUE"
+            },
+            {
+              "valueBoolean": true,
+              "className": "ToggleNode",
+              "path": "options/hotkeys/k: open sketch folder",
+              "type": "VALUE"
+            }
+          ],
+          "className": "FolderNode",
+          "path": "options/hotkeys",
+          "type": "FOLDER"
+        },
+        {
+          "valueFloat": 500.0,
+          "currentPrecisionIndex": 4,
+          "valueFloatPrecision": 1.0,
+          "className": "SliderIntNode",
+          "path": "options/numpad input (ms)",
+          "type": "VALUE"
+        }
+      ],
+      "window": {
+        "posX": 264.0,
+        "posY": 22.0,
+        "closed": false,
+        "windowSizeX": 220.0
+      },
+      "className": "FolderNode",
+      "path": "options",
+      "type": "FOLDER"
+    },
+    {
+      "children": [
+        {
+          "valueFloat": 360.0,
+          "currentPrecisionIndex": 4,
+          "valueFloatPrecision": 1.0,
+          "className": "SliderIntNode",
+          "path": "crosses/rot frames",
+          "type": "VALUE"
+        },
+        {
+          "valueFloat": 22.0,
+          "currentPrecisionIndex": 4,
+          "valueFloatPrecision": 1.0,
+          "className": "SliderIntNode",
+          "path": "crosses/count",
+          "type": "VALUE"
+        },
+        {
+          "valueFloat": 14.0,
+          "currentPrecisionIndex": 4,
+          "valueFloatPrecision": 1.0,
+          "className": "SliderNode",
+          "path": "crosses/rect size",
+          "type": "VALUE"
+        },
+        {
+          "children": [
+            {
+              "className": "PlotDisplayNode",
+              "path": "crosses/step/_",
+              "type": "TRANSIENT"
+            },
+            {
+              "valueFloat": 1.5,
+              "currentPrecisionIndex": 3,
+              "valueFloatPrecision": 0.1,
+              "className": "SliderNode",
+              "path": "crosses/step/x",
+              "type": "VALUE"
+            },
+            {
+              "valueFloat": 1.0,
+              "currentPrecisionIndex": 4,
+              "valueFloatPrecision": 1.0,
+              "className": "SliderNode",
+              "path": "crosses/step/y",
+              "type": "VALUE"
+            }
+          ],
+          "className": "PlotFolderNode",
+          "path": "crosses/step",
+          "type": "FOLDER"
+        },
+        {
+          "children": [
+            {
+              "className": "PlotDisplayNode",
+              "path": "crosses/field pos/_",
+              "type": "TRANSIENT"
+            },
+            {
+              "valueFloat": 0.0,
+              "currentPrecisionIndex": 4,
+              "valueFloatPrecision": 1.0,
+              "className": "SliderNode",
+              "path": "crosses/field pos/x",
+              "type": "VALUE"
+            },
+            {
+              "valueFloat": 0.0,
+              "currentPrecisionIndex": 4,
+              "valueFloatPrecision": 1.0,
+              "className": "SliderNode",
+              "path": "crosses/field pos/y",
+              "type": "VALUE"
+            }
+          ],
+          "className": "PlotFolderNode",
+          "path": "crosses/field pos",
+          "type": "FOLDER"
+        }
+      ],
+      "window": {
+        "posX": 22.0,
+        "posY": 176.0,
+        "closed": false,
+        "windowSizeX": 220.0
+      },
+      "className": "FolderNode",
+      "path": "crosses",
+      "type": "FOLDER"
+    },
+    {
+      "children": [
+        {
+          "hexString": "FF0F0F0F",
+          "children": [
+            {
+              "className": "ColorPreviewNode",
+              "path": "colors/a/preview",
+              "type": "TRANSIENT"
+            },
+            {
+              "valueFloat": 0.0,
+              "currentPrecisionIndex": 2,
+              "valueFloatPrecision": 0.01,
+              "className": "HueNode",
+              "path": "colors/a/hue",
+              "type": "VALUE"
+            },
+            {
+              "valueFloat": 0.0,
+              "currentPrecisionIndex": 2,
+              "valueFloatPrecision": 0.01,
+              "className": "SaturationNode",
+              "path": "colors/a/sat",
+              "type": "VALUE"
+            },
+            {
+              "valueFloat": 0.05882353,
+              "currentPrecisionIndex": 2,
+              "valueFloatPrecision": 0.01,
+              "className": "BrightnessNode",
+              "path": "colors/a/br",
+              "type": "VALUE"
+            },
+            {
+              "valueFloat": 1.0,
+              "currentPrecisionIndex": 2,
+              "valueFloatPrecision": 0.01,
+              "className": "AlphaNode",
+              "path": "colors/a/alpha",
+              "type": "VALUE"
+            },
+            {
+              "className": "ColorPickerHexNode",
+              "path": "colors/a/hex",
+              "type": "VALUE"
+            }
+          ],
+          "window": {
+            "posX": 506.0,
+            "posY": 22.0,
+            "closed": false,
+            "windowSizeX": 154.0
+          },
+          "className": "ColorPickerFolderNode",
+          "path": "colors/a",
+          "type": "FOLDER"
+        },
+        {
+          "hexString": "FFD39143",
+          "children": [
+            {
+              "className": "ColorPreviewNode",
+              "path": "colors/b/preview",
+              "type": "TRANSIENT"
+            },
+            {
+              "valueFloat": 0.08999999,
+              "currentPrecisionIndex": 2,
+              "valueFloatPrecision": 0.01,
+              "className": "HueNode",
+              "path": "colors/b/hue",
+              "type": "VALUE"
+            },
+            {
+              "valueFloat": 0.6799998,
+              "currentPrecisionIndex": 2,
+              "valueFloatPrecision": 0.01,
+              "className": "SaturationNode",
+              "path": "colors/b/sat",
+              "type": "VALUE"
+            },
+            {
+              "valueFloat": 0.83019596,
+              "currentPrecisionIndex": 2,
+              "valueFloatPrecision": 0.01,
+              "className": "BrightnessNode",
+              "path": "colors/b/br",
+              "type": "VALUE"
+            },
+            {
+              "valueFloat": 1.0,
+              "currentPrecisionIndex": 2,
+              "valueFloatPrecision": 0.01,
+              "className": "AlphaNode",
+              "path": "colors/b/alpha",
+              "type": "VALUE"
+            },
+            {
+              "className": "ColorPickerHexNode",
+              "path": "colors/b/hex",
+              "type": "VALUE"
+            }
+          ],
+          "window": {
+            "posX": 506.0,
+            "posY": 22.0,
+            "closed": false,
+            "windowSizeX": 154.0
+          },
+          "className": "ColorPickerFolderNode",
+          "path": "colors/b",
+          "type": "FOLDER"
+        }
+      ],
+      "window": {
+        "posX": 264.0,
+        "posY": 22.0,
+        "closed": false,
+        "windowSizeX": 220.0
+      },
+      "className": "FolderNode",
+      "path": "colors",
+      "type": "FOLDER"
+    },
+    {
+      "children": [
+        {
+          "valueFloat": 256.0,
+          "currentPrecisionIndex": 4,
+          "valueFloatPrecision": 1.0,
+          "className": "SliderIntNode",
+          "path": "fps/framesToAverage",
+          "type": "VALUE"
+        },
+        {
+          "valueFloat": 62.46551,
+          "currentPrecisionIndex": 2,
+          "valueFloatPrecision": 0.01,
+          "className": "SliderNode",
+          "path": "fps/frameRate avg",
+          "type": "VALUE"
+        },
+        {
+          "valueFloat": 60.0,
+          "currentPrecisionIndex": 4,
+          "valueFloatPrecision": 1.0,
+          "className": "SliderIntNode",
+          "path": "fps/frameRate target",
+          "type": "VALUE"
+        }
+      ],
+      "className": "FolderNode",
+      "path": "fps",
+      "type": "FOLDER"
+    },
+    {
+      "children": [
+        {
+          "valueFloat": 600.0,
+          "currentPrecisionIndex": 4,
+          "valueFloatPrecision": 1.0,
+          "className": "SliderIntNode",
+          "path": "rec/frames",
+          "type": "VALUE"
+        },
+        {
+          "className": "ButtonNode",
+          "path": "rec/start",
+          "type": "TRANSIENT"
+        },
+        {
+          "className": "ButtonNode",
+          "path": "rec/stop",
+          "type": "TRANSIENT"
+        },
+        {
+          "className": "ButtonNode",
+          "path": "rec/open folder",
+          "type": "TRANSIENT"
+        },
+        {
+          "valueFloat": 0.0,
+          "currentPrecisionIndex": 4,
+          "valueFloatPrecision": 1.0,
+          "className": "SliderIntNode",
+          "path": "rec/rect center x",
+          "type": "VALUE"
+        },
+        {
+          "valueFloat": 0.0,
+          "currentPrecisionIndex": 4,
+          "valueFloatPrecision": 1.0,
+          "className": "SliderIntNode",
+          "path": "rec/rect center y",
+          "type": "VALUE"
+        },
+        {
+          "valueFloat": 250.0,
+          "currentPrecisionIndex": 4,
+          "valueFloatPrecision": 1.0,
+          "className": "SliderIntNode",
+          "path": "rec/rect width",
+          "type": "VALUE"
+        },
+        {
+          "valueFloat": 250.0,
+          "currentPrecisionIndex": 4,
+          "valueFloatPrecision": 1.0,
+          "className": "SliderIntNode",
+          "path": "rec/rect height",
+          "type": "VALUE"
+        },
+        {
+          "valueBoolean": false,
+          "className": "ToggleNode",
+          "path": "rec/show rect",
+          "type": "VALUE"
+        },
+        {
+          "valueFloat": 60.0,
+          "currentPrecisionIndex": 4,
+          "valueFloatPrecision": 1.0,
+          "className": "SliderIntNode",
+          "path": "rec/ffmpeg fps",
+          "type": "VALUE"
+        },
+        {
+          "className": "ButtonNode",
+          "path": "rec/ffmpeg make mp4",
+          "type": "TRANSIENT"
+        }
+      ],
+      "className": "FolderNode",
+      "path": "rec",
+      "type": "FOLDER"
+    }
+  ],
+  "window": {
+    "posX": 22.0,
+    "posY": 22.0,
+    "closed": false,
+    "windowSizeX": 220.0
+  },
+  "className": "FolderNode",
+  "path": "",
+  "type": "FOLDER"
+}

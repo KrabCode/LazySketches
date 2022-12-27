@@ -1,6 +1,7 @@
 package _22_12.flowers;
 
 import _0_utils.Utils;
+import _22_03.PostFxAdapter;
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PGraphics;
@@ -12,7 +13,8 @@ import java.util.ArrayList;
 public class Flowers extends PApplet {
     LazyGui gui;
     PGraphics pg;
-    ArrayList<PVector> offsets = new ArrayList<>();
+    ArrayList<PVector> posOffsets = new ArrayList<>();
+    ArrayList<Float> sizeOffsets = new ArrayList<>();
 
     public static void main(String[] args) {
         PApplet.main(java.lang.invoke.MethodHandles.lookup().lookupClass());
@@ -38,19 +40,21 @@ public class Flowers extends PApplet {
         drawBackground();
         drawGrid();
         pg.endDraw();
+        PostFxAdapter.apply(this, gui, pg);
         image(pg, 0, 0);
         gui.draw();
         Utils.record(this, gui);
     }
 
     float gridTime = 0;
+
     private void drawGrid() {
         pg.pushMatrix();
         gui.pushFolder("grid");
-        if(gui.toggle("disable depth test")){
+        if (gui.toggle("disable depth test")) {
             pg.hint(PConstants.DISABLE_DEPTH_TEST);
         }
-        PVector tA = gui.plotXYZ("translation a", width/2f, height/2f, 0);
+        PVector tA = gui.plotXYZ("translation a", width / 2f, height / 2f, 0);
         PVector rA = gui.plotXYZ("rotation a");
         PVector tB = gui.plotXYZ("translation b");
         PVector rB = gui.plotXYZ("rotation b");
@@ -62,9 +66,10 @@ public class Flowers extends PApplet {
         pg.rotateX(rB.x);
         pg.rotateY(rB.y);
         pg.rotateZ(rB.z);
-        PVector colsRows = gui.plotXY("col\\/row count");
-        PVector gridSize = gui.plotXY("grid size");
-        PVector pointSize = gui.plotXY("point size", 5);
+        int count = gui.sliderInt("col\\/row count", 20);
+        PVector colsRows = new PVector(count, count);
+        PVector gridSize = gui.plotXY("grid size", 600);
+        float pointSize = gui.slider("point size", 5);
         float pointSizeMult = gui.slider("point size mult", 5);
         float timeSpeed = gui.slider("time speed", 1);
         gridTime += radians(timeSpeed);
@@ -80,29 +85,40 @@ public class Flowers extends PApplet {
         int offsetIndex = -1;
         for (int xi = 0; xi < columns; xi++) {
             for (int yi = 0; yi < rows; yi++) {
-                offsetIndex++;
-                if(offsets.size() <= offsetIndex){
-                    offsets.add(new PVector(randomGaussian(), randomGaussian()));
+                if (posOffsets.size() <= ++offsetIndex) {
+                    posOffsets.add(new PVector(randomGaussian(), randomGaussian()));
                 }
-                PVector offset = PVector.mult(offsets.get(offsetIndex), gui.slider("random offset", 10));
+                PVector offset = PVector.mult(posOffsets.get(offsetIndex), gui.slider("pos offset gauss", 10));
                 float x = map(xi, 0, columns, -gridSize.x, gridSize.x) + offset.x;
                 float y = map(yi, 0, rows, -gridSize.y, gridSize.y) + offset.y;
-                float dist = dist(x,y,0,0);
+                float dist = dist(x + offset.x, y + offset.y, 0, 0);
                 float wave = sin(waveFreq * dist + gridTime);
-                PVector pointSizeLocal = PVector.mult(pointSize, pointSizeMult*max(0, wave));
+                if (sizeOffsets.size() <= offsetIndex) {
+                    sizeOffsets.add(randomGaussian());
+                }
+                float sizeOffsetGauss = sizeOffsets.get(offsetIndex) * gui.slider("size offset gauss", 2);
+                float pointSizeLocal = pointSize * (pointSizeMult + sizeOffsetGauss) * max(0, wave);
                 pg.pushMatrix();
-
-                pg.stroke(gui.colorPicker("line stroke").hex);
-                pg.strokeWeight(gui.slider("line weight", 1));
-                float z = waveAmpY * wave;
                 pg.translate(x, y);
-                float lineZoffset = gui.slider("line z offset");
-                    pg.line(0, 0, 0, 0, 0,  max(gui.slider("line min z"),z + lineZoffset) );
-                pg.translate(0,0, z);
+
+                pg.fill(gui.colorPicker("stem fill").hex);
+                pg.stroke(gui.colorPicker("stem stroke").hex);
+                pg.strokeWeight(gui.slider("stem weight", 1));
+                float z = waveAmpY * wave;
+                float stemGirth = gui.slider("stem girth", 3);
+                float stemOffsetZ = gui.slider("stem z offset");
+                float stemLength = max(gui.slider("line min z"), z);
+                if(stemLength > 0){
+                    pg.pushMatrix();
+                    pg.translate(0, 0, stemLength/2f);
+                    pg.box(stemGirth, stemGirth, -stemLength);
+                    pg.popMatrix();
+                }
+                pg.translate(0, 0, z+stemOffsetZ);
 
                 pg.stroke(gui.colorPicker("point stroke").hex);
                 pg.strokeWeight(gui.slider("point weight", 1));
-                if(gui.toggle("point no stroke")){
+                if (gui.toggle("point no stroke")) {
                     pg.noStroke();
                 }
                 int defaultColor = color(255);
@@ -114,7 +130,7 @@ public class Flowers extends PApplet {
                 };
                 int fillIndex = floor(xi + yi) % fills.length;
                 pg.fill(fills[fillIndex]);
-                    pg.ellipse(0, 0, pointSizeLocal.x, pointSizeLocal.y);
+                pg.ellipse(0, 0, pointSizeLocal, pointSizeLocal);
                 pg.popMatrix();
             }
         }
