@@ -5,6 +5,7 @@ import lazy.ShaderReloader;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PImage;
+import processing.core.PVector;
 import processing.opengl.PShader;
 
 import java.awt.*;
@@ -57,10 +58,10 @@ public class Utils {
                 e.printStackTrace();
             }
         }
-        int recordRectPosX = pApplet.width / 2 + gui.sliderInt("rec/rect center x", 0);
-        int recordRectPosY = pApplet.height / 2 + gui.sliderInt("rec/rect center y", 0);
-        int recordRectSizeX = gui.sliderInt("rec/rect width", pApplet.width / 4);
-        int recordRectSizeY = gui.sliderInt("rec/rect height", pApplet.height / 4);
+        PVector recordRectPos = PVector.add(gui.plotXY("rec/rect pos"), new PVector(pApplet.width/2f, pApplet.height/2f));
+        PVector recordRectSize = gui.plotXY("rec/rect size", 1000);
+        int recordRectSizeX = floor(recordRectSize.x);
+        int recordRectSizeY = floor(recordRectSize.y);
         if(recordRectSizeX % 2 != 0){
             recordRectSizeX += 1;
         }
@@ -71,8 +72,8 @@ public class Utils {
         if (recStarted != -1 && pApplet.frameCount < recStarted + recLength) {
             println("saved " + saveIndex + " / " + recLength);
             PImage cutout = pApplet.get(
-                    recordRectPosX - recordRectSizeX / 2,
-                    recordRectPosY - recordRectSizeY / 2,
+                    floor(recordRectPos.x) - recordRectSizeX / 2,
+                    floor(recordRectPos.y) - recordRectSizeY / 2,
                     recordRectSizeX,
                     recordRectSizeY
             );
@@ -86,7 +87,7 @@ public class Utils {
             pApplet.stroke(pApplet.color(0xFFFFFFFF));
             pApplet.noFill();
             pApplet.rectMode(CENTER);
-            pApplet.rect(recordRectPosX, recordRectPosY, recordRectSizeX, recordRectSizeY);
+            pApplet.rect(recordRectPos.x, recordRectPos.y, recordRectSizeX, recordRectSizeY);
             pApplet.popStyle();
         }
 
