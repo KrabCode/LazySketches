@@ -6,6 +6,7 @@ uniform float time;
 uniform float rotationTime;
 uniform float scalingTime;
 uniform int copies;
+uniform bool swapDirs;
 
 #define PI 3.14159
 
@@ -54,11 +55,21 @@ vec3 hsv2rgb(vec3 c)
 }
 
 float render(vec2 uv){
+    // do the log-polar mapping
     vec2 pos = cartesianToLogPolar(uv);
     pos.x += scalingTime;
-//    pos.y += rotationTime;
     pos *= float(copies)/PI;
+
+    // rotate each row in a different direction
+    float dir = mod(pos.x*0.5, 1.) > 0.5 ? -1. : 1.;
+    if(!swapDirs){
+        dir = 1.;
+    }
+    pos.y += rotationTime * dir;
+
     pos = fract(pos) - 0.5;
+
+    // draw mushroom shape
     pos *= rotate2D(-PI / 2.0);
     float sdCap = sdCutDisk(pos, 0.2, 0.04);
     float stemHeight = 0.20;
