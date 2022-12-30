@@ -44,7 +44,7 @@ public class Utils {
         }
 
         String sketchMainClassName = pApplet.getClass().getSimpleName();
-        String recDir = "out/rec/" + sketchMainClassName +"_" + recordingId;
+        String recDir = pApplet.dataPath("video/" + sketchMainClassName +"_" + recordingId);
         String recDirAbsolute = Paths.get(recDir).toAbsolutePath().toString();
         if(gui.button("rec/open folder")){
             Desktop desktop = Desktop.getDesktop();
