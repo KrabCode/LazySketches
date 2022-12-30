@@ -92,7 +92,8 @@ public class Flowers extends PApplet {
                 float x = map(xi, 0, columns, -gridSize.x, gridSize.x) + offset.x;
                 float y = map(yi, 0, rows, -gridSize.y, gridSize.y) + offset.y;
                 float dist = dist(x + offset.x, y + offset.y, 0, 0);
-                float wave = sin(waveFreq * dist + gridTime);
+
+                float wave = sin(waveFreq * dist + gridTime) + gui.slider("wave const", 0);;
                 if (sizeOffsets.size() <= offsetIndex) {
                     sizeOffsets.add(randomGaussian());
                 }
