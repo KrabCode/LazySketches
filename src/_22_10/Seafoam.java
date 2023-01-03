@@ -34,7 +34,7 @@ public class Seafoam extends PApplet {
         pg.beginDraw();
         drawBackground();
         pg.endDraw();
-        Utils.shaderMove(pg, gui);
+        Utils.shaderMove(pg, gui,null);
         image(pg, 0, 0);
         Utils.record(this, gui);
     }

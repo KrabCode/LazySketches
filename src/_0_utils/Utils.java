@@ -133,8 +133,11 @@ public class Utils {
         pg.image(img, 0, 0);
     }
 
-    public static void shaderMove(PGraphics pg, LazyGui gui) {
+    public static void shaderMove(PGraphics pg, LazyGui gui, String customPath) {
         String moveShaderPath = "_0_templates_glsl/move.glsl";
+        if(customPath!=null){
+            moveShaderPath=customPath;
+        }
         moveShaderTime += radians(gui.sliderInt("move/time speed", 1));
         PShader moveShader = ShaderReloader.getShader(moveShaderPath);
         moveShader.set("time", moveShaderTime);
@@ -145,7 +148,7 @@ public class Utils {
         moveShader.set("octaves", gui.sliderInt("move/octaves", 4));
         moveShader.set("freqMult", gui.slider("move/freqMult", 2.5f));
         moveShader.set("ampMult", gui.slider("move/ampMult", 0.5f));
-        moveShader.set("strength", gui.slider("move/strength", 0.1f, 0, 1));
+        moveShader.set("strength", gui.slider("move/strength", 0.1f, 0, Float.MAX_VALUE));
         moveShader.set("centerForce", gui.slider("move/center force"));
         ShaderReloader.filter(moveShaderPath, pg);
     }

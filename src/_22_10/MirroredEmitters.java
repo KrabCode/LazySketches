@@ -46,7 +46,7 @@ public class MirroredEmitters extends PApplet {
         pg.translate(width / 2f, height / 2f);
         drawEmitterCircles();
         drawParticles();
-        Utils.shaderMove(pg, gui);
+        Utils.shaderMove(pg, gui,null);
         pg.endDraw();
         PostFxAdapter.apply(this, gui, pg);
         clear();

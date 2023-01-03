@@ -1,4 +1,4 @@
-package _22_12;
+package _22_12.RadialLines;
 
 import _0_utils.Utils;
 import lazy.LazyGui;
@@ -16,13 +16,16 @@ public class RadialLines extends PApplet {
 
     @Override
     public void settings() {
-        size(1000, 1000, P2D);
+//        size(1000, 1000, P2D);
+        fullScreen(P2D);
+        smooth(16);
     }
 
     @Override
     public void setup() {
         gui = new LazyGui(this);
         pg = createGraphics(width, height, P2D);
+        pg.smooth(8);
     }
 
     @Override
@@ -50,7 +53,7 @@ public class RadialLines extends PApplet {
 
     private void drawLines(PGraphics pg) {
         gui.pushFolder("lines");
-        int lineCount = gui.sliderInt("line count", 4);
+        int lineCount = gui.sliderInt("group count", 4);
         for (int lineIndex = 0; lineIndex < lineCount; lineIndex++) {
             gui.pushFolder("group " + lineIndex);
             if(!gui.toggle("active")){
@@ -66,6 +69,7 @@ public class RadialLines extends PApplet {
             pg.strokeWeight(gui.slider("weight", 1.99f));
             float segLength = gui.slider("segment length", 20, 1, 1000);
             float gapLength = gui.slider("gap length", 5, 1, 1000);
+            float timeSpeed = gui.slider("time +", 1);
             for (int i = 0; i < count; i++) {
                 pg.pushMatrix();
                 float theta = map(i, 0, count, 0, PI);
@@ -73,7 +77,7 @@ public class RadialLines extends PApplet {
                 if (segLength >= length) {
                     pg.line(-length, 0, length, 0);
                 } else {
-                    float dir = i % 2 == 0 ? -1 : 1;
+                    float dir = (i % 2 == 0 ? -1 : 1) * timeSpeed;
                     float timeOffset = map(i,0, count, 0,  (segLength + gapLength));
                     timeOffset += dir * (t % (segLength + gapLength));
                     float x = -length * 2 + timeOffset;

@@ -35,7 +35,7 @@ public class Noise extends PApplet {
         pg.beginDraw();
         drawNoiseShader();
         pg.endDraw();
-        Utils.shaderMove(pg,gui);
+        Utils.shaderMove(pg,gui,null);
         PostFxAdapter.apply(this, gui, pg);
         image(pg, 0, 0);
         Utils.record(this, gui);
