@@ -33,7 +33,6 @@ public class LayerTest extends PApplet {
         LayerUtils.updateDrawLayers(this, gui, pg);
         pg.endDraw();
         image(pg, 0, 0);
-        gui.draw();
         Utils.record(this, gui);
     }
 

@@ -16,9 +16,9 @@ import static processing.core.PApplet.radians;
 import static processing.core.PConstants.*;
 
 public class LayerUtils {
-    static Map<Integer, PImage> images = new HashMap<Integer, PImage>();
-    static Map<Integer, PGraphics> canvases = new HashMap<Integer, PGraphics>();
-    static boolean isInitializing = true;
+    public static Map<Integer, PImage> images = new HashMap<Integer, PImage>();
+    public static Map<Integer, PGraphics> canvases = new HashMap<Integer, PGraphics>();
+    public static boolean isInitializing = true;
 
     static void updateDrawLayers(PApplet app, LazyGui gui, PGraphics pg){
         gui.pushFolder("image list");
@@ -61,11 +61,13 @@ public class LayerUtils {
             imageCanvas.endDraw();
             canvases.put(canvasIndex, imageCanvas);
             images.remove(canvasIndex);
+            canvas = imageCanvas;
         }
 
         PImage img = images.get(canvasIndex);
         String shaderPath = gui.textInput("shader path");
         if(gui.toggle("apply shader", true) && shaderPath.length() > 0){
+            // add two modes - self feedback (which we have now) and main canvas passthrough as the texture uniform
             PShader shader = ShaderReloader.getShader(shaderPath);
             if(shader != null){
                 shader.set("time", radians(app.frameCount));
@@ -75,7 +77,7 @@ public class LayerUtils {
             }
             ShaderReloader.filter(shaderPath, canvas);
         }else{
-            if(img != null && canvas != null){
+            if(img != null){
                 canvas.beginDraw();
                 canvas.image(img, 0, 0);
                 canvas.endDraw();
@@ -83,23 +85,25 @@ public class LayerUtils {
         }
 
         boolean cornerMode = gui.toggle("center\\/corner mode");
-        PVector pos = PVector.add(gui.plotXY("pos"), new PVector(pg.width/2f, pg.height/2f));
-        if(cornerMode){
-            pg.imageMode(CORNER);
-        }else{
-            pg.imageMode(CENTER);
+        if(gui.toggle("show canvas", true)){
+            PVector pos = PVector.add(gui.plotXY("pos"), new PVector(pg.width/2f, pg.height/2f));
+            if(cornerMode){
+                pg.imageMode(CORNER);
+            }else{
+                pg.imageMode(CENTER);
+            }
+            pg.pushMatrix();
+            pg.pushStyle();
+            pg.translate(pos.x, pos.y);
+            pg.rotate(PI*gui.slider("rotation * π"));
+            pg.scale(gui.slider("scale", 1));
+            float alpha = gui.slider("alpha", 1, 0, 1);
+            pg.colorMode(HSB,1,1,1,1);
+            pg.tint(1, alpha);
+            pg.image(canvas, 0, 0);
+            pg.popMatrix();
+            pg.popStyle();
         }
-        pg.pushMatrix();
-        pg.pushStyle();
-        pg.translate(pos.x, pos.y);
-        pg.rotate(gui.slider("rot"));
-        pg.scale(gui.slider("scale", 1));
-        float alpha = gui.slider("alpha", 1, 0, 1);
-        pg.colorMode(HSB,1,1,1,1);
-        pg.tint(1, alpha);
-        pg.image(canvas, 0, 0);
-        pg.popMatrix();
-        pg.popStyle();
         pg.resetShader();
         gui.popFolder();
     }
