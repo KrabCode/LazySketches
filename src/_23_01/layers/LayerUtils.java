@@ -1,4 +1,4 @@
-package _23_01.images;
+package _23_01.layers;
 
 import lazy.LazyGui;
 import lazy.ShaderReloader;
@@ -15,38 +15,40 @@ import static processing.core.PApplet.println;
 import static processing.core.PApplet.radians;
 import static processing.core.PConstants.*;
 
-public class ImageUtils {
+public class LayerUtils {
+    static Map<Integer, PImage> images = new HashMap<Integer, PImage>();
     static Map<Integer, PGraphics> canvases = new HashMap<Integer, PGraphics>();
     static boolean isInitializing = true;
 
     // TODO layer shaders alone on clear full sketch size canvases without images
 
-    static void updateDrawImages(PApplet app, LazyGui gui, PGraphics pg){
+    static void updateDrawLayers(PApplet app, LazyGui gui, PGraphics pg){
         gui.pushFolder("image list");
         int count = gui.sliderInt("count", 0);
-        if(gui.button("add image")){
+        if(gui.button("add layer")){
             gui.sliderSet("count", count + 1);
         }
         for (int i = 0; i < count; i++) {
-            updateCanvas(app, gui, pg, i);
+            updateDrawLayer(app, gui, pg, i);
         }
         gui.popFolder();
         isInitializing = false;
     }
 
-    private static void updateCanvas(PApplet app, LazyGui gui, PGraphics pg, int canvasIndex) {
-        gui.pushFolder("image " + canvasIndex);
+    private static void updateDrawLayer(PApplet app, LazyGui gui, PGraphics pg, int canvasIndex) {
+        gui.pushFolder("layer " + canvasIndex);
+        int canvasWidth = gui.sliderInt("width", app.width, 256, Integer.MAX_VALUE);
+        int canvasHeight = gui.sliderInt("height", app.height,256, Integer.MAX_VALUE);
         String imagePath = gui.textInput("img path");
-
-        if(gui.button("loadImage") || (imagePath.length() > 0 && isInitializing)){
+        if(gui.button("load image") || (imagePath.length() > 0 && isInitializing)){
             try{
                 PImage img = app.loadImage(imagePath);
+                images.put(canvasIndex, img);
                 PGraphics imageCanvas = app.createGraphics(img.width, img.height, P2D);
-                imageCanvas.beginDraw();
-                imageCanvas.image(img, 0, 0);
-                imageCanvas.endDraw();
+                gui.sliderSet("width", imageCanvas.width);
+                gui.sliderSet("height", imageCanvas.height);
                 canvases.put(canvasIndex, imageCanvas);
-                println("loaded image " + canvasIndex + ": " + imagePath);
+//                println("loaded image " + canvasIndex + ": " + imagePath);
                 gui.toggleSet("display", true);
             }catch(Exception ex){
                 println(ex);
@@ -54,19 +56,29 @@ public class ImageUtils {
         }
 
         PGraphics canvas = canvases.get(canvasIndex);
-        if(canvas == null){
-            gui.popFolder();
-            return;
+        if(gui.button("delete image") || canvas == null){
+            PGraphics imageCanvas = app.createGraphics(canvasWidth, canvasHeight, P2D);
+            imageCanvas.beginDraw();
+            imageCanvas.clear();
+            imageCanvas.endDraw();
+            canvases.put(canvasIndex, imageCanvas);
+            images.remove(canvasIndex);
         }
 
+        PImage img = images.get(canvasIndex);
+        if(img != null && canvas != null){
+            canvas.beginDraw();
+            canvas.image(img, 0, 0);
+            canvas.endDraw();
+        }
 
         String shaderPath = gui.textInput("shader path");
-        if(gui.toggle("apply shader", true)){
+        if(gui.toggle("apply shader", true) && shaderPath.length() > 0){
             PShader shader = ShaderReloader.getShader(shaderPath);
             if(shader != null){
                 shader.set("time", radians(app.frameCount));
             }
-            ShaderReloader.shader(shaderPath, pg);
+            ShaderReloader.filter(shaderPath, canvas);
         }
 
         if(gui.toggle("display")){

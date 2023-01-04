@@ -1,11 +1,11 @@
-package _23_01.images;
+package _23_01.layers;
 
 import _0_utils.Utils;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import lazy.LazyGui;
 
-public class Images extends PApplet {
+public class LayerTest extends PApplet {
     LazyGui gui;
     PGraphics pg;
 
@@ -30,7 +30,7 @@ public class Images extends PApplet {
     public void draw() {
         pg.beginDraw();
         drawBackground();
-        ImageUtils.updateDrawImages(this, gui, pg);
+        LayerUtils.updateDrawLayers(this, gui, pg);
         pg.endDraw();
         image(pg, 0, 0);
         gui.draw();
