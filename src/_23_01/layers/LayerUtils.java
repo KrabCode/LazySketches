@@ -20,8 +20,6 @@ public class LayerUtils {
     static Map<Integer, PGraphics> canvases = new HashMap<Integer, PGraphics>();
     static boolean isInitializing = true;
 
-    // TODO layer shaders alone on clear full sketch size canvases without images
-
     static void updateDrawLayers(PApplet app, LazyGui gui, PGraphics pg){
         gui.pushFolder("image list");
         int count = gui.sliderInt("count", 0);
@@ -34,6 +32,8 @@ public class LayerUtils {
         gui.popFolder();
         isInitializing = false;
     }
+
+    // TODO crop
 
     private static void updateDrawLayer(PApplet app, LazyGui gui, PGraphics pg, int canvasIndex) {
         gui.pushFolder("layer " + canvasIndex);
@@ -48,8 +48,6 @@ public class LayerUtils {
                 gui.sliderSet("width", imageCanvas.width);
                 gui.sliderSet("height", imageCanvas.height);
                 canvases.put(canvasIndex, imageCanvas);
-//                println("loaded image " + canvasIndex + ": " + imagePath);
-                gui.toggleSet("display", true);
             }catch(Exception ex){
                 println(ex);
             }
@@ -66,37 +64,42 @@ public class LayerUtils {
         }
 
         PImage img = images.get(canvasIndex);
-        if(img != null && canvas != null){
-            canvas.beginDraw();
-            canvas.image(img, 0, 0);
-            canvas.endDraw();
-        }
-
         String shaderPath = gui.textInput("shader path");
         if(gui.toggle("apply shader", true) && shaderPath.length() > 0){
             PShader shader = ShaderReloader.getShader(shaderPath);
             if(shader != null){
                 shader.set("time", radians(app.frameCount));
+                if(img != null){
+                    shader.set("image", img);
+                }
             }
             ShaderReloader.filter(shaderPath, canvas);
-        }
-
-        if(gui.toggle("display")){
-            boolean cornerMode = gui.toggle("center\\/corner mode");
-            PVector pos = PVector.add(gui.plotXY("pos"), new PVector(pg.width/2f, pg.height/2f));
-            if(cornerMode){
-                pg.imageMode(CORNER);
-            }else{
-                pg.imageMode(CENTER);
+        }else{
+            if(img != null && canvas != null){
+                canvas.beginDraw();
+                canvas.image(img, 0, 0);
+                canvas.endDraw();
             }
-            pg.pushMatrix();
-
-            pg.translate(pos.x, pos.y);
-            pg.rotate(gui.slider("rot"));
-            pg.scale(gui.slider("scale", 1));
-            pg.image(canvas, 0, 0);
-            pg.popMatrix();
         }
+
+        boolean cornerMode = gui.toggle("center\\/corner mode");
+        PVector pos = PVector.add(gui.plotXY("pos"), new PVector(pg.width/2f, pg.height/2f));
+        if(cornerMode){
+            pg.imageMode(CORNER);
+        }else{
+            pg.imageMode(CENTER);
+        }
+        pg.pushMatrix();
+        pg.pushStyle();
+        pg.translate(pos.x, pos.y);
+        pg.rotate(gui.slider("rot"));
+        pg.scale(gui.slider("scale", 1));
+        float alpha = gui.slider("alpha", 1, 0, 1);
+        pg.colorMode(HSB,1,1,1,1);
+        pg.tint(1, alpha);
+        pg.image(canvas, 0, 0);
+        pg.popMatrix();
+        pg.popStyle();
         pg.resetShader();
         gui.popFolder();
     }
