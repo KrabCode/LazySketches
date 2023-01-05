@@ -17,10 +17,10 @@ void main(){
     vec3 pic = texture(image, vec2(uv.x, 1.-uv.y)).rgb;
     vec3 tex = texture(texture, uv).rgb;
     float texel = 1. / max(resolution.x, resolution.y);
-    vec2 off = 2.*texel*vec2(1.+0.2*cos(time), 0.1*sin(time*0.5));
+    vec2 off = texel*vec2(0.5+0.2*cos(time), 0.01*sin(time*5.5));
     vec3 clr = texture(texture, uv+off).rgb;
 
-    vec2 floor = fract(uv * 60.5);
+    vec2 floor = gl_FragCoord.xy;
     vec4 p = vec4(floor, cos(time), sin(time));
     float n = length(hash44(p));
     n = smoothstep(0.2, 0.8, n);
