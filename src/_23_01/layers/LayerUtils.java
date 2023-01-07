@@ -39,7 +39,7 @@ public class LayerUtils {
         gui.pushFolder("layer " + canvasIndex);
         int canvasWidth = gui.sliderInt("width", app.width, 256, Integer.MAX_VALUE);
         int canvasHeight = gui.sliderInt("height", app.height,256, Integer.MAX_VALUE);
-        String imagePath = gui.textInput("img path");
+        String imagePath = gui.text("img path");
         if(gui.button("load image") || (imagePath.length() > 0 && isInitializing)){
             try{
                 PImage img = app.loadImage(imagePath);
@@ -65,7 +65,7 @@ public class LayerUtils {
         }
 
         PImage img = images.get(canvasIndex);
-        String shaderPath = gui.textInput("shader path");
+        String shaderPath = gui.text("shader path");
         if(gui.toggle("apply shader", true) && shaderPath.length() > 0){
             // add two modes - self feedback (which we have now) and main canvas passthrough as the texture uniform
             PShader shader = ShaderReloader.getShader(shaderPath);

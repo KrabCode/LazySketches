@@ -44,7 +44,7 @@ public class LogPolar extends PApplet {
 
     private void drawShader() {
         gui.pushFolder("shader");
-        String shaderPath = gui.textInput("path", "_22_12\\Logpolar\\logpolar_2D.glsl");
+        String shaderPath = gui.text("path", "_22_12\\Logpolar\\logpolar_2D.glsl");
         rotationTime += radians(gui.slider("rotation +", 0.01f));
         scalingTime += radians(gui.slider("scale +", 0.01f));
         boolean swapDirections = gui.toggle("swap dirs");

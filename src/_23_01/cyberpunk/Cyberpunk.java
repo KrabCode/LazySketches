@@ -60,7 +60,7 @@ public class Cyberpunk extends PApplet {
         int layerCount = gui.sliderInt("layer count", 8);
         for (int i = 0; i < layerCount; i++) {
             gui.pushFolder("layer " + i);
-            String imagePath = gui.textInput("img path", getImagePathByIndex(i));
+            String imagePath = gui.text("img path", getImagePathByIndex(i));
             PImage img = tryGetImage(imagePath);
             if(img == null || !gui.toggle("active", true)){
                 gui.popFolder();
@@ -71,7 +71,7 @@ public class Cyberpunk extends PApplet {
             gg.clear();
             gg.imageMode(CENTER);
             gg.image(img, gg.width/2f, gg.height/2f);
-            String shaderPath = gui.textInput("shader path");
+            String shaderPath = gui.text("shader path");
             if (!"".equals(shaderPath) && gui.toggle("active shader", true)) {
                 PShader shader = ShaderReloader.getShader(shaderPath);
                 if(shader != null){
