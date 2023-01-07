@@ -102,7 +102,7 @@ public class LSystems extends PApplet {
                 systems.add(new LSystem());
             }
             gui.pushFolder("system " + (i+1));
-            systems.get(i).update();
+            systems.get(i).update(i + 1);
             gui.popFolder();
         }
         gui.popFolder();
@@ -120,8 +120,8 @@ public class LSystems extends PApplet {
         String current = "";
         int generation = 0;
 
-        public void update() {
-            gui.pushFolder("rules");
+        public void update(int index) {
+            gui.pushFolder("system " + index + " rules");
             float angle = radians(gui.slider("angle (deg)", 25));
             String newAxiom = gui.text("axiom", axiom);
             if(!newAxiom.equals(axiom)){
@@ -141,28 +141,9 @@ public class LSystems extends PApplet {
             }
             gui.popFolder();
 
-            gui.textSet("current string", current);
-            gui.textSet("current string length", "" + current.length());
-            gui.sliderInt("generation");
-            gui.sliderSet("generation", generation);
-            if(gui.button("advance generation") || frameCount < 3){
-                if(current == null || "".equals(current)){
-                    current = axiom;
-                }
-                for (String[] rule : rules) {
-                    current = current.replaceAll(rule[0], rule[1]);
-                }
-                println("current string: " + current);
-                generation++;
-            }
-            if(gui.button("reset to axiom")){
-                current = axiom;
-                generation = 0;
-            }
-
-            gui.pushFolder("display");
+            gui.pushFolder("system " + index + " display");
             if(gui.toggle("active", true)){
-                float size = gui.slider("scale", 100);
+                float size = gui.slider("scale", 15);
                 char[] path = current.toCharArray();
                 pg.pushMatrix();
                 PVector pos = gui.plotXY("position");
@@ -187,6 +168,26 @@ public class LSystems extends PApplet {
                 pg.popMatrix();
             }
             gui.popFolder();
+
+            gui.textSet("current string", current);
+            gui.textSet("current string length", "" + current.length());
+            gui.sliderInt("generation");
+            gui.sliderSet("generation", generation);
+            if(gui.button("advance generation") || frameCount < 5){
+                if(current == null || "".equals(current)){
+                    current = axiom;
+                }
+                for (String[] rule : rules) {
+                    current = current.replaceAll(rule[0], rule[1]);
+                }
+                println("current string: " + current);
+                generation++;
+            }
+            if(gui.button("reset to axiom")){
+                current = axiom;
+                generation = 0;
+            }
+
 
         }
 
