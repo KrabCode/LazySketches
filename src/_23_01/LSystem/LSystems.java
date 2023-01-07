@@ -71,16 +71,23 @@ public class LSystems extends PApplet {
                         "[ : save position and angle\n" +
                         "] : restore position and angle"
         );
-        gui.pushFolder("example fractal");
+        gui.pushFolder("example fractal flower");
         gui.text("axiom", "X");
         gui.text("rule 1 matcher", "F");
         gui.text("rule 1 replacement", "FF");
         gui.text("rule 2 matcher", "X");
         gui.text("rule 2 replacement", "F+[[X]-X]-F[-FX]+X");
-        gui.text("angle", "25");
-        gui.popFolder();
+        gui.text("angle (degrees)", "25");
         gui.popFolder();
 
+        gui.pushFolder("example koch curve");
+        gui.text("axiom", "F");
+        gui.text("rule 1 matcher", "F");
+        gui.text("rule 1 replacement", "F+F−F−F+F");
+        gui.text("angle (degrees)", "90");
+        gui.popFolder();
+
+        gui.popFolder();
     }
 
     private void drawLSystems() {
@@ -102,65 +109,46 @@ public class LSystems extends PApplet {
     }
 
     private void drawBackground() {
-        pg.fill(gui.colorPicker("background").hex);
+        pg.fill(gui.colorPicker("background", color(0.15f)).hex);
         pg.noStroke();
         pg.rectMode(CORNER);
         pg.rect(0, 0, width, height);
     }
 
     class LSystem{
-        String axiom = "X";
-        String current = "X";
+        String axiom = "";
+        String current = "";
         int generation = 0;
 
         public void update() {
-            gui.pushFolder("display");
-            if(gui.toggle("active", true)){
-                float size = gui.slider("scale", 100);
-                float angle = degrees(gui.slider("angle (degrees)", 25));
-                char[] path = current.toCharArray();
-                pg.pushMatrix();
-                PVector pos = gui.plotXY("pos");
-                pg.translate(width/2f+pos.x, height/2f + pos.y);
-                pg.stroke(gui.colorPicker("stroke").hex);
-                pg.strokeWeight(gui.slider("weight", 1.99f));
-                for(char c : path){
-                    if(c == 'F'){
-                        pg.line(0,-size,0,0);
-                        pg.translate(0, -size);
-                    }else if(c == '-'){
-                        pg.rotate(-angle);
-                    }else if(c == '+'){
-                        pg.rotate(-angle);
-                    }else if(c == '['){
-                        pg.pushMatrix();
-                    }else if(c == ']'){
-                        pg.popMatrix();
-                    }
-                }
-                pg.popMatrix();
-            }
-            gui.popFolder();
-
             gui.pushFolder("rules");
-            axiom = gui.text("axiom", axiom);
+            float angle = radians(gui.slider("angle (deg)", 25));
+            String newAxiom = gui.text("axiom", axiom);
+            if(!newAxiom.equals(axiom)){
+                axiom = newAxiom;
+                current = axiom;
+            }
             int ruleCount = gui.sliderInt("rule count", 1);
             if(gui.button("add rule")){
                 gui.sliderSet("rule count", ruleCount + 1);
             }
             ArrayList<String[]> rules = new ArrayList<>();
             for (int i = 0; i < ruleCount; i++) {
-                String matcher = gui.text("rule " + (i+1) + " matcher", "").toUpperCase();
-                String replacement = gui.text("rule " + (i+1) + " replacement", "").toUpperCase();
+                String matcher = gui.text("rule " + (i+1) + " matcher", "");
+                String replacement = gui.text("rule " + (i+1) + " replacement", "");
                 String[] rule = new String[]{matcher, replacement};
                 rules.add(rule);
             }
             gui.popFolder();
 
             gui.textSet("current string", current);
+            gui.textSet("current string length", "" + current.length());
             gui.sliderInt("generation");
             gui.sliderSet("generation", generation);
-            if(gui.button("advance generation") || frameCount < 7){
+            if(gui.button("advance generation") || frameCount < 3){
+                if(current == null || "".equals(current)){
+                    current = axiom;
+                }
                 for (String[] rule : rules) {
                     current = current.replaceAll(rule[0], rule[1]);
                 }
@@ -171,6 +159,34 @@ public class LSystems extends PApplet {
                 current = axiom;
                 generation = 0;
             }
+
+            gui.pushFolder("display");
+            if(gui.toggle("active", true)){
+                float size = gui.slider("scale", 100);
+                char[] path = current.toCharArray();
+                pg.pushMatrix();
+                PVector pos = gui.plotXY("position");
+                pg.translate(width/2f+pos.x, height/2f + pos.y);
+                pg.rotate(radians(gui.slider("rotation (deg)")));
+                pg.stroke(gui.colorPicker("stroke").hex);
+                pg.strokeWeight(gui.slider("weight", 1.99f));
+                for(char c : path){
+                    if(c == 'F'){
+                        pg.line(size,0,0,0);
+                        pg.translate(size, 0);
+                    }else if(c == '−'){
+                        pg.rotate(-angle);
+                    }else if(c == '+'){
+                        pg.rotate(angle);
+                    }else if(c == '['){
+                        pg.pushMatrix();
+                    }else if(c == ']'){
+                        pg.popMatrix();
+                    }
+                }
+                pg.popMatrix();
+            }
+            gui.popFolder();
 
         }
 
