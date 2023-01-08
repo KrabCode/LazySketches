@@ -1,6 +1,7 @@
 package _23_01.LSystem;
 
 import _0_utils.Utils;
+import lazy.PickerColor;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import lazy.LazyGui;
@@ -65,11 +66,13 @@ public class LSystems extends PApplet {
                 "the part being searched for is called the \"matcher\" in this sketch\n" +
                 "and its new value is called the \"replacement\" \n");
         gui.text("drawing instructions",
-                    "F : go forward\n" +
-                        "+ : turn right\n" +
-                        "- : turn left\n" +
+                    "F : draw and go forward a fixed length\n" +
+                        "G : go forward a fixed length but do not draw\n" +
+                        "+ : turn right at (angle)\n" +
+                        "- : turn left at (angle)\n" +
                         "[ : save position and angle\n" +
-                        "] : restore position and angle"
+                        "] : restore position and angle\n" +
+                        "| : draw and go forward by a length based on current ["
         );
         gui.pushFolder("example fractal flower");
         gui.text("axiom", "X");
@@ -119,15 +122,13 @@ public class LSystems extends PApplet {
         String axiom = "";
         String current = "";
         int generation = 0;
+        int maxDepth = 0;
+        int maxDepthOverride = 99;
 
         public void update(int index) {
             gui.pushFolder("system " + index + " rules");
             float angle = radians(gui.slider("angle (deg)", 25));
-            String newAxiom = gui.text("axiom", axiom);
-            if(!newAxiom.equals(axiom)){
-                axiom = newAxiom;
-                current = axiom;
-            }
+            axiom = gui.text("axiom", axiom);
             int ruleCount = gui.sliderInt("rule count", 1);
             if(gui.button("add rule")){
                 gui.sliderSet("rule count", ruleCount + 1);
@@ -143,37 +144,59 @@ public class LSystems extends PApplet {
 
             gui.pushFolder("system " + index + " display");
             if(gui.toggle("active", true)){
-                float size = gui.slider("scale", 15);
+                float lengthFixed = gui.slider("F,G step length", 15);
+                float lengthAtDepthMax = gui.slider("| step at max depth", 5);
                 char[] path = current.toCharArray();
                 pg.pushMatrix();
                 PVector pos = gui.plotXY("position");
                 pg.translate(width/2f+pos.x, height/2f + pos.y);
-                pg.rotate(radians(gui.slider("rotation (deg)")));
-                pg.stroke(gui.colorPicker("stroke").hex);
-                pg.strokeWeight(gui.slider("weight", 1.99f));
+                pg.rotate(radians(gui.slider("global rotation (deg)")));
+                pg.strokeCap(gui.toggle("stroke cap square\\/round") ? ROUND : SQUARE);
+                float weightAtZero = gui.slider("weight root", 5);
+                float weightAtMax = gui.slider("weight max depth", 1);
+                PickerColor colorAtZero = gui.colorPicker("color root", color(1,0,1));
+                PickerColor colorAtMaxDepth = gui.colorPicker("color max depth", color(1,1,1));
+                int depth = 0;
+
                 for(char c : path){
+                    float depthNorm = norm(min(depth, maxDepth), 0, maxDepth);
+                    pg.stroke(pg.lerpColor(colorAtZero.hex, colorAtMaxDepth.hex, depthNorm));
+                    pg.strokeWeight(lerp(weightAtZero, weightAtMax, depthNorm));
                     if(c == 'F'){
-                        pg.line(size,0,0,0);
-                        pg.translate(size, 0);
-                    }else if(c == '−'){
+                        pg.line(lengthFixed,0,0,0);
+                        pg.translate(lengthFixed, 0);
+                    }else if(c == 'G'){
+                        pg.translate(lengthFixed, 0);
+                    }else if(c == '|'){
+                        float depthAwareLength = lerp(lengthFixed, lengthAtDepthMax, depthNorm);
+                        pg.line(depthAwareLength,0,0,0);
+                        pg.translate(depthAwareLength, 0);
+                    }else if(c == '-'){
                         pg.rotate(-angle);
                     }else if(c == '+'){
-                        pg.rotate(angle);
+                        pg.rotate(+angle);
                     }else if(c == '['){
                         pg.pushMatrix();
+                        depth++;
                     }else if(c == ']'){
                         pg.popMatrix();
+                        depth--;
                     }
+                    maxDepth = max(depth, maxDepth);
+                    maxDepth = min(maxDepthOverride, maxDepth);
                 }
                 pg.popMatrix();
             }
             gui.popFolder();
 
             gui.textSet("current string", current);
-            gui.textSet("current string length", "" + current.length());
-            gui.sliderInt("generation");
-            gui.sliderSet("generation", generation);
+            gui.textSet("string length", "" + current.length());
+            gui.textSet("generation", "" + generation);
+            gui.textSet("max depth", "" + maxDepth);
+            maxDepthOverride = gui.sliderInt("max depth override", 999);
+
             if(gui.button("advance generation") || frameCount < 5){
+                maxDepth = 0;
                 if(current == null || "".equals(current)){
                     current = axiom;
                 }
