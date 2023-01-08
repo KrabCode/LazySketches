@@ -144,8 +144,8 @@ public class LSystems extends PApplet {
 
             gui.pushFolder("system " + index + " display");
             if(gui.toggle("active", true)){
-                float lengthFixed = gui.slider("F,G step length", 15);
-                float lengthAtDepthMax = gui.slider("| step at max depth", 5);
+                float lengthFixed = gui.slider("F,G step length", 10);
+                float lengthMult = gui.slider("| step multiplier", 0.65f);
                 char[] path = current.toCharArray();
                 pg.pushMatrix();
                 PVector pos = gui.plotXY("position");
@@ -157,30 +157,45 @@ public class LSystems extends PApplet {
                 PickerColor colorAtZero = gui.colorPicker("color root", color(1,0,1));
                 PickerColor colorAtMaxDepth = gui.colorPicker("color max depth", color(1,1,1));
                 int depth = 0;
-
+                int turnCount = 1;
+                String numberRegex = "[2-9]";
                 for(char c : path){
                     float depthNorm = norm(min(depth, maxDepth), 0, maxDepth);
                     pg.stroke(pg.lerpColor(colorAtZero.hex, colorAtMaxDepth.hex, depthNorm));
                     pg.strokeWeight(lerp(weightAtZero, weightAtMax, depthNorm));
+                    boolean isNumber = String.valueOf(c).matches(numberRegex);
+                    if(isNumber){
+                        turnCount = Integer.parseInt(String.valueOf(c));
+                    }
                     if(c == 'F'){
                         pg.line(lengthFixed,0,0,0);
                         pg.translate(lengthFixed, 0);
                     }else if(c == 'G'){
                         pg.translate(lengthFixed, 0);
                     }else if(c == '|'){
-                        float depthAwareLength = lerp(lengthFixed, lengthAtDepthMax, depthNorm);
-                        pg.line(depthAwareLength,0,0,0);
-                        pg.translate(depthAwareLength, 0);
+                        float depthAwareStep = lengthFixed;
+                        for (int i = 0; i < depth; i++) {
+                            depthAwareStep *= lengthMult;
+                        }
+                        pg.line(depthAwareStep,0,0,0);
+                        pg.translate(depthAwareStep, 0);
                     }else if(c == '-'){
-                        pg.rotate(-angle);
+                        for (int i = 0; i < turnCount; i++) {
+                            pg.rotate(-angle);
+                        }
                     }else if(c == '+'){
-                        pg.rotate(+angle);
+                        for (int i = 0; i < turnCount; i++) {
+                            pg.rotate(+angle);
+                        }
                     }else if(c == '['){
                         pg.pushMatrix();
                         depth++;
                     }else if(c == ']'){
                         pg.popMatrix();
                         depth--;
+                    }
+                    if(!isNumber){
+                        turnCount = 1;
                     }
                     maxDepth = max(depth, maxDepth);
                     maxDepth = min(maxDepthOverride, maxDepth);
