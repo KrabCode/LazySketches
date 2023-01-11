@@ -150,7 +150,7 @@ public class LSystems extends PApplet {
                 pg.pushMatrix();
                 PVector pos = gui.plotXY("position");
                 pg.translate(width/2f+pos.x, height/2f + pos.y);
-                pg.rotate(radians(gui.slider("global rotation (deg)")));
+                pg.rotate(-HALF_PI + radians(gui.slider("rotation (deg)")));
                 pg.strokeCap(gui.toggle("stroke cap square\\/round") ? ROUND : SQUARE);
                 float weightAtZero = gui.slider("weight root", 5);
                 float weightAtMax = gui.slider("weight max depth", 1);
