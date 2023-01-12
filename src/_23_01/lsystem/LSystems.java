@@ -1,4 +1,4 @@
-package _23_01.LSystem;
+package _23_01.lsystem;
 
 import _0_utils.Utils;
 import lazy.PickerColor;
