@@ -59,7 +59,7 @@ public class Pixelate extends PApplet {
         imageMode(CENTER);
         image(pg, width/2f, height/2f);
 
-        Utils.record(this, gui);
+//        Utils.record(this, gui);
     }
 
     private void refreshInputImage() {
@@ -95,7 +95,7 @@ public class Pixelate extends PApplet {
 
     private void updateExport() {
         gui.pushFolder("export");
-        String saveImageFolder = gui.text("folder name", "output");
+        String saveImageFolder = "export/" + gui.text("folder name", "output");
         if(gui.button("open folder")){
             try {
                 Desktop.getDesktop().browse(new File(saveImageFolder).toURI());
@@ -142,7 +142,7 @@ public class Pixelate extends PApplet {
             int fontSize = gui.sliderInt("text size", 10);
             int fontColor = gui.colorPicker("text fill", 0xFF000000).hex;
             PVector textOffset = gui.plotXY("text pos");
-            gui.popFolder();
+        gui.popFolder();
 
         int colorCount = gui.sliderInt("color count", 4);
         for (int i = 0; i < colorCount; i++) {
@@ -179,7 +179,7 @@ public class Pixelate extends PApplet {
 
     private PFont getFontAtSize(int fontSize) {
         if(!fonts.containsKey(fontSize)){
-            fonts.put(fontSize, createFont("Arial", fontSize));
+            fonts.put(fontSize, createFont("JetBrainsMono-Regular.ttf", fontSize));
         }
         return fonts.get(fontSize);
     }
