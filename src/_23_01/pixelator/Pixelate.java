@@ -28,7 +28,8 @@ public class Pixelate extends PApplet {
 
     @Override
     public void settings() {
-        size(800, 800, P2D);
+//        size(800, 800, P2D);
+        fullScreen(P2D);
     }
 
     @Override
@@ -126,15 +127,16 @@ public class Pixelate extends PApplet {
 
     private void pixelate() {
         gui.pushFolder("grid");
-        pg.strokeWeight(gui.slider("stroke weight", 1));
-        pg.stroke(gui.colorPicker("stroke").hex);
-        if (gui.toggle("no stroke", true)) {
+        if (gui.toggle("active", true)) {
+            pg.strokeWeight(gui.slider("stroke weight", 1));
+            pg.stroke(gui.colorPicker("stroke").hex);
+        } else {
             pg.noStroke();
         }
         gui.popFolder();
 
         gui.pushFolder("limited palette");
-            boolean limitedPalette = gui.toggle("active", true);
+            boolean limitedPalette = gui.toggle("active", false);
             gui.pushFolder("text");
             boolean showNumber = gui.toggle("active", true);
             int fontSize = gui.sliderInt("text size", 10);
