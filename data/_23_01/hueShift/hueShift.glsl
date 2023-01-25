@@ -42,6 +42,9 @@ void main(){
     hsv.x += hueShiftAmount;
     hsv.y += satShiftAmount;
     hsv.z += brShiftAmount;
+    float d = length(uv-0.5)*2.;
+    float t = time * 1;
+//    hsv.x = mod(hsv.x - d + t, 1.);
     col.rgb = hsv2rgb(hsv);
     gl_FragColor = col;
 }

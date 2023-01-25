@@ -1,9 +1,7 @@
 package _23_01.pixelator;
 
-import _0_utils.Utils;
 import lazy.LazyGui;
 import lazy.PickerColor;
-import lazy.stores.FontStore;
 import processing.core.*;
 import processing.opengl.PShader;
 
@@ -58,8 +56,6 @@ public class Pixelate extends PApplet {
 
         imageMode(CENTER);
         image(pg, width/2f, height/2f);
-
-//        Utils.record(this, gui);
     }
 
     private void refreshInputImage() {
@@ -138,7 +134,7 @@ public class Pixelate extends PApplet {
         gui.pushFolder("limited palette");
             boolean limitedPalette = gui.toggle("active", false);
             gui.pushFolder("text");
-            boolean showNumber = gui.toggle("active", true);
+            boolean showText = gui.toggle("active", true);
             int fontSize = gui.sliderInt("text size", 10);
             int fontColor = gui.colorPicker("text fill", 0xFF000000).hex;
             PVector textOffset = gui.plotXY("text pos");
@@ -147,6 +143,7 @@ public class Pixelate extends PApplet {
         int colorCount = gui.sliderInt("color count", 4);
         for (int i = 0; i < colorCount; i++) {
             palettes.put(i, gui.colorPicker("color " + i, color(norm(i, 0, colorCount - 1))));
+            gui.text("text/symbol " + i, "" + i);
         }
         gui.popFolder();
 
@@ -167,11 +164,12 @@ public class Pixelate extends PApplet {
                 }
                 pg.fill(clr);
                 pg.rect(xi, yi, pixelSize, pixelSize);
-                if (limitedPalette && showNumber) {
+                if (limitedPalette && showText) {
                     pg.textAlign(CENTER, CENTER);
                     pg.textFont(getFontAtSize(fontSize));
                     pg.fill(fontColor);
-                    pg.text("" + colorMatchIndex, textOffset.x + xi + pixelSize / 2f, textOffset.y + yi + pixelSize / 2f);
+                    String textToShow = gui.text("limited palette/text/symbol " + colorMatchIndex, "" + colorMatchIndex);
+                    pg.text(textToShow, textOffset.x + xi + pixelSize / 2f, textOffset.y + yi + pixelSize / 2f);
                 }
             }
         }
