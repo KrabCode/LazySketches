@@ -81,7 +81,7 @@ public class Pixelate extends PApplet {
             }
             gui.popFolder();
             gui.pushFolder("pixelate");
-            if (gui.toggle("pixelate active", true)) {
+            if (gui.toggle("active", true)) {
                 pixelate();
             }
             gui.popFolder();
@@ -91,11 +91,17 @@ public class Pixelate extends PApplet {
 
     private void updateExport() {
         gui.pushFolder("export");
-        String saveImageFolder = "export/" + gui.text("folder name", "output");
+        String saveImageFolder = dataPath("export/" + gui.text("folder name", "output"));
         if(gui.button("open folder")){
             try {
-                Desktop.getDesktop().browse(new File(saveImageFolder).toURI());
-            } catch (IOException e) {
+                File file = new File(saveImageFolder);
+                if (!file.exists()) {
+                    //noinspection ResultOfMethodCallIgnored
+                    file.mkdirs();
+                }
+                Desktop.getDesktop().browse(file.toURI());
+            }
+            catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
