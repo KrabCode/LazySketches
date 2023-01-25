@@ -1,22 +1,26 @@
-package _23_01;
+package _23_01.pixelator;
 
 import _0_utils.Utils;
 import lazy.LazyGui;
 import lazy.PickerColor;
-import processing.core.PApplet;
-import processing.core.PGraphics;
-import processing.core.PImage;
-import processing.core.PVector;
+import lazy.stores.FontStore;
+import processing.core.*;
+import processing.opengl.PShader;
 
-import java.util.ArrayList;
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class Pixelate extends PApplet {
     LazyGui gui;
     PGraphics pg;
     PImage img;
     Map<Integer, PickerColor> palettes = new HashMap<Integer, PickerColor>();
+    Map<Integer, PFont> fonts = new HashMap<>();
+    PShader colorShiftShader;
 
     public static void main(String[] args) {
         PApplet.main(java.lang.invoke.MethodHandles.lookup().lookupClass());
@@ -30,6 +34,7 @@ public class Pixelate extends PApplet {
     @Override
     public void setup() {
         gui = new LazyGui(this);
+        gui.toggleSet("options/saves/autosave on exit", true);
         pg = createGraphics(width, height, P2D);
         pg.beginDraw();
         pg.textSize(128);
@@ -43,17 +48,17 @@ public class Pixelate extends PApplet {
         refreshInputImage();
         pg.beginDraw();
         pg.colorMode(RGB, 1, 1, 1, 1);
+        if (img != null) {
+            pg.image(img, 0, 0);
+        }
         updateOutputImage();
         pg.endDraw();
-        if (gui.button("output/save image")) {
-            String path = "out/" + Utils.generateRandomShortId() + ".png";
-            pg.save(path);
-            println("saved " + path);
-        }
-        translate(width / 2f, height / 2f);
+        updateExport();
+
         imageMode(CENTER);
-        scale(gui.slider("output/display scale", 1));
-        image(pg, 0, 0);
+        image(pg, width/2f, height/2f);
+
+        Utils.record(this, gui);
     }
 
     private void refreshInputImage() {
@@ -62,6 +67,7 @@ public class Pixelate extends PApplet {
         if (gui.button("load image") || frameCount == 1) {
             try {
                 img = loadImage(imagePath);
+                pg = createGraphics(img.width, img.height, P2D);
             } catch (Exception ex) {
                 println(ex);
             }
@@ -72,13 +78,50 @@ public class Pixelate extends PApplet {
     private void updateOutputImage() {
         gui.pushFolder("output");
         if (img != null) {
-            if (!gui.toggle("view input\\/output", true)) {
-                pg.image(img, 0, 0);
-            } else {
+            gui.pushFolder("color shift");
+            if(gui.toggle("active")){
+                hueShift();
+            }
+            gui.popFolder();
+            gui.pushFolder("pixelate");
+            if (gui.toggle("pixelate active", true)) {
                 pixelate();
             }
+            gui.popFolder();
         }
         gui.popFolder();
+    }
+
+    private void updateExport() {
+        gui.pushFolder("export");
+        String saveImageFolder = gui.text("folder name", "output");
+        if(gui.button("open folder")){
+            try {
+                Desktop.getDesktop().browse(new File(saveImageFolder).toURI());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        if (gui.button("export .png")) {
+            String randomId = UUID.randomUUID().toString().substring(0, 6);
+            String path = saveImageFolder + "/" + randomId + ".png";
+            pg.save(path);
+            println("saved " + path);
+        }
+        gui.popFolder();
+    }
+
+    private void hueShift() {
+        if(colorShiftShader == null){
+            colorShiftShader = loadShader("_23_01/pixelator/hueShift.glsl");
+        }
+        float hueTime = gui.slider("animate hue");
+        float hue =  gui.slider("hue");
+        gui.sliderSet("hue", hue + radians(hueTime));
+        colorShiftShader.set("hueShiftAmount", hue);
+        colorShiftShader.set("satShiftAmount", gui.slider("saturation"));
+        colorShiftShader.set("brShiftAmount", gui.slider("brightness"));
+        pg.filter(colorShiftShader);
     }
 
     private void pixelate() {
@@ -89,26 +132,29 @@ public class Pixelate extends PApplet {
             pg.noStroke();
         }
         gui.popFolder();
-        gui.pushFolder("limited palette");
-        boolean limitedPalette = gui.toggle("active", true);
-        int colorCount = gui.sliderInt("color count", 4);
 
-        boolean showNumber = gui.toggle("show number", true);
-        float fontSize = gui.slider("text size", 10);
-        int fontColor = gui.colorPicker("text fill", 0xFF000000).hex;
-        PVector textOffset = gui.plotXY("text pos");
+        gui.pushFolder("limited palette");
+            boolean limitedPalette = gui.toggle("active", true);
+            gui.pushFolder("text");
+            boolean showNumber = gui.toggle("active", true);
+            int fontSize = gui.sliderInt("text size", 10);
+            int fontColor = gui.colorPicker("text fill", 0xFF000000).hex;
+            PVector textOffset = gui.plotXY("text pos");
+            gui.popFolder();
+
+        int colorCount = gui.sliderInt("color count", 4);
         for (int i = 0; i < colorCount; i++) {
             palettes.put(i, gui.colorPicker("color " + i, color(norm(i, 0, colorCount - 1))));
         }
         gui.popFolder();
 
-        img.loadPixels();
+        pg.loadPixels();
         int pixelSize = gui.sliderInt("pixel size", 20, 2, width);
         int offsetX = gui.sliderInt("offset x");
         int offsetY = gui.sliderInt("offset y");
 
-        for (int xi = -pixelSize * 2 + offsetX; xi < img.width + pixelSize * 2; xi += pixelSize) {
-            for (int yi = -pixelSize * 2 + offsetY; yi < img.height + pixelSize * 2; yi += pixelSize) {
+        for (int xi = -pixelSize * 2 + offsetX; xi < pg.width + pixelSize * 2; xi += pixelSize) {
+            for (int yi = -pixelSize * 2 + offsetY; yi < pg.height + pixelSize * 2; yi += pixelSize) {
                 int avg = getAverageColor(xi, yi, pixelSize, pixelSize);
                 int clr = avg;
                 int colorMatchIndex = -1;
@@ -121,7 +167,7 @@ public class Pixelate extends PApplet {
                 pg.rect(xi, yi, pixelSize, pixelSize);
                 if (limitedPalette && showNumber) {
                     pg.textAlign(CENTER, CENTER);
-                    pg.textSize(fontSize);
+                    pg.textFont(getFontAtSize(fontSize));
                     pg.fill(fontColor);
                     pg.text("" + colorMatchIndex, textOffset.x + xi + pixelSize / 2f, textOffset.y + yi + pixelSize / 2f);
                 }
@@ -129,14 +175,21 @@ public class Pixelate extends PApplet {
         }
     }
 
+    private PFont getFontAtSize(int fontSize) {
+        if(!fonts.containsKey(fontSize)){
+            fonts.put(fontSize, createFont("Arial", fontSize));
+        }
+        return fonts.get(fontSize);
+    }
+
     private int getAverageColor(int x, int y, int w, int h) {
         float sumR = 0;
         float sumG = 0;
         float sumB = 0;
         float count = 0;
-        for (int xi = max(x, 0); xi < min(x + w, img.width); xi++) {
-            for (int yi = max(y, 0); yi < min(y + h, img.height); yi++) {
-                int pixelColor = img.pixels[xi + yi * img.width];
+        for (int xi = max(x, 0); xi < min(x + w, pg.width); xi++) {
+            for (int yi = max(y, 0); yi < min(y + h, pg.height); yi++) {
+                int pixelColor = pg.pixels[xi + yi * pg.width];
                 sumR += red(pixelColor);
                 sumG += green(pixelColor);
                 sumB += blue(pixelColor);
@@ -151,7 +204,7 @@ public class Pixelate extends PApplet {
 
     private int[] findClosestColorInPalette(int queryColor, int colorCount) {
         float closestDistance = Float.MAX_VALUE;
-        int closestColor = 0xFFFF0000;
+        int closestColor = 0xFFFF0000; // red debug color
         int closestColorIndex = -1;
         for (int i = 0; i < colorCount; i++) {
             PVector queryPoint = new PVector(red(queryColor), green(queryColor), blue(queryColor));
