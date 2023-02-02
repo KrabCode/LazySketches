@@ -1,5 +1,6 @@
 package _23_02.FractalFlame;
 
+import _0_utils.Utils;
 import lazy.LazyGui;
 import processing.core.PApplet;
 import processing.core.PConstants;
@@ -56,6 +57,7 @@ public class FractalFlame extends PApplet {
             pg.endDraw();
         }
         image(pg, 0, 0);
+        Utils.record(this, gui);
     }
 
     private void updatePoints() {
@@ -75,6 +77,9 @@ public class FractalFlame extends PApplet {
         float lerpAmt = gui.slider("lerp amt", 0.1f);
         pg.stroke(gui.colorPicker("color (add)", 0xFFFFFFFF).hex);
         pg.strokeWeight(1.99f);
+        float sinMag = gui.slider("sin mag", 1);
+        float sinFreq = gui.slider("sin freq", 0.05f);
+        PVector sinPos = gui.plotXY("sin pos");
         for (int pointIndex = 0; pointIndex < pointCount; pointIndex++) {
             if(pointIndex > points.size() - 1){
                 points.add(new PVector(random(-range, range), random(-range, range)));
@@ -90,8 +95,8 @@ public class FractalFlame extends PApplet {
                     y = lerp(y, 0, lerpAmt);
                 }
                 if(randomFunctionIndex == 1){
-                    x = x + sin(y*0.05f);
-                    y = y + cos(x*0.05f);
+                    x += sinMag * sin((sinPos.y + y)*sinFreq);
+                    y += sinMag * cos((sinPos.x + x)*sinFreq);
                 }
                 pg.point(x, y);
             }
