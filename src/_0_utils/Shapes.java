@@ -3,10 +3,10 @@ package _0_utils;
 import lazy.LazyGui;
 import lazy.PickerColor;
 import lazy.ShaderReloader;
-import processing.core.PApplet;
-import processing.core.PConstants;
-import processing.core.PGraphics;
-import processing.core.PVector;
+import processing.core.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static lazy.stores.GlobalReferences.app;
 
@@ -17,6 +17,8 @@ public class Shapes extends PApplet {
     private static float gridPosX, gridPosY;
 
     private static int backgroundFrameCount;
+
+    static Map<String, PFont> fontsByPath = new HashMap<>();
 
     public static void main(String[] args) {
         PApplet.main(java.lang.invoke.MethodHandles.lookup().lookupClass());
@@ -87,25 +89,31 @@ public class Shapes extends PApplet {
     public static void drawSimpleText(String path, LazyGui gui, PGraphics pg) {
         gui.pushFolder(path);
         String content = gui.text( "content");
-        float x = pg.width / 2f + gui.slider( "x");
-        float y = pg.height / 2f + gui.slider( "y");
-        float h = gui.slider( "text size", 256);
-        if(gui.toggle( "display rect")){
-            pg.stroke(0xFFFFFFFF);
-            pg.strokeWeight(4);
-            pg.rectMode(CORNER);
-            pg.rect(x,y,pg.textWidth(content),h);
-        }
-        String fontName = gui.text("font name");
+        PVector pos = gui.plotXY("pos");
+        float rotation = TAU * gui.slider("rotation * tau");
+        float x = pg.width / 2f + pos.x;
+        float y = pg.height / 2f + pos.y;
+        float textSize = gui.slider( "text size", 256);
+        String fontPath = gui.text("font path");
+        String fontPathWithSize = fontPath + "|" + floor(textSize);
         if(gui.button("update font")){
-            pg.textFont(app.createFont(fontName, h));
+            PFont font = app.createFont(fontPath, textSize);
+            fontsByPath.put(fontPathWithSize, font);
         }
-        pg.textSize(h);
+        if(fontsByPath.containsKey(fontPathWithSize)){
+            pg.textFont(fontsByPath.get(fontPathWithSize));
+        }
+        pg.textSize(textSize);
+        pg.textAlign(CENTER, CENTER);
+        pg.pushMatrix();
+        pg.translate(x,y);
+        pg.rotate(rotation);
         PVector shadowOffset = gui.plotXY( "shadow offset");
-        pg.fill(gui.colorPicker( "shadow fill").hex);
-        pg.text(content, x+shadowOffset.x, y+shadowOffset.y);
-        pg.fill(gui.colorPicker( "normal fill").hex);
-        pg.text(content, x, y);
+        pg.fill(gui.colorPicker( "shadow fill", 0xFF000000).hex);
+        pg.text(content, shadowOffset.x, shadowOffset.y);
+        pg.fill(gui.colorPicker( "normal fill", 0xFFFFFFFF).hex);
+        pg.text(content, 0, 0);
+        pg.popMatrix();
         gui.popFolder();
     }
 

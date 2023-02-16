@@ -2,6 +2,7 @@ package _23_02.FractalFlame;
 
 import _0_utils.Shapes;
 import _0_utils.Utils;
+import _22_03.PostFxAdapter;
 import lazy.LazyGui;
 import lazy.ShaderReloader;
 import processing.core.*;
@@ -81,10 +82,13 @@ public class FractalFlame extends PApplet {
             shader.set("palette", palette);
             ShaderReloader.filter(shaderPath, fg);
         }
+        gui.popFolder();
+        gui.pushFolder("text");
         Shapes.drawSimpleText("text 1/", gui, fg);
         Shapes.drawSimpleText("text 2/", gui, fg);
-        fg.endDraw();
         gui.popFolder();
+        fg.endDraw();
+        PostFxAdapter.apply(this, gui, fg);
         image(fg, 0, 0);
 
         Utils.record(this, gui);
