@@ -1,18 +1,16 @@
 package _23_02.FractalFlame;
 
+import _0_utils.Shapes;
 import _0_utils.Utils;
-import _22_03.PostFxAdapter;
 import lazy.LazyGui;
 import lazy.ShaderReloader;
-import processing.core.PApplet;
-import processing.core.PConstants;
-import processing.core.PGraphics;
-import processing.core.PVector;
+import processing.core.*;
 import processing.opengl.PShader;
 
 import java.util.ArrayList;
 
 /**
+ * based on: <a href="https://flam3.com/flame_draves.pdf">The Fractal Flame Algorithm</a>
  * The algorithm:
  * Have three non-linear functions that return a new pos based on old pos.
  * Pick random point, iterate 'totalIterations' times, pick a random function for each iteration.
@@ -22,11 +20,9 @@ import java.util.ArrayList;
  * Then render the histogram using logarithmic brightness and iteration count in a shader based filter.
  */
 
-
-
 public class FractalFlame extends PApplet {
     private LazyGui gui;
-    PGraphics pg;
+    PGraphics pg, fg;
     ArrayList<ArrayList<PVector>> points = new ArrayList<>();
 
     public static void main(String[] args) {
@@ -40,12 +36,13 @@ public class FractalFlame extends PApplet {
     public void setup() {
         gui = new LazyGui(this);
         pg = createGraphics(width, height, P2D);
+        fg = createGraphics(width, height, P2D);
     }
 
     public void draw() {
         clear();
         pg.beginDraw();
-        if (gui.toggle("big red switch/update scene", true)) {
+        if (gui.toggle("update scene", true)) {
             pg.noStroke();
             if (gui.toggle("background/active", true)) {
                 pg.blendMode(PConstants.SUBTRACT);
@@ -70,19 +67,26 @@ public class FractalFlame extends PApplet {
             gui.popFolder();
             pg.blendMode(BLEND);
         }
-
         pg.endDraw();
-        PostFxAdapter.apply(this, gui, pg);
-        image(pg, 0, 0);
-        gui.pushFolder("shader");
 
+        gui.pushFolder("histogram shader");
+        fg.beginDraw();
         String shaderPath = gui.text("shader path", "_23_02/FractalFlame/histogramInterpreter.glsl");
+
         if(gui.toggle("active")){
-            ShaderReloader.getShader(shaderPath).set("time", radians(frameCount));
-            ShaderReloader.filter(dataPath(shaderPath));
+            PShader shader = ShaderReloader.getShader(shaderPath);
+            shader.set("time", radians(frameCount));
+            shader.set("histogram", pg);
+            PGraphics palette = gui.gradient("palette");
+            shader.set("palette", palette);
+            ShaderReloader.filter(shaderPath, fg);
         }
+        Shapes.drawSimpleText("text 1/", gui, fg);
+        Shapes.drawSimpleText("text 2/", gui, fg);
+        fg.endDraw();
         gui.popFolder();
-        resetShader();
+        image(fg, 0, 0);
+
         Utils.record(this, gui);
     }
 
@@ -114,16 +118,16 @@ public class FractalFlame extends PApplet {
             PVector p = points.get(pointIndex);
             for (int iter = 0; iter < itersPerFrame; iter++) {
                 int randomFunctionIndex = floor(random(4));
-if(randomFunctionIndex == 0){
-    int randomSide = floor(random(lerpSideCount));
-    float angle = lerpAngleOffset + TAU * norm(randomSide, 0, lerpSideCount);
-    float cornerX = lerpCenter.x + lerpRadius * cos(angle);
-    float cornerY = lerpCenter.y + lerpRadius * sin(angle);
-    p.x = lerp(p.x, cornerX, lerpAmt);
-    p.y = lerp(p.y, cornerY, lerpAmt);
-}else if(randomFunctionIndex == 1){
-    p.rotate(rotate);
-}else if(randomFunctionIndex == 2){
+                if(randomFunctionIndex == 0){
+                    int randomSide = floor(random(lerpSideCount));
+                    float angle = lerpAngleOffset + TAU * norm(randomSide, 0, lerpSideCount);
+                    float cornerX = lerpCenter.x + lerpRadius * cos(angle);
+                    float cornerY = lerpCenter.y + lerpRadius * sin(angle);
+                    p.x = lerp(p.x, cornerX, lerpAmt);
+                    p.y = lerp(p.y, cornerY, lerpAmt);
+                }else if(randomFunctionIndex == 1){
+                    p.rotate(rotate);
+                }else if(randomFunctionIndex == 2){
                     p.mult(scale);
                 }else if(randomFunctionIndex == 3){
                     p.add(addPos.copy());

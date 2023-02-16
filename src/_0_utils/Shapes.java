@@ -6,6 +6,9 @@ import lazy.ShaderReloader;
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PGraphics;
+import processing.core.PVector;
+
+import static lazy.stores.GlobalReferences.app;
 
 @SuppressWarnings("SuspiciousNameCombination")
 public class Shapes extends PApplet {
@@ -40,13 +43,13 @@ public class Shapes extends PApplet {
         drawShapes("shapes/", gui, pg);
         drawPyramids("pyramids/", gui, pg);
         drawSinewaves("sines/", gui, pg);
-        drawString("string/", gui, pg);
+        drawMovingString("string/", gui, pg);
         pg.endDraw();
         image(pg, 0, 0);
         Utils.record(this, gui);
     }
 
-    public static void drawString(String path, LazyGui gui, PGraphics pg) {
+    public static void drawMovingString(String path, LazyGui gui, PGraphics pg) {
         pg.pushMatrix();
         String content = gui.text( path + "content", "...");
         int count = content.length();
@@ -79,6 +82,31 @@ public class Shapes extends PApplet {
             pg.popMatrix();
         }
         pg.popMatrix();
+    }
+
+    public static void drawSimpleText(String path, LazyGui gui, PGraphics pg) {
+        gui.pushFolder(path);
+        String content = gui.text( "content");
+        float x = pg.width / 2f + gui.slider( "x");
+        float y = pg.height / 2f + gui.slider( "y");
+        float h = gui.slider( "text size", 256);
+        if(gui.toggle( "display rect")){
+            pg.stroke(0xFFFFFFFF);
+            pg.strokeWeight(4);
+            pg.rectMode(CORNER);
+            pg.rect(x,y,pg.textWidth(content),h);
+        }
+        String fontName = gui.text("font name");
+        if(gui.button("update font")){
+            pg.textFont(app.createFont(fontName, h));
+        }
+        pg.textSize(h);
+        PVector shadowOffset = gui.plotXY( "shadow offset");
+        pg.fill(gui.colorPicker( "shadow fill").hex);
+        pg.text(content, x+shadowOffset.x, y+shadowOffset.y);
+        pg.fill(gui.colorPicker( "normal fill").hex);
+        pg.text(content, x, y);
+        gui.popFolder();
     }
 
     private static String getLetter(String content, int letterIndex) {
