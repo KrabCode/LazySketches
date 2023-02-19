@@ -24,7 +24,7 @@ import java.util.ArrayList;
 public class FractalFlame extends PApplet {
     private LazyGui gui;
     PGraphics pg, fg;
-    ArrayList<ArrayList<PVector>> points = new ArrayList<>();
+    ArrayList<ArrayList<Point>> points = new ArrayList<>();
 
     public static void main(String[] args) {
         PApplet.main(java.lang.invoke.MethodHandles.lookup().lookupClass());
@@ -74,7 +74,7 @@ public class FractalFlame extends PApplet {
         fg.beginDraw();
         String shaderPath = gui.text("shader path", "_23_02/FractalFlame/histogramInterpreter.glsl");
 
-        if(gui.toggle("active")){
+        if (gui.toggle("active")) {
             PShader shader = ShaderReloader.getShader(shaderPath);
             shader.set("time", radians(frameCount));
             shader.set("histogram", pg);
@@ -94,7 +94,7 @@ public class FractalFlame extends PApplet {
         Utils.record(this, gui);
     }
 
-    private void updatePoints(ArrayList<PVector> points) {
+    private void updatePoints(ArrayList<Point> points) {
         int pointCount = gui.sliderInt("point count", 100);
         if (gui.button("points.clear()")) {
             points.clear();
@@ -107,43 +107,89 @@ public class FractalFlame extends PApplet {
         int itersPerFrame = gui.sliderInt("iters per frame", 5);
         float range = gui.slider("spawn range", 300);
         pg.strokeWeight(gui.slider("stroke weight", 1.99f));
-        PVector lerpCenter = gui.plotXY("lerp center");
-        float lerpAmt = gui.slider("lerp amount", 0.1f);
-        int lerpSideCount = gui.sliderInt("lerp sides", 6);
-        float lerpRadius = gui.slider("lerp radius", 600);
-        float lerpAngleOffset = PI * gui.slider("lerp angle");
-        float rotate = PI * gui.slider("rotamte");
-        float scale = gui.slider("scale", 1);
-        PVector addPos = gui.plotXY("add pos");
+        int invisibleIterCount = gui.sliderInt("invis iters", 0);
+        int pointColor = gui.colorPicker("point add", 0xFFFFFFFF).hex;
+        ArrayList<Function> functions = rebuildFunctions();
         for (int pointIndex = 0; pointIndex < pointCount; pointIndex++) {
             if (pointIndex > points.size() - 1) {
-                points.add(new PVector(random(-range, range), random(-range, range)));
+                points.add(new Point(random(-range, range), random(-range, range)));
             }
-            PVector p = points.get(pointIndex);
+            Point p = points.get(pointIndex);
             for (int iter = 0; iter < itersPerFrame; iter++) {
-                int randomFunctionIndex = floor(random(4));
-                if(randomFunctionIndex == 0){
-                    int randomSide = floor(random(lerpSideCount));
-                    float angle = lerpAngleOffset + TAU * norm(randomSide, 0, lerpSideCount);
-                    float cornerX = lerpCenter.x + lerpRadius * cos(angle);
-                    float cornerY = lerpCenter.y + lerpRadius * sin(angle);
-                    p.x = lerp(p.x, cornerX, lerpAmt);
-                    p.y = lerp(p.y, cornerY, lerpAmt);
-                }else if(randomFunctionIndex == 1){
-                    p.rotate(rotate);
-                }else if(randomFunctionIndex == 2){
-                    p.mult(scale);
-                }else if(randomFunctionIndex == 3){
-                    p.add(addPos.copy());
+                if(functions.size() > 0){
+
+                    int randomFunctionIndex = floor(random(functions.size()));
+                    p = (Point) functions.get(randomFunctionIndex).transform(p);
+                }
+                if (p.iters++ < invisibleIterCount) {
+                    continue;
                 }
                 pg.blendMode(ADD);
-                pg.stroke(gui.colorPicker("point add", 0xFFFFFFFF).hex);
-                pg.point(p.x, p.y);
-                pg.blendMode(SUBTRACT);
-                pg.stroke(gui.colorPicker("point sub", 0xFFFFFFFF).hex);
+                pg.stroke(pointColor);
                 pg.point(p.x, p.y);
             }
         }
+    }
+
+    private ArrayList<Function> rebuildFunctions() {
+        ArrayList<Function> functions = new ArrayList<>();
+        gui.pushFolder("functions");
+        gui.pushFolder("lerp");
+        if (gui.toggle("active")) {
+            PVector lerpCenter = gui.plotXY("pos");
+            float lerpAmt = gui.slider("amount", 0.1f);
+            int lerpSideCount = gui.sliderInt("sides", 6);
+            float shapeRadius = gui.slider("radius", 600);
+            float lerpAngleOffset = PI * gui.slider("angle");
+            functions.add(p -> {
+                if (lerpAmt > 0) {
+                    int randomSide = floor(random(lerpSideCount));
+                    float angle = lerpAngleOffset + TAU * norm(randomSide, 0, lerpSideCount);
+                    float cornerX = lerpCenter.x + shapeRadius * cos(angle);
+                    float cornerY = lerpCenter.y + shapeRadius * sin(angle);
+                    p.x = lerp(p.x, cornerX, lerpAmt);
+                    p.y = lerp(p.y, cornerY, lerpAmt);
+                }
+                return p;
+            });
+        }
+        gui.popFolder();
+
+        gui.pushFolder("sinusoidal");
+        if (gui.toggle("active")) {
+            float sinRadius = gui.slider("sin r", 300);
+            functions.add(p -> {
+                p.x = sin(p.x) * sinRadius;
+                p.y = sin(p.y) * sinRadius;
+                return p;
+            });
+        }
+        gui.popFolder();
+
+        gui.pushFolder("spherical");
+        if (gui.toggle("active")) {
+            functions.add(p -> {
+                        float r = dist(p.x, p.y, 0, 0);
+                        p.x = 1f / pow(r, 2) * p.x;
+                        p.y = 1f / pow(r, 2) * p.y;
+                        return p;
+            });
+        }
+        gui.popFolder();
+        gui.popFolder();
+        return functions;
+    }
+
+    static class Point extends PVector {
+        int iters;
+
+        public Point(float x, float y) {
+            super(x, y);
+        }
+    }
+
+    interface Function {
+        PVector transform(PVector p);
     }
 
 }
