@@ -109,6 +109,7 @@ public class FractalFlame extends PApplet {
         pg.strokeWeight(gui.slider("stroke weight", 1.99f));
         int invisibleIterCount = gui.sliderInt("invis iters", 0);
         int pointColor = gui.colorPicker("point add", 0xFFFFFFFF).hex;
+        float shapeSize = gui.slider("global shape size");
         ArrayList<Function> functions = rebuildFunctions();
         for (int pointIndex = 0; pointIndex < pointCount; pointIndex++) {
             if (pointIndex > points.size() - 1) {
@@ -119,14 +120,14 @@ public class FractalFlame extends PApplet {
                 if(functions.size() > 0){
 
                     int randomFunctionIndex = floor(random(functions.size()));
-                    p = (Point) functions.get(randomFunctionIndex).transform(p);
+                    functions.get(randomFunctionIndex).transform(p);
                 }
                 if (p.iters++ < invisibleIterCount) {
                     continue;
                 }
                 pg.blendMode(ADD);
                 pg.stroke(pointColor);
-                pg.point(p.x, p.y);
+                pg.point(p.x*shapeSize, p.y*shapeSize);
             }
         }
     }
@@ -139,7 +140,7 @@ public class FractalFlame extends PApplet {
             PVector lerpCenter = gui.plotXY("pos");
             float lerpAmt = gui.slider("amount", 0.1f);
             int lerpSideCount = gui.sliderInt("sides", 6);
-            float shapeRadius = gui.slider("radius", 600);
+            float shapeRadius = gui.slider("radius", 1);
             float lerpAngleOffset = PI * gui.slider("angle");
             functions.add(p -> {
                 if (lerpAmt > 0) {
@@ -150,32 +151,43 @@ public class FractalFlame extends PApplet {
                     p.x = lerp(p.x, cornerX, lerpAmt);
                     p.y = lerp(p.y, cornerY, lerpAmt);
                 }
-                return p;
             });
         }
         gui.popFolder();
 
-        gui.pushFolder("sinusoidal");
-        if (gui.toggle("active")) {
-            float sinRadius = gui.slider("sin r", 300);
+        if (gui.toggle("sinusoidal")) {
             functions.add(p -> {
-                p.x = sin(p.x) * sinRadius;
-                p.y = sin(p.y) * sinRadius;
-                return p;
+                p.x = sin(p.x);
+                p.y = sin(p.y);
             });
         }
-        gui.popFolder();
+
+        if(gui.toggle("circle inversion")){
+            functions.add(p -> {
+                float dot = PVector.dot(p, p);
+                p.x /= dot;
+                p.y /= dot;
+            });
+        }
 
         gui.pushFolder("spherical");
-        if (gui.toggle("active")) {
+        if(gui.toggle("active")){
+            float radius = gui.slider("radius", 1);
+            float offset = gui.slider("offset", 1);
             functions.add(p -> {
-                        float r = dist(p.x, p.y, 0, 0);
-                        p.x = 1f / pow(r, 2) * p.x;
-                        p.y = 1f / pow(r, 2) * p.y;
-                        return p;
+               p.x = p.x / (radius * PVector.dot(p, p) + offset);
+               p.y = p.y / (radius * PVector.dot(p, p) + offset);
             });
         }
         gui.popFolder();
+
+        if(gui.toggle("horseshoe")){
+            functions.add(p -> {
+                float r = p.mag();
+                p.x = 1f/r * (p.x-p.y)*(p.x+p.y);
+                p.y = 1f/r * (2*p.x*p.y);
+            });
+        }
         gui.popFolder();
         return functions;
     }
@@ -189,7 +201,7 @@ public class FractalFlame extends PApplet {
     }
 
     interface Function {
-        PVector transform(PVector p);
+        void transform(PVector p);
     }
 
 }
