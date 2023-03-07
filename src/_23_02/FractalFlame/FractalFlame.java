@@ -109,7 +109,7 @@ public class FractalFlame extends PApplet {
         pg.strokeWeight(gui.slider("stroke weight", 1.99f));
         int invisibleIterCount = gui.sliderInt("invis iters", 0);
         int pointColor = gui.colorPicker("point add", 0xFFFFFFFF).hex;
-        float shapeSize = gui.slider("global shape size");
+        float shapeSize = gui.slider("global shape size", 800);
         ArrayList<Function> functions = rebuildFunctions();
         for (int pointIndex = 0; pointIndex < pointCount; pointIndex++) {
             if (pointIndex > points.size() - 1) {
