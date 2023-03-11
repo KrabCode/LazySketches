@@ -1,14 +1,18 @@
 package _23_03.BoxLandscape;
 
 import _0_utils.Utils;
+import lazy.ShaderReloader;
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PGraphics;
 import lazy.LazyGui;
 import processing.core.PVector;
+import processing.opengl.PShader;
 
 public class BoxLandscape extends PApplet {
     LazyGui gui;
     PGraphics pg;
+    float time;
 
     public static void main(String[] args) {
         PApplet.main(java.lang.invoke.MethodHandles.lookup().lookupClass());
@@ -16,7 +20,8 @@ public class BoxLandscape extends PApplet {
 
     @Override
     public void settings() {
-        size(1080, 1080, P2D);
+//        size(1080, 1080, P2D);
+        fullScreen(P2D);
     }
 
     @Override
@@ -24,29 +29,34 @@ public class BoxLandscape extends PApplet {
         gui = new LazyGui(this);
         pg = createGraphics(width, height, P3D);
         colorMode(HSB, 1, 1, 1, 1);
-        frameRate(144);
+        frameRate(60);
     }
 
     @Override
     public void draw() {
         pg.beginDraw();
-        drawBackground();
+        if(gui.toggle("clear 3D canvas", true)){
+            pg.clear();
+        }
         perspective();
         drawBoxes();
+        drawFx();
         pg.endDraw();
         clear();
+        drawBackground();
         image(pg, 0, 0);
         gui.draw();
-        Utils.updateGetFrameRateAverage(this, gui, 144);
+        Utils.updateGetFrameRateAverage(this, gui, 60);
         Utils.drawCustomCursor(this, gui);
         Utils.record(this, gui);
     }
 
     private void drawBoxes() {
         gui.pushFolder("boxes");
+        time += radians(gui.slider("time", 1));
         pg.pushMatrix();
         PVector pos = gui.plotXYZ("position");
-        pg.translate(pos.x+width/2f, pos.y+height/2f, pos.z);
+        pg.translate(pos.x + width / 2f, pos.y + height / 2f, pos.z);
         PVector rot = gui.plotXYZ("rotation");
         pg.rotateX(rot.x);
         pg.rotateY(rot.y);
@@ -61,7 +71,7 @@ public class BoxLandscape extends PApplet {
         int zCount = gui.sliderInt("z count", 10);
         float xMargin = gui.slider("x margin", 5);
         float zMargin = gui.slider("z margin", 5);
-        PVector xzSize = new PVector((xRange*2) / xCount - xMargin, (zRange*2) / zCount - zMargin);
+        PVector xzSize = new PVector((xRange * 2) / xCount - xMargin, (zRange * 2) / zCount - zMargin);
         float ySize = gui.slider("y size", 50);
         for (int xi = 0; xi < xCount; xi++) {
             for (int zi = 0; zi < zCount; zi++) {
@@ -69,17 +79,67 @@ public class BoxLandscape extends PApplet {
                 float x = map(xi, 0, xCount, -xRange, xRange);
                 float y = 0;
                 float z = map(zi, 0, zCount, -zRange, zRange);
-                pg.translate(x,y,z);
-                pg.box(xzSize.x, ySize, xzSize.y);
+                pg.translate(x, y, z);
+                float ySizeLocal =  ySize;
+
+                gui.pushFolder("animations");
+                int waveCount = gui.sliderInt("wave count", 1);
+                for (int i = 0; i < waveCount; i++) {
+                    gui.pushFolder("wave #" + i);
+                    PVector waveCenter = gui.plotXY("wave center");
+                    float d = dist(waveCenter.x, waveCenter.y,x,z);
+                    float ySizeFreq = gui.slider("freq", 0.1f);
+                    float ySizeAmp = gui.slider("amp", 10);
+                    float yTimeFreq = gui.slider("time freq", 1);
+                    ySizeLocal += ySizeAmp * sin(d*ySizeFreq + time * yTimeFreq);
+                    gui.popFolder();
+                }
+                pg.box(xzSize.x, ySizeLocal, xzSize.y);
                 pg.popMatrix();
+                gui.popFolder();
             }
         }
         pg.popMatrix();
         gui.popFolder();
     }
 
+
+    private void drawFx() {
+        String barrelShaderPath = "filters/sableralph/barrelBlurChroma.glsl";
+        String gaussBlurShaderPath = "filters/sableralph/gaussianBlur.glsl";
+        gui.pushFolder("fx");
+        gui.pushFolder("barrel blur");
+        if(gui.toggle("active")){
+            ShaderReloader.getShader(barrelShaderPath).set("sketchSize", (float) width, (float) height);
+            ShaderReloader.getShader(barrelShaderPath).set("barrelPower", gui.slider("barrel power", 2.2f));
+            ShaderReloader.filter(barrelShaderPath, pg);
+        }
+        gui.popFolder();
+
+        gui.pushFolder("gaussian blur");
+        if(gui.toggle("active")){
+
+            PShader gaussianBlur = ShaderReloader.getShader(gaussBlurShaderPath);
+
+            // Control the values with the mouse
+            gaussianBlur.set("strength", gui.slider("strength", 7, 0.1f, 9.0f));
+            gaussianBlur.set("kernelSize", gui.sliderInt("kernel size", 16, 3, 32));
+
+            // Vertical pass
+            gaussianBlur.set("horizontalPass", 0);
+            ShaderReloader.filter(gaussBlurShaderPath, pg);
+
+            // Horizontal pass
+            gaussianBlur.set("horizontalPass", 1);
+            ShaderReloader.filter(gaussBlurShaderPath, pg);
+        }
+        gui.popFolder();
+        gui.popFolder();
+    }
+
+
     private void drawBackground() {
-        pg.background(gui.colorPicker("background").hex);
+        image(gui.gradient("background"), 0, 0, width, height);
     }
 
     public void perspective() {
