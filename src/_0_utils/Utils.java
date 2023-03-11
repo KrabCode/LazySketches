@@ -1,7 +1,9 @@
 package _0_utils;
 
 import lazy.LazyGui;
+import lazy.PickerColor;
 import lazy.ShaderReloader;
+import lazy.stores.NormColorStore;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PImage;
@@ -26,6 +28,8 @@ public class Utils {
     private static float moveShaderTime = 0;
     private static int frameRateTargetLastFrame = -1;
     private static final ArrayList<Float> frameRateHistory = new ArrayList<>();
+
+    private static PImage cursorImage;
 
     public static String generateRandomShortId() {
         return UUID.randomUUID().toString().replace("-", "").substring(0, 8);
@@ -190,4 +194,45 @@ public class Utils {
         frameRateTargetLastFrame = frameRateTargetTemp;
         gui.popFolder();
     }
+
+
+    public static void drawCustomCursor(PApplet app, LazyGui gui) {
+        gui.pushFolder("custom cursor");
+        if(cursorImage == null){
+            cursorImage = app.loadImage("recording_assets/cursor.png");
+            println("loaded cursor", cursorImage.width , cursorImage.height);
+        }
+        if(gui.toggle("active")){
+            app.noCursor();
+            app.pushMatrix();
+            app.translate(app.mouseX, app.mouseY);
+            app.scale(gui.slider("cursor scale", 1));
+            PickerColor cursorClickedColor = gui.colorPicker("cursor clicked", NormColorStore.color(1));
+            PickerColor cursorIdleColor = gui.colorPicker("cursor idle", NormColorStore.color(1));
+            if(gui.toggle("circle")){
+                float clickCircleSize = gui.slider("circle size", 100);
+                PickerColor circleColor = gui.colorPicker("circle color");
+                PVector circlePos = gui.plotXY("circle pos");
+                if(app.mousePressed){
+                    app.fill(circleColor.hex);
+                    app.noStroke();
+                    app.ellipse(circlePos.x, circlePos.y, clickCircleSize, clickCircleSize);
+                }
+            }
+
+            if(app.mousePressed){
+                app.tint(cursorClickedColor.hex);
+            }else{
+                app.tint(cursorIdleColor.hex);
+            }
+            app.image(cursorImage, 0, 0);
+            app.noTint();
+            app.popMatrix();
+        }else{
+            // default cursor
+            app.cursor();
+        }
+        gui.popFolder();
+    }
+
 }

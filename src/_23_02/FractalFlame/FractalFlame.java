@@ -80,6 +80,8 @@ public class FractalFlame extends PApplet {
             shader.set("histogram", pg);
             PGraphics palette = gui.gradient("palette");
             shader.set("palette", palette);
+            shader.set("gammaPow", gui.slider("gamma pow", 2.2f));
+            shader.set("logMax", gui.slider("log max", 1f));
             ShaderReloader.filter(shaderPath, fg);
         }
         gui.popFolder();
@@ -135,7 +137,7 @@ public class FractalFlame extends PApplet {
     private ArrayList<Function> rebuildFunctions() {
         ArrayList<Function> functions = new ArrayList<>();
         gui.pushFolder("functions");
-        gui.pushFolder("lerp");
+        gui.pushFolder("lerp a");
         if (gui.toggle("active")) {
             PVector lerpCenter = gui.plotXY("pos");
             float lerpAmt = gui.slider("amount", 0.1f);
@@ -155,12 +157,36 @@ public class FractalFlame extends PApplet {
         }
         gui.popFolder();
 
-        if (gui.toggle("sinusoidal")) {
+        gui.pushFolder("lerp b");
+        if (gui.toggle("active")) {
+            PVector lerpCenter = gui.plotXY("pos");
+            float lerpAmt = gui.slider("amount", 0.1f);
+            int lerpSideCount = gui.sliderInt("sides", 6);
+            float shapeRadius = gui.slider("radius", 1);
+            float lerpAngleOffset = PI * gui.slider("angle");
             functions.add(p -> {
-                p.x = sin(p.x);
-                p.y = sin(p.y);
+                if (lerpAmt > 0) {
+                    int randomSide = floor(random(lerpSideCount));
+                    float angle = lerpAngleOffset + TAU * norm(randomSide, 0, lerpSideCount);
+                    float cornerX = lerpCenter.x + shapeRadius * cos(angle);
+                    float cornerY = lerpCenter.y + shapeRadius * sin(angle);
+                    p.x = lerp(p.x, cornerX, lerpAmt);
+                    p.y = lerp(p.y, cornerY, lerpAmt);
+                }
             });
         }
+        gui.popFolder();
+
+        gui.pushFolder("sinusoidal");
+        if (gui.toggle("active")) {
+            float freq = gui.slider("freq", 1);
+            float amp = gui.slider("amp", 1);
+            functions.add(p -> {
+                p.x = amp*sin(p.x*freq);
+                p.y = amp*sin(p.y*freq);
+            });
+        }
+        gui.popFolder();
 
         if(gui.toggle("circle inversion")){
             functions.add(p -> {
@@ -181,13 +207,21 @@ public class FractalFlame extends PApplet {
         }
         gui.popFolder();
 
-        if(gui.toggle("horseshoe")){
+        gui.pushFolder("rot + scl");
+        if(gui.toggle("rotate active")){
+            float rot = gui.slider("rotate amount");
             functions.add(p -> {
-                float r = p.mag();
-                p.x = 1f/r * (p.x-p.y)*(p.x+p.y);
-                p.y = 1f/r * (2*p.x*p.y);
+                p.rotate(rot);
             });
         }
+
+        if(gui.toggle("scale active")){
+            float scl = gui.slider("scale amount");
+            functions.add(p -> {
+                p.mult(scl);
+            });
+        }
+        gui.popFolder();
         gui.popFolder();
         return functions;
     }
