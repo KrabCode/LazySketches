@@ -36,7 +36,8 @@ public class Utils {
     }
 
     public static void record(PApplet pApplet, LazyGui gui){
-        int recLength = gui.sliderInt("rec/frames", 600);
+        gui.sliderSet("rec/current frame", saveIndex);
+        int recLength = gui.sliderInt("rec/frames total", 600);
         if (gui.button("rec/start")) {
             recordingId = generateRandomShortId();
             recStarted = pApplet.frameCount;
@@ -46,7 +47,6 @@ public class Utils {
         if (stopCommand) {
             recStarted = -1;
         }
-
         String sketchMainClassName = pApplet.getClass().getSimpleName();
         String recDir = pApplet.dataPath("video/" + sketchMainClassName +"_" + recordingId);
         String recDirAbsolute = Paths.get(recDir).toAbsolutePath().toString();
@@ -54,6 +54,7 @@ public class Utils {
             Desktop desktop = Desktop.getDesktop();
             File dir = new File(recDirAbsolute + "\\");
             if(!dir.exists()){
+                //noinspection ResultOfMethodCallIgnored
                 dir.mkdirs();
             }
             try {
@@ -124,17 +125,6 @@ public class Utils {
         if(onTop){
             pApplet.getSurface().setAlwaysOnTop(true);
         }
-    }
-
-    public static void drawImage(PGraphics pg, PImage img, LazyGui gui){
-        pg.imageMode(CENTER);
-        pg.translate(
-                pg.width/2f + gui.slider("img/x"),
-                pg.height/2f + gui.slider("img/y")
-        );
-        pg.rotate(gui.slider("img/rotate"));
-        pg.scale(gui.slider("img/scale", 1));
-        pg.image(img, 0, 0);
     }
 
     public static void shaderMove(PGraphics pg, LazyGui gui, String customPath) {
@@ -228,8 +218,8 @@ public class Utils {
             app.image(cursorImage, 0, 0);
             app.noTint();
             app.popMatrix();
-        }else{
-            // default cursor
+        }
+        if(gui.button("reset cursor")){
             app.cursor();
         }
         gui.popFolder();
