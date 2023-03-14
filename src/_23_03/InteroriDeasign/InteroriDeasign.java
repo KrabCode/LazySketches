@@ -1,21 +1,18 @@
-package _23_03.InteriorDesigner;
+package _23_03.InteroriDeasign;
 
 import _0_utils.Utils;
 import processing.core.PApplet;
-import processing.core.PGraphics;
 import lazy.LazyGui;
 import processing.core.PVector;
 import org.gicentre.handy.*;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-public class InteroriDesign extends PApplet {
+public class InteroriDeasign extends PApplet {
     LazyGui gui;
     HandyRenderer h;
-    PGraphics pg;
+    int count = -1;
     Map<String, HandyRenderer> handyRenderers = new HashMap<>();
 
     public static void main(String[] args) {
@@ -57,8 +54,8 @@ public class InteroriDesign extends PApplet {
     }
 
     private void drawRectangles() {
-        gui.pushFolder("rectangles");
-        int count = gui.sliderInt("count", 1);
+        gui.pushFolder("shapes");
+        count = gui.sliderInt("count", 1);
         int maxCount = max(100, count);
         if(gui.button("+1")){
             gui.sliderSet("count", count + 1);
@@ -117,7 +114,6 @@ public class InteroriDesign extends PApplet {
             textAlign(LEFT, CENTER);
             textFont(gui.getMainFont());
             PVector textPos = gui.plotXY("text pos", 30, 50).sub(size.x / 2f, size.y / 2f);
-
             fill(color(0.15f, 0.75f));
             rectMode(CORNER);
             noStroke();
@@ -129,6 +125,7 @@ public class InteroriDesign extends PApplet {
         gui.popFolder();
     }
 
+    @SuppressWarnings("unused")
     private boolean isMouseOverRect(int px, int py, PVector pos, PVector size) {
         float rx = pos.x;
         float ry = pos.y;
