@@ -2,7 +2,7 @@ package _23_03.InteroriDeasign;
 
 import _0_utils.Utils;
 import processing.core.PApplet;
-import lazy.LazyGui;
+import com.krab.lazy.LazyGui;
 import processing.core.PVector;
 import org.gicentre.handy.*;
 

@@ -1,8 +1,8 @@
 package _22_10;
 
 import _0_utils.Utils;
-import lazy.LazyGui;
-import lazy.ShaderReloader;
+import com.krab.lazy.LazyGui;
+import com.krab.lazy.ShaderReloader;
 import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PGraphics;

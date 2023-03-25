@@ -1,9 +1,9 @@
 package _0_utils;
 
-import lazy.LazyGui;
-import lazy.PickerColor;
-import lazy.ShaderReloader;
-import lazy.stores.NormColorStore;
+import com.krab.lazy.LazyGui;
+import com.krab.lazy.PickerColor;
+import com.krab.lazy.ShaderReloader;
+import com.krab.lazy.stores.NormColorStore;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PImage;

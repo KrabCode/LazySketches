@@ -1,6 +1,6 @@
 package _22_11;
 
-import lazy.LazyGui;
+import com.krab.lazy.LazyGui;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 

@@ -2,7 +2,7 @@ package _22_09;
 
 import _0_utils.Utils;
 import jdk.nashorn.internal.objects.Global;
-import lazy.LazyGui;
+import com.krab.lazy.LazyGui;
 import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PGraphics;

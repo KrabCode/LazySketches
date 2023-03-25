@@ -1,7 +1,8 @@
 package _23_03;
 
-import lazy.LazyGui;
-import lazy.ShaderReloader;
+import com.krab.lazy.LazyGui;
+import com.krab.lazy.LazyGuiSettings;
+import com.krab.lazy.ShaderReloader;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PImage;
@@ -26,7 +27,7 @@ public class Fx extends PApplet {
 
     @Override
     public void setup() {
-        gui = new LazyGui(this);
+        gui = new LazyGui(this, new LazyGuiSettings().setLoadLatestSaveOnStartup(false).setMouseConfineToWindow(true));
         pg = createGraphics(width, height, P2D);
     }
 

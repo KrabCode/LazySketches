@@ -1,11 +1,11 @@
 package _23_03.BoxLandscape;
 
 import _0_utils.Utils;
-import lazy.ShaderReloader;
+import com.krab.lazy.ShaderReloader;
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PGraphics;
-import lazy.LazyGui;
+import com.krab.lazy.LazyGui;
 import processing.core.PVector;
 import processing.opengl.PShader;
 

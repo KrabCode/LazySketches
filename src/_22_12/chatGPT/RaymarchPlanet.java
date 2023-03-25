@@ -1,11 +1,11 @@
 package _22_12.chatGPT;
 
 import _0_utils.Utils;
-import lazy.PickerColor;
-import lazy.ShaderReloader;
+import com.krab.lazy.PickerColor;
+import com.krab.lazy.ShaderReloader;
 import processing.core.PApplet;
 import processing.core.PGraphics;
-import lazy.LazyGui;
+import com.krab.lazy.LazyGui;
 import processing.core.PVector;
 import processing.opengl.PShader;
 

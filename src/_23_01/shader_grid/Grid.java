@@ -1,10 +1,10 @@
 package _23_01.shader_grid;
 
 import _0_utils.Utils;
-import lazy.ShaderReloader;
+import com.krab.lazy.ShaderReloader;
 import processing.core.PApplet;
 import processing.core.PGraphics;
-import lazy.LazyGui;
+import com.krab.lazy.LazyGui;
 
 public class Grid extends PApplet {
     LazyGui gui;

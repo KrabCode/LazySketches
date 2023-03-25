@@ -3,7 +3,7 @@ package _23_03;
 import _0_utils.Utils;
 import processing.core.PApplet;
 import processing.core.PGraphics;
-import lazy.LazyGui;
+import com.krab.lazy.LazyGui;
 import processing.core.PVector;
 
 public class GuiShowcase extends PApplet {

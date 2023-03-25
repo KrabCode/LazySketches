@@ -1,7 +1,7 @@
 package _22_12.RadialLines;
 
 import _0_utils.Utils;
-import lazy.LazyGui;
+import com.krab.lazy.LazyGui;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 

@@ -2,8 +2,8 @@ package _22_03;
 
 import processing.core.PApplet;
 import processing.core.PGraphics;
-import lazy.LazyGui;
-import lazy.ShaderReloader;
+import com.krab.lazy.LazyGui;
+import com.krab.lazy.ShaderReloader;
 import processing.core.PImage;
 
 import java.util.ArrayList;

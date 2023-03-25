@@ -3,7 +3,7 @@ package _23_01.layers;
 import _0_utils.Utils;
 import processing.core.PApplet;
 import processing.core.PGraphics;
-import lazy.LazyGui;
+import com.krab.lazy.LazyGui;
 
 public class LayerTest extends PApplet {
     LazyGui gui;

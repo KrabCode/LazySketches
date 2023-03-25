@@ -1,7 +1,7 @@
 package _23_01.pixelator;
 
-import lazy.LazyGui;
-import lazy.PickerColor;
+import com.krab.lazy.LazyGui;
+import com.krab.lazy.PickerColor;
 import processing.core.*;
 import processing.opengl.PShader;
 

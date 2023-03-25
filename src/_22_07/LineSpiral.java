@@ -2,7 +2,7 @@ package _22_07;
 
 import processing.core.PApplet;
 import processing.core.PGraphics;
-import lazy.LazyGui;
+import com.krab.lazy.LazyGui;
 
 public class LineSpiral extends PApplet {LazyGui gui;
     PGraphics pg;

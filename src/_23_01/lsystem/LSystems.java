@@ -1,10 +1,10 @@
 package _23_01.lsystem;
 
 import _0_utils.Utils;
-import lazy.PickerColor;
+import com.krab.lazy.PickerColor;
 import processing.core.PApplet;
 import processing.core.PGraphics;
-import lazy.LazyGui;
+import com.krab.lazy.LazyGui;
 import processing.core.PVector;
 
 import java.util.ArrayList;

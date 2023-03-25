@@ -2,11 +2,11 @@ package _22_12.Noise;
 
 import _0_utils.Utils;
 import _22_03.PostFxAdapter;
-import lazy.PickerColor;
-import lazy.ShaderReloader;
+import com.krab.lazy.PickerColor;
+import com.krab.lazy.ShaderReloader;
 import processing.core.PApplet;
 import processing.core.PGraphics;
-import lazy.LazyGui;
+import com.krab.lazy.LazyGui;
 import processing.opengl.PShader;
 
 public class Noise extends PApplet {

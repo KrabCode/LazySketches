@@ -3,8 +3,9 @@ package _23_02.FractalFlame;
 import _0_utils.Shapes;
 import _0_utils.Utils;
 import _22_03.PostFxAdapter;
-import lazy.LazyGui;
-import lazy.ShaderReloader;
+import com.krab.lazy.LazyGui;
+import com.krab.lazy.LazyGuiSettings;
+import com.krab.lazy.ShaderReloader;
 import processing.core.*;
 import processing.opengl.PShader;
 
@@ -35,7 +36,7 @@ public class FractalFlame extends PApplet {
     }
 
     public void setup() {
-        gui = new LazyGui(this);
+        gui = new LazyGui(this, new LazyGuiSettings().setLoadLatestSaveOnStartup(false));
         pg = createGraphics(width, height, P2D);
         fg = createGraphics(width, height, P2D);
     }
@@ -56,7 +57,7 @@ public class FractalFlame extends PApplet {
 
             pg.translate(width / 2f, height / 2f);
             gui.pushFolder("point clusters");
-            int emitterCount = gui.sliderInt("cluster count");
+            int emitterCount = gui.sliderInt("cluster count", 1);
             for (int i = 0; i < emitterCount; i++) {
                 if (i >= points.size()) {
                     points.add(new ArrayList<>());
@@ -74,14 +75,14 @@ public class FractalFlame extends PApplet {
         fg.beginDraw();
         String shaderPath = gui.text("shader path", "_23_02/FractalFlame/histogramInterpreter.glsl");
 
-        if (gui.toggle("active")) {
+        if (gui.toggle("active", true)) {
             PShader shader = ShaderReloader.getShader(shaderPath);
             shader.set("time", radians(frameCount));
             shader.set("histogram", pg);
             PGraphics palette = gui.gradient("palette");
             shader.set("palette", palette);
             shader.set("gammaPow", gui.slider("gamma pow", 2.2f));
-            shader.set("logMax", gui.slider("log max", 1f));
+            shader.set("logMax", gui.slider("log max", 0.001f));
             ShaderReloader.filter(shaderPath, fg);
         }
         gui.popFolder();

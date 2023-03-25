@@ -2,7 +2,7 @@ package _0_templates_java;
 
 import processing.core.PApplet;
 import processing.core.PGraphics;
-import lazy.LazyGui;
+import com.krab.lazy.LazyGui;
 
 public class Template extends PApplet {
     LazyGui gui;

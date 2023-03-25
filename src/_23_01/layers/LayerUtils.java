@@ -1,7 +1,7 @@
 package _23_01.layers;
 
-import lazy.LazyGui;
-import lazy.ShaderReloader;
+import com.krab.lazy.LazyGui;
+import com.krab.lazy.ShaderReloader;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PImage;

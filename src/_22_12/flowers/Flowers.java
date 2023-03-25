@@ -5,7 +5,7 @@ import _22_03.PostFxAdapter;
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PGraphics;
-import lazy.LazyGui;
+import com.krab.lazy.LazyGui;
 import processing.core.PVector;
 
 import java.util.ArrayList;

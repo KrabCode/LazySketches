@@ -3,7 +3,7 @@ package _22_03;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PVector;
-import lazy.LazyGui;
+import com.krab.lazy.LazyGui;
 
 import java.util.ArrayList;
 import java.util.UUID;

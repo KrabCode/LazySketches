@@ -1,11 +1,11 @@
 package _22_05;
 
 import _22_03.PostFxAdapter;
-import lazy.PickerColor;
+import com.krab.lazy.PickerColor;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PVector;
-import lazy.LazyGui;
+import com.krab.lazy.LazyGui;
 
 import java.util.ArrayList;
 

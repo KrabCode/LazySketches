@@ -1,7 +1,7 @@
 package _22_11;
 
-import lazy.LazyGui;
-import lazy.PickerColor;
+import com.krab.lazy.LazyGui;
+import com.krab.lazy.PickerColor;
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PGraphics;

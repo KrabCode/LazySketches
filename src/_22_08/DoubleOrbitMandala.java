@@ -3,7 +3,7 @@ package _22_08;
 import _22_03.PostFxAdapter;
 import processing.core.PApplet;
 import processing.core.PGraphics;
-import lazy.LazyGui;
+import com.krab.lazy.LazyGui;
 
 public class DoubleOrbitMandala extends PApplet {
     LazyGui gui;

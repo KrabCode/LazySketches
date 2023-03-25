@@ -2,8 +2,8 @@ package _22_10;
 
 import _0_utils.Utils;
 import _22_03.PostFxAdapter;
-import lazy.LazyGui;
-import lazy.PickerColor;
+import com.krab.lazy.LazyGui;
+import com.krab.lazy.PickerColor;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PVector;

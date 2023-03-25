@@ -1,14 +1,14 @@
 package _0_utils;
 
-import lazy.LazyGui;
-import lazy.PickerColor;
-import lazy.ShaderReloader;
+import com.krab.lazy.LazyGui;
+import com.krab.lazy.PickerColor;
+import com.krab.lazy.ShaderReloader;
 import processing.core.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static lazy.stores.GlobalReferences.app;
+import static com.krab.lazy.stores.GlobalReferences.app;
 
 @SuppressWarnings("SuspiciousNameCombination")
 public class Shapes extends PApplet {

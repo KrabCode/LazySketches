@@ -3,8 +3,8 @@ package _22_07;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.opengl.PShader;
-import lazy.LazyGui;
-import lazy.ShaderReloader;
+import com.krab.lazy.LazyGui;
+import com.krab.lazy.ShaderReloader;
 
 public class FlatLighting extends PApplet {LazyGui gui;
     PGraphics canvas;
@@ -62,7 +62,7 @@ public class FlatLighting extends PApplet {LazyGui gui;
         int detail = gui.sliderInt("brush/detail", 16);
         float brushRadius = gui.slider("brush/weight", 50);
         float alpha = gui.slider("brush/alpha", 1);
-        if (!mousePressed || !gui.mousePressedOutsideGui()) {
+        if (!mousePressed || !gui.isMouseOutsideGui()) {
             return;
         }
         float distance = dist(pmouseX, pmouseY, mouseX, mouseY);
