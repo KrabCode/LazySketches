@@ -9,9 +9,9 @@ import static processing.core.PApplet.lerp;
 
 public class CameraGrid2D {
     PApplet app;
-    private PVector cameraOffset;
-    private PVector playerPos = new PVector();;
-    private String guiFolderName = "camera grid";
+    private final PVector cameraOffset;
+    private final PVector playerPos = new PVector();
+    private final String guiFolderName = "camera grid";
 
     public CameraGrid2D(PApplet app) {
         this.app = app;
