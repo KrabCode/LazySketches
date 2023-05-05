@@ -1,5 +1,6 @@
 package _23_04;
 
+import _0_utils.Utils;
 import com.krab.lazy.LazyGui;
 import processing.core.PApplet;
 import processing.core.PGraphics;
@@ -35,6 +36,7 @@ public class FlatSphereLighting extends PApplet {
         pg.endDraw();
         image(pg, 0, 0);
         gui.draw();
+        Utils.record(this, gui);
     }
 
     private void drawForeground() {
