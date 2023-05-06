@@ -7,8 +7,7 @@ import static processing.core.PApplet.floor;
 
 public class Utils {
     public static void setupSurface(PApplet app, PSurface surface) {
-        surface.setSize(1000, app.displayHeight-300);
-        surface.setAlwaysOnTop(true);
-        surface.setLocation(PApplet.floor(app.displayWidth-app.width-75), floor(150));
+        surface.setSize(1000, app.displayHeight-500);
+        surface.setLocation(PApplet.floor(app.displayWidth-app.width-75), 150);
     }
 }

@@ -5,12 +5,14 @@ import com.krab.lazy.*;
 import processing.core.PGraphics;
 import processing.core.PVector;
 
+
 public class Flocking extends PApplet {
+    PVector playerTarget = new PVector();
+    boolean lerpingTowardsTarget = false;
     LazyGui gui;
     PGraphics pg;
     CameraGrid2D world;
     PVector playerPos;
-    PVector playerSpd;
 
     public static void main(String[] args) {
         PApplet.main(java.lang.invoke.MethodHandles.lookup().lookupClass());
@@ -19,6 +21,7 @@ public class Flocking extends PApplet {
     @Override
     public void settings() {
         fullScreen(P2D);
+        smooth(8);
     }
 
     @Override
@@ -26,6 +29,7 @@ public class Flocking extends PApplet {
         Utils.setupSurface(this, surface);
         gui = new LazyGui(this);
         pg = createGraphics(width, height, P2D);
+        pg.smooth(8);
         world = new CameraGrid2D(this);
         frameRate(144);
     }
@@ -54,15 +58,24 @@ public class Flocking extends PApplet {
     private void updatePlayer(){
         gui.pushFolder("player");
         playerPos = gui.plotXY("playerPos");
-        playerSpd = gui.plotXY("playerSpd");
-        gui.plotSet("playerPos", PVector.add(playerPos, playerSpd));
+        float lerpAmt = gui.slider("lerp speed", 0.1f, 0, 1);
+        if(Input.getCode(CONTROL).down){
+            playerTarget = world.screenPosToWorldPos(mouseX, mouseY);
+            lerpingTowardsTarget = true;
+        }
+        gui.plotSet("playerPos", PVector.lerp(playerPos, playerTarget, lerpAmt));
+        if(PVector.dist(playerPos, playerTarget) < 0.01f){
+            lerpingTowardsTarget = false;
+        }
         gui.popFolder();
     }
 
     private void drawPlayer() {
         pg.noStroke();
-        pg.fill(1,1,1);
-        pg.ellipse(0, 0, 60, 60);
+        pg.noFill();
+        pg.stroke(1);
+        pg.strokeWeight(3);
+        pg.ellipse(0, 0, 50,50);
     }
 
     private void drawFlock() {
@@ -76,5 +89,4 @@ public class Flocking extends PApplet {
         pg.rectMode(CORNER);
         pg.rect(0,0,width,height);
     }
-
 }

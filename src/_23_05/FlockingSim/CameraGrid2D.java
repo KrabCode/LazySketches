@@ -51,4 +51,8 @@ public class CameraGrid2D {
         pg.popMatrix();
         gui.popFolder();
     }
+
+    public PVector screenPosToWorldPos(float x, float y) {
+        return new PVector(x, y).add(-cameraOffset.x, -cameraOffset.y);
+    }
 }
