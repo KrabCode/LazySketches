@@ -36,7 +36,7 @@ public class CameraGrid2D {
         gui.pushFolder(guiFolderName);
         float cellSize = gui.slider("cell size", 40, 5, 1000);
         pg.strokeWeight(gui.slider("line width", 1));
-        pg.stroke(gui.colorPicker("line color").hex);
+        pg.stroke(gui.colorPicker("line color", 0xFF0F0F0F).hex);
         float w = pg.width*2;
         float h = pg.height*2;
         pg.pushMatrix();
