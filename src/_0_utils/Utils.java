@@ -1,13 +1,11 @@
 package _0_utils;
 
+import com.krab.lazy.Input;
 import com.krab.lazy.LazyGui;
 import com.krab.lazy.PickerColor;
 import com.krab.lazy.ShaderReloader;
 import com.krab.lazy.stores.NormColorStore;
-import processing.core.PApplet;
-import processing.core.PGraphics;
-import processing.core.PImage;
-import processing.core.PVector;
+import processing.core.*;
 import processing.opengl.PShader;
 
 import java.awt.*;
@@ -38,13 +36,15 @@ public class Utils {
     public static void record(PApplet pApplet, LazyGui gui){
         gui.sliderSet("rec/current frame", saveIndex);
         int recLength = gui.sliderInt("rec/frames total", 600);
-        if (gui.button("rec/start")) {
+        if (gui.button("rec/start (ctrl + k)") ||
+                (Input.getCode(CONTROL).down && Input.getChar('k').pressed)) {
             recordingId = generateRandomShortId();
             recStarted = pApplet.frameCount;
             saveIndex = 1;
         }
-        boolean stopCommand = gui.button("rec/stop");
-        if (stopCommand) {
+        boolean stopCommand = gui.button("rec/stop (ctrl + l)");
+        if (stopCommand ||
+                (Input.getCode(CONTROL).down && Input.getChar('l').pressed)) {
             recStarted = -1;
         }
         String sketchMainClassName = pApplet.getClass().getSimpleName();
@@ -225,4 +225,9 @@ public class Utils {
         gui.popFolder();
     }
 
+    public static void setupSurface(PApplet app, PSurface surface) {
+        surface.setSize(1000, app.displayHeight-500);
+        surface.setLocation(PApplet.floor(app.displayWidth-app.width-75), 150);
+        surface.setAlwaysOnTop(true);
+    }
 }
