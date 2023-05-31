@@ -23,7 +23,8 @@ public class TentacleCat extends PApplet {
 
     @Override
     public void settings() {
-        size(1080, 1080, P2D);
+//        size(1080, 1080, P2D);
+        fullScreen(P3D);
     }
 
     @Override
