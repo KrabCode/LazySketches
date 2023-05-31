@@ -42,7 +42,7 @@ public class Utils {
             recStarted = pApplet.frameCount;
             saveIndex = 1;
         }
-        boolean stopCommand = gui.button("rec/stop (ctrl + l)");
+        boolean stopCommand = gui.button("rec/stop  (ctrl + l)");
         if (stopCommand ||
                 (Input.getCode(CONTROL).down && Input.getChar('l').pressed)) {
             recStarted = -1;
