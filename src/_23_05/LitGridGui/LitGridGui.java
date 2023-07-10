@@ -28,7 +28,7 @@ public class LitGridGui extends PApplet {
 
     @Override
     public void draw() {
-        // read mouse input
+        // read mouse input+
         // enforce odd num for nice centering
         gui.pushFolder("grid");
         num = gui.sliderInt("rows", 20)*2+1;

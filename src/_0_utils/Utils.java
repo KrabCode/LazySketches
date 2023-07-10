@@ -36,7 +36,7 @@ public class Utils {
     public static void record(PApplet pApplet, LazyGui gui){
         gui.sliderInt("rec/current frame");
         gui.sliderSet("rec/current frame", saveIndex);
-        int recLength = gui.sliderInt("rec/frames total", 600);
+        int recLength = gui.sliderInt("rec/frames total", 360);
         if (gui.button("rec/start (ctrl + k)") ||
                 (Input.getCode(CONTROL).down && Input.getChar('k').pressed)) {
             recordingId = generateRandomShortId();
