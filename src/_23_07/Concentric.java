@@ -6,7 +6,6 @@ import com.krab.lazy.LazyGui;
 import com.krab.lazy.LazyGuiSettings;
 import com.krab.lazy.utils.ArrayListBuilder;
 import processing.core.PApplet;
-import processing.core.PConstants;
 import processing.core.PGraphics;
 
 import java.util.ArrayList;
@@ -69,7 +68,6 @@ public class Concentric extends PApplet {
         gui.pushFolder("shapes");
         int shapeCount = gui.sliderInt("count", 1, 1, 1000);
         maximumShapeCountSoFar = max(shapeCount, maximumShapeCountSoFar);
-        float runningRotate = 0;
         for (int i = 0; i < maximumShapeCountSoFar; i++) {
             gui.pushFolder(String.valueOf(i));
             if (i >= shapeCount) {
@@ -101,6 +99,7 @@ public class Concentric extends PApplet {
         gui.popFolder();
     }
 
+    @SuppressWarnings("unused")
     private void drawCircleTemplate(String type, float radius, float rotation) {
         gui.pushFolder(CIRCLE);
         gui.showCurrentFolder();
