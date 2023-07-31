@@ -26,7 +26,6 @@ public class Utils {
     private static float moveShaderTime = 0;
     private static int frameRateTargetLastFrame = -1;
     private static final ArrayList<Float> frameRateHistory = new ArrayList<>();
-
     private static PImage cursorImage;
 
     public static String generateRandomShortId() {
@@ -34,27 +33,34 @@ public class Utils {
     }
 
     public static void record(PApplet pApplet, LazyGui gui){
-        gui.sliderInt("rec/current frame");
-        gui.sliderSet("rec/current frame", saveIndex);
-        int recLength = gui.sliderInt("rec/frames total", 360);
+        gui.sliderInt("rec/frame");
+        gui.sliderSet("rec/frame", saveIndex);
+        int recLengthDefault = 360;
+        int recLength = gui.sliderInt("rec/length", recLengthDefault);
+
+        boolean recordingInProgress = recStarted != -1 && pApplet.frameCount < recStarted + recLength;
+        boolean recordingJustEnded = recStarted != -1 && pApplet.frameCount == recStarted + recLength;
         if (gui.button("rec/start (ctrl + k)") ||
                 (Input.getCode(CONTROL).down && Input.getChar('k').pressed)) {
             recordingId = generateRandomShortId();
             recStarted = pApplet.frameCount;
             saveIndex = 1;
-            gui.sliderSet("rec/current frame", saveIndex);
+            gui.sliderSet("rec/frame", saveIndex);
         }
         boolean stopCommand = gui.button("rec/stop  (ctrl + l)");
         if (stopCommand ||
                 (Input.getCode(CONTROL).down && Input.getChar('l').pressed)) {
             recStarted = -1;
+            saveIndex = 1;
+            recordingJustEnded = true;
+            gui.sliderSet("rec/frame", saveIndex);
         }
         String sketchMainClassName = pApplet.getClass().getSimpleName();
         String recDir = pApplet.dataPath("video/" + sketchMainClassName +"_" + recordingId);
         String recDirAbsolute = Paths.get(recDir).toAbsolutePath().toString();
         if(gui.button("rec/open folder")){
             Desktop desktop = Desktop.getDesktop();
-            File dir = new File(recDirAbsolute + "\\");
+            File dir = new File(pApplet.dataPath("video"));
             if(!dir.exists()){
                 //noinspection ResultOfMethodCallIgnored
                 dir.mkdirs();
@@ -69,6 +75,7 @@ public class Utils {
         PVector recordRectSize = gui.plotXY("rec/rect size", 1000);
         int recordRectSizeX = floor(recordRectSize.x);
         int recordRectSizeY = floor(recordRectSize.y);
+        // prevent resolutions odd numbers because ffmpeg can't work with them
         if(recordRectSizeX % 2 != 0){
             recordRectSizeX += 1;
         }
@@ -76,7 +83,7 @@ public class Utils {
             recordRectSizeY += 1;
         }
         String recImageFormat = ".jpg";
-        if (recStarted != -1 && pApplet.frameCount < recStarted + recLength) {
+        if (recordingInProgress) {
             println("saved " + saveIndex + " / " + recLength);
             PImage cutout = pApplet.get(
                     floor(recordRectPos.x) - recordRectSizeX / 2,
@@ -86,12 +93,9 @@ public class Utils {
             );
             cutout.save( recDir + "/" + saveIndex++ + recImageFormat);
         }
-        if(stopCommand || (recStarted != -1 && pApplet.frameCount == recStarted + recLength)){
-            println("Recorded image series folder: " + recDirAbsolute);
-        }
         if (gui.toggle("rec/show rect")) {
             pApplet.pushStyle();
-            pApplet.stroke(pApplet.color(0xFFFFFFFF));
+            pApplet.stroke(pApplet.color(0xA0FFFFFF));
             pApplet.noFill();
             pApplet.rectMode(CENTER);
             pApplet.rect(recordRectPos.x, recordRectPos.y, recordRectSizeX, recordRectSizeY);
@@ -99,10 +103,10 @@ public class Utils {
         }
 
         int ffmpegFramerate = gui.sliderInt("rec/ffmpeg fps", 60, 1, Integer.MAX_VALUE);
-        if(gui.button("rec/ffmpeg make mp4")){
-            String outMovieFilename = recDirAbsolute + "/_" + generateRandomShortId();
+        if(gui.toggle("rec/ffmpeg", true) && recordingJustEnded){
+            String outMovieFilename = pApplet.dataPath("video/" + sketchMainClassName +"_" + recordingId);
             String inputFormat = recDirAbsolute + "/%01d" + recImageFormat;
-            String command = String.format("ffmpeg  -r %s -i %s -start_number_range 100000 -an %s.mp4",
+            String command = String.format("ffmpeg  -r %s -i %s -start_number_range 100 -an %s.mp4",
                     ffmpegFramerate, inputFormat, outMovieFilename);
             println("running ffmpeg: " + command);
             try {
