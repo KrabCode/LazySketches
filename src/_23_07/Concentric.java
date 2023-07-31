@@ -1,10 +1,12 @@
 package _23_07;
 
 import _0_utils.Utils;
+import _22_03.PostFxAdapter;
 import com.krab.lazy.LazyGui;
 import com.krab.lazy.LazyGuiSettings;
 import com.krab.lazy.utils.ArrayListBuilder;
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PGraphics;
 
 import java.util.ArrayList;
@@ -13,9 +15,11 @@ public class Concentric extends PApplet {
     private static final String RAY_CIRCLE = "rays";
     private static final String CIRCLE = "circle";
     private static final String SINE_CIRCLE = "sine";
+    private static final String ARC = "arc";
     ArrayList<String> typeOptions = new ArrayListBuilder<String>()
             .add(RAY_CIRCLE)
             .add(SINE_CIRCLE)
+            .add(ARC)
             .build();
     LazyGui gui;
     PGraphics pg;
@@ -28,11 +32,14 @@ public class Concentric extends PApplet {
     public void settings() {
 //        size(800, 800, P2D);
         fullScreen(P2D);
+        smooth(8);
     }
 
     @Override
     public void setup() {
-        gui = new LazyGui(this, new LazyGuiSettings().setLoadLatestSaveOnStartup(false));
+        gui = new LazyGui(this, new LazyGuiSettings()
+                .setLoadLatestSaveOnStartup(true)
+        );
         pg = createGraphics(width, height, P3D);
     }
 
@@ -41,8 +48,10 @@ public class Concentric extends PApplet {
         pg.beginDraw();
         drawBackground();
         pg.translate(width / 2f, height / 2f);
+        pg.scale(gui.slider("scale", 1));
         drawShapes();
         pg.endDraw();
+        PostFxAdapter.apply(this, gui, pg);
         image(pg, 0, 0);
         Utils.record(this, gui);
     }
@@ -78,21 +87,15 @@ public class Concentric extends PApplet {
             pg.stroke(strokeClr);
             pg.fill(fillClr);
             gui.popFolder();
-            gui.pushFolder("rotate");
-            float rotate = gui.slider("position");
-            float rotateDelta = radians(gui.slider("change", 1));
-            gui.sliderAdd("position", rotateDelta);
-            boolean inheritsRotation = gui.toggle("inherit", true);
-            gui.popFolder();
+            float rotateAngle = gui.slider("rotate");
+            float rotateDelta = radians(gui.slider("rotate +", 1));
+            gui.sliderAdd("rotate", rotateDelta);
             float radius = gui.slider("radius", 30 + i * 30);
             String type = gui.radio("type", typeOptions);
-            if (inheritsRotation) {
-                runningRotate += rotate;
-                rotate = runningRotate;
-            }
-            drawCircleTemplate(type, radius, rotate);
-            drawSine(type, radius, rotate);
-            drawRayCircle(type, radius, rotate);
+            drawCircleTemplate(type, radius, rotateAngle);
+            drawSine(type, radius, rotateAngle);
+            drawRayCircle(type, radius, rotateAngle);
+            drawArcs(type, radius, rotateAngle);
             gui.popFolder();
         }
         gui.popFolder();
@@ -151,7 +154,7 @@ public class Concentric extends PApplet {
         pg.beginShape();
         for (int vertex = 0; vertex < detail; vertex++) {
             float localAngle = map(vertex, 0, detail, 0, TAU);
-            float localRadius = radius + amp * sin((localAngle + rotation) * freq);
+            float localRadius = radius + amp * sin((localAngle) * freq);
             float x = localRadius * cos(localAngle);
             float y = localRadius * sin(localAngle);
             pg.vertex(x, y);
@@ -160,4 +163,47 @@ public class Concentric extends PApplet {
         gui.popFolder();
         pg.popMatrix();
     }
+
+
+    private void drawArcs(String type, float radius, float rotation) {
+        gui.pushFolder(ARC);
+        gui.showCurrentFolder();
+        if (!type.equals(ARC)) {
+            gui.hideCurrentFolder();
+            gui.popFolder();
+            return;
+        }
+        // only ask for GUI values here
+        float extent = gui.slider("extent", 0.5f);
+//        pg.rotate(rotation);
+//        pg.arc(0, 0, radius * 2, radius * 2, 0, extent * TAU);
+        if (extent <= 0) {
+            gui.popFolder();
+            return;
+        }
+        pg.pushMatrix();
+        pg.rotate(rotation);
+        pg.beginShape(TRIANGLE_STRIP);
+        int detail = gui.sliderInt("detail", 360);
+        float thickness = gui.slider("thickness", 20);
+        float thicknessHalf = thickness * 0.5f;
+        for (int i = 0; i < detail; i++) {
+            float innerRadius = radius - thicknessHalf;
+            float outerRadius = radius + thicknessHalf;
+            float angle = map(i, 0, detail-1, 0, TAU);
+            if(angle > extent * TAU){
+                break;
+            }
+            float x0 = innerRadius * cos(angle);
+            float y0 = innerRadius * sin(angle);
+            float x1 = outerRadius * cos(angle);
+            float y1 = outerRadius * sin(angle);
+            pg.vertex(x0, y0);
+            pg.vertex(x1, y1);
+        }
+        pg.endShape();
+        pg.popMatrix();
+        gui.popFolder();
+    }
+
 }
