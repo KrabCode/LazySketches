@@ -17,10 +17,12 @@ public class Concentric extends PApplet {
     private static final String CIRCLE = "circle";
     private static final String SINE_CIRCLE = "sine";
     private static final String TRIANGLE_STRIP_ARC = "strip";
+    private static final String SPIROGRAPH = "spiro";
     ArrayList<String> typeOptions = new ArrayListBuilder<String>()
             .add(RAYS)
             .add(SINE_CIRCLE)
             .add(TRIANGLE_STRIP_ARC)
+            .add(SPIROGRAPH)
             .build();
     LazyGui gui;
     PGraphics pg;
@@ -33,14 +35,14 @@ public class Concentric extends PApplet {
     @Override
     public void settings() {
 //        size(800, 800, P2D);
-        fullScreen(P2D);
+        fullScreen(P3D);
         smooth(8);
     }
 
     @Override
     public void setup() {
         gui = new LazyGui(this, new LazyGuiSettings()
-                .setLoadLatestSaveOnStartup(false)
+                .setLoadLatestSaveOnStartup(true)
         );
         pg = createGraphics(width, height, P3D);
     }
@@ -102,6 +104,7 @@ public class Concentric extends PApplet {
             drawSineCircle(type, radius, rotateAngle);
             drawRayCircle(type, radius, rotateAngle);
             drawTriangleStripArc(type, radius, rotateAngle);
+            drawSpirographs(type, radius, rotateAngle);
             pg.popMatrix();
             gui.popFolder();
         }
@@ -218,4 +221,56 @@ public class Concentric extends PApplet {
         gui.popFolder();
     }
 
+    private void drawSpirographs(String type, float radius, float rotateAngle) {
+        gui.pushFolder(SPIROGRAPH + " params");
+        gui.showCurrentFolder();
+        if (!type.equals(SPIROGRAPH)) {
+            gui.hideCurrentFolder();
+            gui.popFolder();
+            return;
+        }
+        // only ask for GUI values here
+        pg.pushStyle();
+        pg.noFill();
+        float radiusBig = radius;
+        float radiusSmall = radiusBig / gui.sliderInt("small circles", 3);
+        float holeDistance = gui.slider("hole distance", 15);
+        int detail = gui.sliderInt("detail", 500);
+        boolean shouldDrawGradually = gui.toggle("draw gradually");
+        float gradualMaxAngle = radians(gui.slider("draw length", 0.9f) * 360);
+        if (shouldDrawGradually) {
+            pg.beginShape();
+            for (int i = 0; i < detail; i++) {
+                float bigAngle = map(i, 0, detail-1, 0, TAU);
+                if (bigAngle > gradualMaxAngle) {
+                    break;
+                }
+                float finalAngle = rotateAngle + bigAngle;
+                PVector p = getSpirographPoint(radiusBig, radiusSmall, finalAngle, holeDistance);
+                pg.vertex(p.x, p.y);
+            }
+            pg.endShape();
+        } else {
+            pg.rotate(rotateAngle);
+            pg.beginShape();
+            for (int i = 0; i < detail; i++) {
+                float bigAngle = map(i, 0, detail-1, 0, TAU);
+                PVector p = getSpirographPoint(radiusBig, radiusSmall, bigAngle, holeDistance);
+                pg.vertex(p.x, p.y);
+            }
+            pg.endShape(CLOSE);
+        }
+        pg.popStyle();
+        gui.popFolder();
+    }
+
+    PVector getSpirographPoint(float radiusBig, float radiusSmall, float bigAngle, float holeDistance) {
+        float smallCenterRadius = radiusBig - radiusSmall;
+        float smallCenterX = smallCenterRadius * cos(bigAngle);
+        float smallCenterY = smallCenterRadius * sin(bigAngle);
+        float smallRotation = - (smallCenterRadius / radiusSmall) * bigAngle;
+        float holeX = smallCenterX + holeDistance * cos(smallRotation);
+        float holeY = smallCenterY + holeDistance * sin(smallRotation);
+        return new PVector(holeX, holeY);
+    }
 }
