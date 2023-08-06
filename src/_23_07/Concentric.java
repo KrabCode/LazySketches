@@ -232,8 +232,7 @@ public class Concentric extends PApplet {
         // only ask for GUI values here
         pg.pushStyle();
         pg.noFill();
-        float radiusBig = radius;
-        float radiusSmall = radiusBig / gui.sliderInt("small circles", 3);
+        float radiusSmall = radius / gui.sliderInt("small circles", 3);
         float holeDistance = gui.slider("hole distance", 15);
         int detail = gui.sliderInt("detail", 500);
         boolean shouldDrawGradually = gui.toggle("draw gradually");
@@ -246,7 +245,7 @@ public class Concentric extends PApplet {
                     break;
                 }
                 float finalAngle = rotateAngle + bigAngle;
-                PVector p = getSpirographPoint(radiusBig, radiusSmall, finalAngle, holeDistance);
+                PVector p = getSpirographPoint(radius, radiusSmall, finalAngle, holeDistance);
                 pg.vertex(p.x, p.y);
             }
             pg.endShape();
@@ -255,7 +254,7 @@ public class Concentric extends PApplet {
             pg.beginShape();
             for (int i = 0; i < detail; i++) {
                 float bigAngle = map(i, 0, detail-1, 0, TAU);
-                PVector p = getSpirographPoint(radiusBig, radiusSmall, bigAngle, holeDistance);
+                PVector p = getSpirographPoint(radius, radiusSmall, bigAngle, holeDistance);
                 pg.vertex(p.x, p.y);
             }
             pg.endShape(CLOSE);
