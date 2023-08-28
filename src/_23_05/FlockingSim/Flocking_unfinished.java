@@ -7,7 +7,7 @@ import processing.core.PGraphics;
 import processing.core.PVector;
 
 
-public class Flocking extends PApplet {
+public class Flocking_unfinished extends PApplet {
     LazyGui gui;
     PGraphics pg;
     CameraGrid2D world;
