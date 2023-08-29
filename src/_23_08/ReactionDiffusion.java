@@ -66,8 +66,9 @@ public class ReactionDiffusion extends PApplet {
         PShader updateShader = ShaderReloader.getShader(updateShaderPath);
         updateShader.set("dA", gui.slider("dA", 1));
         updateShader.set("dB", gui.slider("dB", 0.5f));
-        updateShader.set("f", gui.slider("f", 0.055f));
-        updateShader.set("k", gui.slider("k", 0.062f));
+        float colorStep = 1/255f;
+        updateShader.set("f", colorStep*gui.slider("f", 1));
+        updateShader.set("k", colorStep*gui.slider("k", 1));
         updateShader.set("t", gui.slider("t", 0.1f));
         ShaderReloader.filter(updateShaderPath, pg);
         pg.endDraw();
