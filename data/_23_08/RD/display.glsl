@@ -1,15 +1,17 @@
 
-uniform sampler2D img;
+uniform sampler2D source;
+uniform sampler2D gradient;
 uniform vec2 resolution;
 uniform bool displayRedAsWhite = false;
 
+vec3 getColorFromGradient(float pos){
+    return texture(gradient, vec2(0.5, 1.-pos)).rgb;
+}
+
 void main(){
     vec2 uv = gl_FragCoord.xy / resolution.xy;
-    vec4 col = texture(img, uv).rgba;
-    if(displayRedAsWhite){
-        col.rgb = vec3(1.0-col.b);
-    }else{
-        col.rgb = vec3(col.b);
-    }
-    gl_FragColor = vec4(col.rgb, 1);
+    vec4 data = texture(source, uv).rgba;
+    float val = 1.0-data.b;
+    vec3 gradientOutput = getColorFromGradient(val);
+    gl_FragColor = vec4(gradientOutput, 1);
 }

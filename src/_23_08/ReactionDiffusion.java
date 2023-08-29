@@ -1,10 +1,13 @@
 package _23_08;
 
+import _0_utils.Utils;
+import _22_03.PostFxAdapter;
 import com.krab.lazy.LazyGui;
 import com.krab.lazy.LazyGuiSettings;
 import com.krab.lazy.ShaderReloader;
 import processing.core.PApplet;
 import processing.core.PGraphics;
+import processing.core.PVector;
 import processing.opengl.PShader;
 
 public class ReactionDiffusion extends PApplet {
@@ -29,19 +32,21 @@ public class ReactionDiffusion extends PApplet {
 //                .setLoadLatestSaveOnStartup(false)
         );
         colorMode(RGB,1,1,1,1);
-        updateCanvas = createGraphics(width, height, P2D);
-        renderCanvas = createGraphics(width, height, P2D);
-        drawSeedTexture(updateCanvas);
+        int canvasSize = min(width, height);
+        updateCanvas = createGraphics(canvasSize, canvasSize, P2D);
+        renderCanvas = createGraphics(canvasSize, canvasSize, P2D);
+        drawSeedIfNeeded(updateCanvas);
     }
 
     @Override
     public void draw() {
-        drawSeedTexture(updateCanvas);
+        drawSeedIfNeeded(updateCanvas);
         updateSimulation(updateCanvas);
         renderSimulation(updateCanvas, renderCanvas);
+        Utils.record(this, gui);
     }
 
-    private void drawSeedTexture(PGraphics pg) {
+    private void drawSeedIfNeeded(PGraphics pg) {
         gui.pushFolder("seed");
         if(gui.button("draw once") || frameCount == 0){
             if(frameCount == 0){
@@ -54,7 +59,7 @@ public class ReactionDiffusion extends PApplet {
                     "circle",
                     "square"
             };
-            float size = gui.slider("size");
+            float size = gui.slider("size", 60);
             String type = gui.radio("type", types);
             pg.background(1,0,0);
             pg.translate(pg.width/2f, pg.height/2f);
@@ -78,13 +83,15 @@ public class ReactionDiffusion extends PApplet {
         PShader updateShader = ShaderReloader.getShader(updateShaderPath);
         updateShader.set("dA", gui.slider("dA", 1));
         updateShader.set("dB", gui.slider("dB", 0.5f));
-        updateShader.set("f", gui.slider("f", 0.6f));
-        updateShader.set("k", gui.slider("k", 0.05f));
-        updateShader.set("t", gui.slider("t", 0.1f));
+        PVector killFeed = gui.plotXY("kill\\/feed", 0.01f, 0.01f);
+        updateShader.set("k", killFeed.x);
+        updateShader.set("f", killFeed.y);
+        updateShader.set("t", gui.slider("t",1));
         int passCount = gui.sliderInt("passes", 2, 1, 200);
         for (int i = 0; i < passCount; i++) {
             ShaderReloader.filter(updateShaderPath, pg);
         }
+        PostFxAdapter.apply(this, gui, pg);
         pg.endDraw();
         gui.popFolder();
     }
@@ -94,9 +101,10 @@ public class ReactionDiffusion extends PApplet {
         targetCanvas.beginDraw();
         String displayShaderPath = "_23_08/RD/display.glsl";
         PShader displayShader = ShaderReloader.getShader(displayShaderPath);
-        displayShader.set("img",  sourceCanvas);
-        displayShader.set("displayRedAsWhite",  gui.toggle("A\\/B = white"));
+        displayShader.set("source",  sourceCanvas);
+        displayShader.set("gradient", gui.gradient("gradient"));
         ShaderReloader.filter(displayShaderPath, targetCanvas);
+        PostFxAdapter.apply(this, gui, targetCanvas);
         targetCanvas.endDraw();
         boolean debugSource = gui.toggle("debug canvas", false);
         displayOutputOnMainCanvas(debugSource?sourceCanvas:targetCanvas);
