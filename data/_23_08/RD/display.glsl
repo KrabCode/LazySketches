@@ -7,7 +7,7 @@ void main(){
     vec2 uv = gl_FragCoord.xy / resolution.xy;
     vec4 col = texture(img, uv).rgba;
     if(displayRedAsWhite){
-        col.rgb = vec3(col.r);
+        col.rgb = vec3(1.0-col.b);
     }else{
         col.rgb = vec3(col.b);
     }

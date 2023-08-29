@@ -3,11 +3,11 @@ precision highp float;
 uniform sampler2D texture;
 uniform vec2 resolution;
 
-uniform float dA = 1.;
-uniform float dB = .5;
-uniform float f = 0.055;
-uniform float k = 0.062;
-uniform float t = 0.1;
+uniform float dA;
+uniform float dB;
+uniform float f;
+uniform float k;
+uniform float t;
 
 // Based on https://karlsims.com/rd.html
 // A is represented by RED
@@ -16,7 +16,7 @@ uniform float t = 0.1;
 
 const vec3[] grid = vec3[](
 vec3(-1, -1, 0.05), vec3(0, -1, 0.2), vec3(1, -1, 0.05),
-vec3(-1, 0, 0.2),  vec3(0,0,-1),  vec3(1, 0, 0.2),
+vec3(-1, 0, 0.2), vec3(0,0,-1),      vec3(1, 0, 0.2),
 vec3(-1, 1, 0.05), vec3(0, 1, 0.2), vec3(1, 1, 0.05)
 );
 
@@ -37,15 +37,16 @@ vec2 getPixelValues(vec2 coord){
 }
 
 vec2 getLaplacianAverageValues(vec2 p){
-    return getPixelValues(p+grid[0].xy) * grid[0].z +
-    getPixelValues(p+grid[1].xy) * grid[1].z +
-    getPixelValues(p+grid[2].xy) * grid[2].z +
-    getPixelValues(p+grid[3].xy) * grid[3].z +
-    getPixelValues(p+grid[4].xy) * grid[4].z +
-    getPixelValues(p+grid[5].xy) * grid[5].z +
-    getPixelValues(p+grid[6].xy) * grid[6].z +
-    getPixelValues(p+grid[7].xy) * grid[7].z +
-    getPixelValues(p+grid[8].xy) * grid[8].z;
+    return
+        getPixelValues(p+grid[0].xy) * grid[0].z +
+        getPixelValues(p+grid[1].xy) * grid[1].z +
+        getPixelValues(p+grid[2].xy) * grid[2].z +
+        getPixelValues(p+grid[3].xy) * grid[3].z +
+        getPixelValues(p+grid[4].xy) * grid[4].z +
+        getPixelValues(p+grid[5].xy) * grid[5].z +
+        getPixelValues(p+grid[6].xy) * grid[6].z +
+        getPixelValues(p+grid[7].xy) * grid[7].z +
+        getPixelValues(p+grid[8].xy) * grid[8].z;
 }
 
 vec2 simulateReactionDiffusion(vec2 p){
@@ -53,17 +54,14 @@ vec2 simulateReactionDiffusion(vec2 p){
     float A = AB.x;
     float B = AB.y;
     vec2 lapDiff = getLaplacianAverageValues(p);
-    float lapAsquared = pow(lapDiff.x, 2);
-    float lapBsquared = pow(lapDiff.y, 2);
     float ABsquared = A * B * B;
-    float newA = A + (dA * lapAsquared - ABsquared + f * (1 - A)) * t;
-    float newB = B + (dB * lapBsquared + ABsquared - (k + f) * B) * t;
-    return vec2(newA, newB);
+    float newA = A + (dA * lapDiff.x - ABsquared + f * (1.0 - A)) * t;
+    float newB = B + (dB * lapDiff.y + ABsquared - ((k + f) * B)) * t;
+    return clamp(vec2(newA, newB), vec2(0), vec2(1));
 }
 
 void main(){
     vec2 p = gl_FragCoord.xy;
-    vec4 col = getPixel(p);
     vec2 newValues = simulateReactionDiffusion(p);
     gl_FragColor = setValuesFromColor(newValues);
 }

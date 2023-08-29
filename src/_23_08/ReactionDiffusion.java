@@ -28,7 +28,7 @@ public class ReactionDiffusion extends PApplet {
         gui = new LazyGui(this, new LazyGuiSettings()
 //                .setLoadLatestSaveOnStartup(false)
         );
-        colorMode(HSB,1,1,1,1);
+        colorMode(RGB,1,1,1,1);
         updateCanvas = createGraphics(width, height, P2D);
         renderCanvas = createGraphics(width, height, P2D);
         drawSeedTexture(updateCanvas);
@@ -43,17 +43,29 @@ public class ReactionDiffusion extends PApplet {
 
     private void drawSeedTexture(PGraphics pg) {
         gui.pushFolder("seed");
-        if(gui.button("regen once") || gui.toggle("regen always") || frameCount == 0){
+        if(gui.button("draw once") || frameCount == 0){
             if(frameCount == 0){
-                // dummy draw to appease a bug spirit
                 pg.beginDraw();
                 pg.endDraw();
             }
             pg.beginDraw();
-            String seedShaderPath = "_23_08/RD/seed.glsl";
-            PShader seedShader = ShaderReloader.getShader(seedShaderPath);
-            seedShader.set("n", gui.slider("amp", 1));
-            ShaderReloader.filter(seedShaderPath, pg);
+            pg.colorMode(RGB,1,1,1,1);
+            String[] types = new String[]{
+                    "circle",
+                    "square"
+            };
+            float size = gui.slider("size");
+            String type = gui.radio("type", types);
+            pg.background(1,0,0);
+            pg.translate(pg.width/2f, pg.height/2f);
+            pg.fill(1,0,1);
+            pg.rectMode(CENTER);
+            pg.noStroke();
+            if(type.equals("circle")){
+                pg.circle(0,0, size);
+            }else{
+                pg.square(0,0,size);
+            }
             pg.endDraw();
         }
         gui.popFolder();
@@ -66,11 +78,13 @@ public class ReactionDiffusion extends PApplet {
         PShader updateShader = ShaderReloader.getShader(updateShaderPath);
         updateShader.set("dA", gui.slider("dA", 1));
         updateShader.set("dB", gui.slider("dB", 0.5f));
-        float colorStep = 1/255f;
-        updateShader.set("f", colorStep*gui.slider("f", 1));
-        updateShader.set("k", colorStep*gui.slider("k", 1));
+        updateShader.set("f", gui.slider("f", 0.6f));
+        updateShader.set("k", gui.slider("k", 0.05f));
         updateShader.set("t", gui.slider("t", 0.1f));
-        ShaderReloader.filter(updateShaderPath, pg);
+        int passCount = gui.sliderInt("passes", 2, 1, 200);
+        for (int i = 0; i < passCount; i++) {
+            ShaderReloader.filter(updateShaderPath, pg);
+        }
         pg.endDraw();
         gui.popFolder();
     }
