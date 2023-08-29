@@ -7,7 +7,7 @@ import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.opengl.PShader;
 
-public class RD extends PApplet {
+public class ReactionDiffusion extends PApplet {
     LazyGui gui;
     PGraphics updateCanvas;
     PGraphics renderCanvas;
