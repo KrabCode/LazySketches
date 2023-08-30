@@ -34,7 +34,9 @@ public class ReactionDiffusion extends PApplet {
         colorMode(RGB,1,1,1,1);
         int canvasSize = min(width, height);
         updateCanvas = createGraphics(canvasSize, canvasSize, P2D);
+        updateCanvas.noSmooth();
         renderCanvas = createGraphics(canvasSize, canvasSize, P2D);
+        renderCanvas.noSmooth();
         drawSeedIfNeeded(updateCanvas);
     }
 
