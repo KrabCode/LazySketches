@@ -14,7 +14,7 @@ public class Template extends PApplet {
 
     @Override
     public void settings() {
-        size(1080,1080,P2D);
+        size(800,800,P2D);
     }
 
     @Override
