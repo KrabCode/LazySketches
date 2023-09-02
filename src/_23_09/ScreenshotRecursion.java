@@ -1,5 +1,6 @@
 package _23_09;
 
+import _0_utils.Utils;
 import com.krab.lazy.LazyGui;
 import processing.core.PApplet;
 import processing.core.PGraphics;
@@ -19,7 +20,7 @@ public class ScreenshotRecursion extends PApplet {
 
     @Override
     public void settings() {
-        float sizeMult = 0.8f;
+        float sizeMult = 1.f;
         int w = floor(displayWidth * sizeMult);
         int h = floor(displayHeight * sizeMult);
         size(w, h,P2D);
@@ -51,6 +52,7 @@ public class ScreenshotRecursion extends PApplet {
         pg.image(screen, 0, 0);
         pg.endDraw();
         image(pg, 0, 0);
+        Utils.record(this, gui);
     }
 
     private void drawBackground() {
