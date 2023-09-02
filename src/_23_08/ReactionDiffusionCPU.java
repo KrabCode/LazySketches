@@ -1,9 +1,12 @@
 package _23_08;
 
+import _22_03.PostFxAdapter;
 import com.krab.lazy.LazyGui;
-import javafx.scene.control.Cell;
+import com.krab.lazy.ShaderReloader;
 import processing.core.PApplet;
 import processing.core.PGraphics;
+import processing.core.PVector;
+import processing.opengl.PShader;
 
 public class ReactionDiffusionCPU extends PApplet {
 
@@ -13,7 +16,7 @@ public class ReactionDiffusionCPU extends PApplet {
 
     float diffA, diffB, feed, kill, time;
 
-    int scaleMult = 3;
+    float scaleMult = 0.33f;
     int w;
     int h;
 
@@ -28,21 +31,16 @@ public class ReactionDiffusionCPU extends PApplet {
 
     @Override
     public void setup() {
-        w = width / scaleMult;
-        h = height / scaleMult;
-        gui = new LazyGui(this);
-        pg = createGraphics(w, h, P2D);
-        pg.beginDraw();
-        pg.clear();
-        pg.endDraw();
-        pg.colorMode(RGB, 1, 1, 1, 1);
         colorMode(RGB, 1, 1, 1, 1);
-        canvas = new Cell[w][h];
+        gui = new LazyGui(this);
+        initPGraphics();
+        frameRate(144);
     }
 
     @Override
     public void draw() {
         if(frameCount == 1 || gui.button("reset")){
+            initPGraphics();
             float initDiameter = gui.slider("init diam", 60);
             initCanvas(initDiameter);
         }
@@ -56,8 +54,21 @@ public class ReactionDiffusionCPU extends PApplet {
         image(pg, 0, 0);
     }
 
+    private void initPGraphics() {
+        PVector size = gui.plotXY("canvas size", 200);
+        if(w != size.x || h != size.y){
+            pg = createGraphics(floor(size.x), floor(size.y), P2D);
+            pg.beginDraw();
+            pg.endDraw();
+            pg.colorMode(RGB, 1, 1, 1, 1);
+        }
+        w = floor(size.x);
+        h = floor(size.y);
+    }
+
     private void updateParams() {
         gui.pushFolder("update");
+        gui.toggle("active");
         diffA = gui.slider("diff A", 1);
         diffB = gui.slider("diff B", 0.5f);
         feed = gui.slider("feed", 0.0545f);
@@ -68,7 +79,7 @@ public class ReactionDiffusionCPU extends PApplet {
 
     private void updateCanvas() {
         gui.pushFolder("update");
-        if (!gui.button("update once") && !gui.toggle("keep updating")) {
+        if (!gui.toggle("active")) {
             gui.popFolder();
             return;
         }
@@ -132,7 +143,7 @@ public class ReactionDiffusionCPU extends PApplet {
     }
 
     private void displayCanvasOnPGraphics(PGraphics pg) {
-        if (frameCount % gui.sliderInt("frame skip", 60) != 0) {
+        if (frameCount % gui.sliderInt("frame skip", 3, 1, 1000) != 0) {
             return;
         }
         pg.beginDraw();
@@ -146,6 +157,11 @@ public class ReactionDiffusionCPU extends PApplet {
             }
         }
         pg.updatePixels();
+        String displayShaderPath = "_23_08/RD/display_for_CPU.glsl";
+        PShader displayShader = ShaderReloader.getShader(displayShaderPath);
+        displayShader.set("source",  pg);
+        displayShader.set("gradient", gui.gradient("gradient"));
+        ShaderReloader.filter(displayShaderPath, pg);
         pg.endDraw();
     }
 
@@ -157,6 +173,7 @@ public class ReactionDiffusionCPU extends PApplet {
     }
 
     private void initCanvas(float size) {
+        canvas = new Cell[w][h];
         float rectX = w / 2f - size / 2;
         float rectY = h / 2f - size / 2;
         for (int x = 0; x < w; x++) {
@@ -166,7 +183,7 @@ public class ReactionDiffusionCPU extends PApplet {
 //                    cell.b = 1.f;
 //                }
                 if(pointRect(x,y,rectX,rectY,size,size)){
-                    cell.b = 1.f;
+                    cell.b = random(1);
                 }
                 canvas[x][y] = cell;
             }
