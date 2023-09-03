@@ -116,6 +116,7 @@ public class Utils {
                     while (sc.hasNextLine()) {
                         println(sc.nextLine());
                     }
+                    println("finished recording " + outMovieFilename);
                 }).start();
             } catch (IOException e) {
                 e.printStackTrace();
