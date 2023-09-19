@@ -72,7 +72,7 @@ public class Utils {
             }
         }
         PVector recordRectPos = PVector.add(gui.plotXY("rec/rect pos"), new PVector(pApplet.width/2f, pApplet.height/2f));
-        PVector recordRectSize = gui.plotXY("rec/rect size", 1000);
+        PVector recordRectSize = gui.plotXY("rec/rect size", pApplet.width, pApplet.height);
         int recordRectSizeX = floor(recordRectSize.x);
         int recordRectSizeY = floor(recordRectSize.y);
         // prevent resolutions odd numbers because ffmpeg can't work with them
