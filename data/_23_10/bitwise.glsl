@@ -8,18 +8,23 @@ uniform sampler2D texture;
 uniform vec2 resolution;
 uniform float time;
 
+float xor(ivec2 p){
+    int modulo = int(time);
+    return (p.y ^ p.x) % modulo;
+}
+
 float render(vec2 uv){
-    float reps = 256.;
-    vec2 p = abs(floor(uv * reps) + 0.5);
-    ivec2 ip = ivec2(p);
-    int xor = (ip.y ^ ip.x) % 7;
-    float result = 1. - min(1, xor);
+    float reps = 1024.;
+    ivec2 p = ivec2(abs(floor(uv * reps) + 0.5));
+    float xor = xor(p);
+    float result = clamp(xor, 0, 1);
     return result;
 }
 
 void main(){
     vec2 uv = (gl_FragCoord.xy-.5*resolution) / resolution.y;
-    vec3 fc = vec3(0.12);
-    fc += render(uv);
+    vec3 clrA = vec3(0.8);
+    vec3 clrB = vec3(0.1);
+    vec3 fc = mix(clrA, clrB, render(uv));
     gl_FragColor = vec4(fc, 1.);
 }

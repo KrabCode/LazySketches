@@ -10,7 +10,6 @@ import processing.opengl.PShader;
 public class BitwiseShader extends PApplet {
     LazyGui gui;
     PGraphics pg;
-    float t;
 
     public static void main(String[] args) {
         PApplet.main(java.lang.invoke.MethodHandles.lookup().lookupClass());
@@ -33,8 +32,10 @@ public class BitwiseShader extends PApplet {
     public void draw() {
         pg.beginDraw();
         String fragPath = "/_23_10/bitwise.glsl";
+        float t = gui.slider("time");
+        t += radians(gui.slider("time ++", 1));
+        gui.sliderSet("time", t);
         ShaderReloader.getShader(fragPath).set("time", t);
-        t += radians(gui.slider("time", 1));
         ShaderReloader.filter(fragPath);
         pg.endDraw();
         image(pg, 0, 0);
