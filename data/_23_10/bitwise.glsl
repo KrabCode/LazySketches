@@ -1,8 +1,9 @@
-#version 120
-#extension GL_EXT_gpu_shader4 : enable
+#version 460
 
 precision highp float;
 precision highp int;
+
+out vec4 fragColor;
 
 uniform sampler2D texture;
 uniform vec2 resolution;
@@ -26,5 +27,5 @@ void main(){
     vec3 clrA = vec3(0.8);
     vec3 clrB = vec3(0.1);
     vec3 fc = mix(clrA, clrB, render(uv));
-    gl_FragColor = vec4(fc, 1.);
+    fragColor = vec4(fc, 1.);
 }
