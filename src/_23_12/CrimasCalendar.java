@@ -55,13 +55,14 @@ public class CrimasCalendar extends PApplet{
         float rectSpan = gui.slider("rect span", 800);
         int length = dates.size();
         gui.pushFolder("rect style");
-        int rectFillDefault = gui.colorPicker("rect fill default", 0.1f).hex;
-        int rectFillSelected = gui.colorPicker("rect fill selected", 0.3f).hex;
-        int rectStrokeDefault = gui.colorPicker("rect stroke default", 0.8f).hex;
-        int rectStrokeSelected = gui.colorPicker("rect stroke selected", 1).hex;
-        float rectSize = gui.slider("rect size", 150);
-        float rectRound = gui.slider("rect round", 10);
-        float rectWeight = gui.slider("rect weight", 2);
+        int rectFillDefault = gui.colorPicker("fill default", 0.1f).hex;
+        int rectFillSelected = gui.colorPicker("fill selected", 0.3f).hex;
+        int rectStrokeDefault = gui.colorPicker("stroke default", 0.8f).hex;
+        int rectStrokeSelected = gui.colorPicker("stroke selected", 1).hex;
+        PVector rectPos = gui.plotXY("pos");
+        PVector rectSize = gui.plotXY("size", 150);
+        float rectRound = gui.slider("rounding", 10);
+        float rectWeight = gui.slider("weight", 2);
         gui.popFolder();
         for (int i = 0; i < length; i++) {
             pg.pushMatrix();
@@ -74,7 +75,7 @@ public class CrimasCalendar extends PApplet{
             pg.stroke(isSelected ? rectStrokeSelected : rectStrokeDefault);
             pg.strokeWeight(rectWeight);
             pg.rectMode(CENTER);
-            pg.rect(0, 0, rectSize, rectSize, rectRound);
+            pg.rect(rectPos.x, rectPos.y, rectSize.x, rectSize.y, rectRound);
             if(isSelected){
                 drawLineAnimation();
             }

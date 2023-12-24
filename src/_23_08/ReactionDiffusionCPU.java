@@ -1,6 +1,5 @@
 package _23_08;
 
-import _22_03.PostFxAdapter;
 import com.krab.lazy.LazyGui;
 import com.krab.lazy.ShaderReloader;
 import processing.core.PApplet;
@@ -14,11 +13,12 @@ public class ReactionDiffusionCPU extends PApplet {
     LazyGui gui;
     PGraphics pg;
 
-    float diffA, diffB, feed, kill, time;
+    float diffA, diffB, feed, kill;
 
     float scaleMult = 0.33f;
     int w;
     int h;
+    private float timeA, timeB;
 
     public static void main(String[] args) {
         PApplet.main(java.lang.invoke.MethodHandles.lookup().lookupClass());
@@ -71,9 +71,10 @@ public class ReactionDiffusionCPU extends PApplet {
         gui.toggle("active");
         diffA = gui.slider("diff A", 1);
         diffB = gui.slider("diff B", 0.5f);
-        feed = gui.slider("feed", 0.0545f);
-        kill = gui.slider("kill", 0.062f);
-        time = gui.slider("time", 1);
+        feed = gui.slider("feed", 0.061f);
+        kill = gui.slider("kill", 0.06264f);
+        timeA = gui.slider("time A", 0.5f);
+        timeB = gui.slider("time B", 1);
         gui.popFolder();
     }
 
@@ -117,9 +118,16 @@ public class ReactionDiffusionCPU extends PApplet {
                 getValueEdgeAwareB(x-1,y+1) * 0.05f +
                 getValueEdgeAwareB(x-1,y-1) * 0.05f;
         float ABB = localA * localB * localB;
+
+        float distanceFromCenter = norm(dist(x,y, w/2f, h/2f), 0, w/2f);
+        float angleFromCenter = norm(atan2(y - h/2f, x - w/2f), - PI, PI);
+        float angleFromCenterWave = 0.5f+0.5f*sin(3 * atan2(y - h/2f, x - w/2f));
+        float n = angleFromCenterWave; // can be any of the above
+        float deltaTime = lerp(timeA, timeB, n);
+
         Cell writeOnly = new Cell();
-        writeOnly.a = localA + (diffA * neighbourAverageA - ABB + feed * (1 - localA)) * time;
-        writeOnly.b = localB + (diffB * neighbourAverageB + ABB - (kill + feed) * localB) * time;
+        writeOnly.a = localA + (diffA * neighbourAverageA - ABB + feed * (1 - localA)) * deltaTime;
+        writeOnly.b = localB + (diffB * neighbourAverageB + ABB - (kill + feed) * localB) * deltaTime;
         writeOnly.constrain();
         return writeOnly;
     }
