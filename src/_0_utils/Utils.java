@@ -12,9 +12,7 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Scanner;
-import java.util.UUID;
+import java.util.*;
 
 import static processing.core.PApplet.*;
 import static processing.core.PConstants.CENTER;
@@ -236,5 +234,16 @@ public class Utils {
         surface.setSize(1000, app.displayHeight-500);
         surface.setLocation(PApplet.floor(app.displayWidth-app.width-75), 150);
         surface.setAlwaysOnTop(true);
+    }
+
+    private static final Map<String, PFont> fonts = new HashMap<>();
+    public static PFont getFont(PApplet app, String name, int size) {
+        size = max(1, size);
+        String key = name + size;
+        if(!fonts.containsKey(key)){
+            println("Loading font \""+name, size+"\"...");
+            fonts.put(key, app.createFont(name, size));
+        }
+        return fonts.get(key);
     }
 }
