@@ -30,7 +30,7 @@ public class Utils {
         return UUID.randomUUID().toString().replace("-", "").substring(0, 8);
     }
 
-    public static void record(PApplet pApplet, LazyGui gui){
+    public static void record(PApplet pApplet, LazyGui gui) {
         gui.sliderInt("rec/frame");
         gui.sliderSet("rec/frame", saveIndex);
         int recLengthDefault = 360;
@@ -54,12 +54,12 @@ public class Utils {
             gui.sliderSet("rec/frame", saveIndex);
         }
         String sketchMainClassName = pApplet.getClass().getSimpleName();
-        String recDir = pApplet.dataPath("video/" + sketchMainClassName +"_" + recordingId);
+        String recDir = pApplet.dataPath("video/" + sketchMainClassName + "_" + recordingId);
         String recDirAbsolute = Paths.get(recDir).toAbsolutePath().toString();
-        if(gui.button("rec/open folder")){
+        if (gui.button("rec/open folder")) {
             Desktop desktop = Desktop.getDesktop();
             File dir = new File(pApplet.dataPath("video"));
-            if(!dir.exists()){
+            if (!dir.exists()) {
                 //noinspection ResultOfMethodCallIgnored
                 dir.mkdirs();
             }
@@ -69,15 +69,15 @@ public class Utils {
                 e.printStackTrace();
             }
         }
-        PVector recordRectPos = PVector.add(gui.plotXY("rec/rect pos"), new PVector(pApplet.width/2f, pApplet.height/2f));
+        PVector recordRectPos = PVector.add(gui.plotXY("rec/rect pos"), new PVector(pApplet.width / 2f, pApplet.height / 2f));
         PVector recordRectSize = gui.plotXY("rec/rect size", pApplet.width, pApplet.height);
         int recordRectSizeX = floor(recordRectSize.x);
         int recordRectSizeY = floor(recordRectSize.y);
         // prevent resolutions odd numbers because ffmpeg can't work with them
-        if(recordRectSizeX % 2 != 0){
+        if (recordRectSizeX % 2 != 0) {
             recordRectSizeX += 1;
         }
-        if(recordRectSizeY % 2 != 0){
+        if (recordRectSizeY % 2 != 0) {
             recordRectSizeY += 1;
         }
         String recImageFormat = ".jpg";
@@ -89,7 +89,7 @@ public class Utils {
                     recordRectSizeX,
                     recordRectSizeY
             );
-            cutout.save( recDir + "/" + saveIndex++ + recImageFormat);
+            cutout.save(recDir + "/" + saveIndex++ + recImageFormat);
         }
         if (gui.toggle("rec/show rect")) {
             pApplet.pushStyle();
@@ -101,8 +101,8 @@ public class Utils {
         }
 
         int ffmpegFramerate = gui.sliderInt("rec/ffmpeg fps", 60, 1, Integer.MAX_VALUE);
-        if(gui.toggle("rec/ffmpeg", true) && recordingJustEnded){
-            String outMovieFilename = pApplet.dataPath("video/" + sketchMainClassName +"_" + recordingId);
+        if (gui.toggle("rec/ffmpeg", true) && recordingJustEnded) {
+            String outMovieFilename = pApplet.dataPath("video/" + sketchMainClassName + "_" + recordingId);
             String inputFormat = recDirAbsolute + "/%01d" + recImageFormat;
             String command = String.format("ffmpeg  -r %s -i %s -start_number_range 100 -an %s.mp4",
                     ffmpegFramerate, inputFormat, outMovieFilename);
@@ -126,16 +126,16 @@ public class Utils {
         int w = pApplet.displayWidth / 2;
         int h = pApplet.displayHeight;
         pApplet.getSurface().setSize(w, h);
-        pApplet.getSurface().setLocation(pApplet.displayWidth-w, 0);
-        if(onTop){
+        pApplet.getSurface().setLocation(pApplet.displayWidth - w, 0);
+        if (onTop) {
             pApplet.getSurface().setAlwaysOnTop(true);
         }
     }
 
     public static void shaderMove(PGraphics pg, LazyGui gui, String customPath) {
         String moveShaderPath = "_0_templates_glsl/move.glsl";
-        if(customPath!=null){
-            moveShaderPath=customPath;
+        if (customPath != null) {
+            moveShaderPath = customPath;
         }
         moveShaderTime += radians(gui.sliderInt("move/time speed", 1));
         PShader moveShader = ShaderReloader.getShader(moveShaderPath);
@@ -154,11 +154,12 @@ public class Utils {
 
     /**
      * Hue values loop at the 1 - 0 border both in the positive and negative direction, just like two pi loops back to 0.
+     *
      * @param hue value to transfer to the [0-1] range without changing apparent color value
      * @return hue in the range between 0-1
      */
-    public static float hueModulo(float hue){
-        if (hue < 0.f){
+    public static float hueModulo(float hue) {
+        if (hue < 0.f) {
             return hue % 1f + 1f;
         } else {
             return hue % 1f;
@@ -170,11 +171,11 @@ public class Utils {
         gui.pushFolder("fps");
         int frameRateStackSize = gui.sliderInt("framesToAverage", 256);
         frameRateHistory.add(app.frameRate);
-        if(frameRateHistory.size() > frameRateStackSize) {
+        if (frameRateHistory.size() > frameRateStackSize) {
             frameRateHistory.remove(0);
         }
         float frameRateAverage = 0;
-        if(!frameRateHistory.isEmpty()){
+        if (!frameRateHistory.isEmpty()) {
             float sum = 0;
             for (float n : frameRateHistory) {
                 sum += n;
@@ -183,7 +184,7 @@ public class Utils {
         }
         gui.sliderSet("frameRate avg", frameRateAverage);
         int frameRateTargetTemp = gui.sliderInt("frameRate target", frameRateTargetDefault);
-        if(frameRateTargetTemp != frameRateTargetLastFrame){
+        if (frameRateTargetTemp != frameRateTargetLastFrame) {
             app.frameRate(frameRateTargetTemp);
         }
         frameRateTargetLastFrame = frameRateTargetTemp;
@@ -193,57 +194,72 @@ public class Utils {
 
     public static void drawCustomCursor(PApplet app, LazyGui gui) {
         gui.pushFolder("custom cursor");
-        if(cursorImage == null){
+        if (cursorImage == null) {
             cursorImage = app.loadImage("recording_assets/cursor.png");
-            println("loaded cursor", cursorImage.width , cursorImage.height);
+            println("loaded cursor", cursorImage.width, cursorImage.height);
         }
-        if(gui.toggle("active")){
+        if (gui.toggle("active")) {
             app.noCursor();
             app.pushMatrix();
             app.translate(app.mouseX, app.mouseY);
             app.scale(gui.slider("cursor scale", 1));
             PickerColor cursorClickedColor = gui.colorPicker("cursor clicked", NormColorStore.color(1));
             PickerColor cursorIdleColor = gui.colorPicker("cursor idle", NormColorStore.color(1));
-            if(gui.toggle("circle")){
+            if (gui.toggle("circle")) {
                 float clickCircleSize = gui.slider("circle size", 100);
                 PickerColor circleColor = gui.colorPicker("circle color");
                 PVector circlePos = gui.plotXY("circle pos");
-                if(app.mousePressed){
+                if (app.mousePressed) {
                     app.fill(circleColor.hex);
                     app.noStroke();
                     app.ellipse(circlePos.x, circlePos.y, clickCircleSize, clickCircleSize);
                 }
             }
 
-            if(app.mousePressed){
+            if (app.mousePressed) {
                 app.tint(cursorClickedColor.hex);
-            }else{
+            } else {
                 app.tint(cursorIdleColor.hex);
             }
             app.image(cursorImage, 0, 0);
             app.noTint();
             app.popMatrix();
         }
-        if(gui.button("reset cursor")){
+        if (gui.button("reset cursor")) {
             app.cursor();
         }
         gui.popFolder();
     }
 
     public static void setupSurface(PApplet app, PSurface surface) {
-        surface.setSize(1000, app.displayHeight-500);
-        surface.setLocation(PApplet.floor(app.displayWidth-app.width-75), 150);
+        surface.setSize(1000, app.displayHeight - 500);
+        surface.setLocation(PApplet.floor(app.displayWidth - app.width - 75), 150);
         surface.setAlwaysOnTop(true);
     }
 
     private static final Map<String, PFont> fonts = new HashMap<>();
+
     public static PFont getFont(PApplet app, String name, int size) {
         size = max(1, size);
         String key = name + size;
-        if(!fonts.containsKey(key)){
-            println("Loading font \""+name, size+"\"...");
+        if (!fonts.containsKey(key)) {
+            println("Loading font \"" + name, size + "\"...");
             fonts.put(key, app.createFont(name, size));
         }
         return fonts.get(key);
+    }
+
+    static OpenSimplexNoise noise = new OpenSimplexNoise();
+
+    public static float noise(float x, float y) {
+        return (float) noise.eval(x, y);
+    }
+
+    public static float noise(float x, float y, float z) {
+        return (float) noise.eval(x, y, z);
+    }
+
+    public static float noise(float x, float y, float z, float w) {
+        return (float) noise.eval(x, y, z, w);
     }
 }
