@@ -2,10 +2,8 @@ package _24_01_genuary._01;
 
 import _0_utils.Utils;
 import com.krab.lazy.PickerColor;
-import processing.core.PApplet;
-import processing.core.PGraphics;
+import processing.core.*;
 import com.krab.lazy.LazyGui;
-import processing.core.PVector;
 
 import java.util.ArrayList;
 
@@ -16,6 +14,7 @@ public class ParticleLayers extends PApplet {
     LazyGui gui;
     PGraphics pg;
     ArrayList<Layer> layers = new ArrayList<>();
+    private PImage img;
 
     public static void main(String[] args) {
         PApplet.main(java.lang.invoke.MethodHandles.lookup().lookupClass());
@@ -24,14 +23,14 @@ public class ParticleLayers extends PApplet {
     @Override
     public void settings() {
 //        size(1080, 1080, P2D);
-        fullScreen(P2D);
+        fullScreen(P3D);
     }
 
     @Override
     public void setup() {
         gui = new LazyGui(this);
         colorMode(HSB, 1, 1, 1, 1);
-        pg = createGraphics(width, height, P2D);
+        pg = createGraphics(width, height, P3D);
         pg.beginDraw();
         pg.colorMode(HSB, 1, 1, 1, 1);
         pg.endDraw();
@@ -42,14 +41,106 @@ public class ParticleLayers extends PApplet {
     public void draw() {
         pg.beginDraw();
         drawBackground();
-        pg.translate(width * .5f, height * .5f);
         drawLayers();
+        drawDrosteBox();
         pg.endDraw();
         image(pg, 0, 0);
         Utils.record(this, gui);
         gui.draw();
     }
 
+    private void drawDrosteBox() {
+        gui.pushFolder("droste box");
+        PVector getPos = gui.plotXY("get pos", 0);
+        PVector getSize = gui.plotXY("get size", 1000);
+        float boxZ = gui.slider("box z", 0);
+        if(gui.toggle("show box")){
+            pg.push();
+            pg.stroke(1);
+            pg.noFill();
+            pg.rectMode(CORNER);
+            pg.translate(0, 0, boxZ);
+            pg.rect(getPos.x, getPos.y, getSize.x, getSize.y);
+            pg.pop();
+        }
+        pg.stroke(gui.colorPicker("stroke").hex);
+        pg.strokeWeight(gui.slider("stroke weight", 1));
+        float boxSize = gui.slider("box size", 1);
+        PVector boxRot = gui.plotXYZ("box rot", 0);
+        boxRot.add(gui.plotXYZ("box rot speed", 0));
+        gui.plotSet("box rot", boxRot);
+        PVector boxPos = gui.plotXYZ("box pos", 0);
+        pg.pushMatrix();
+        pg.translate(width * .5f, height * .5f);
+        pg.translate(boxPos.x, boxPos.y, boxPos.z);
+        pg.rotateX(boxRot.x);
+        pg.rotateY(boxRot.y);
+        pg.rotateZ(boxRot.z);
+        pg.scale(gui.slider("box scale", 1));
+        if(img != null){
+            texturedCube(img, boxSize);
+        }
+        pg.popMatrix();
+        img = pg.get(floor(getPos.x), floor(getPos.y), floor(getSize.x), floor(getSize.y));
+        pg.noTexture();
+        gui.popFolder();
+    }
+
+    // texturedCube() source:
+    // https://forum.processing.org/one/topic/box-multitextures.html
+    void texturedCube(PImage tex, float size) {
+        pg.beginShape(QUADS);
+        pg.texture(tex);
+        pg.textureMode(NORMAL);
+
+        // Given one texture and six faces, we can easily set up the uv coordinates
+        // such that four of the faces tile "perfectly" along either u or v, but the other
+        // two faces cannot be so aligned.  This code tiles "along" u, "around" the X/Z faces
+        // and fudges the Y faces - the Y faces are arbitrarily aligned such that a
+        // rotation along the X axis will put the "top" of either texture at the "top"
+        // of the screen, but is not otherwised aligned with the X/Z faces. (This
+        // just affects what type of symmetry is required if you need seamless
+        // tiling all the way around the cube)
+
+        // +Z "front" face
+        pg.vertex(-size, -size, +size, 0, 0);
+        pg.vertex(+size, -size, +size, 1, 0);
+        pg.vertex(+size, +size, +size, 1, 1);
+        pg.vertex(-size, +size, +size, 0, 1);
+
+        // -Z "back" face
+        pg.vertex(+size, -size, -size, 0, 0);
+        pg.vertex(-size, -size, -size, 1, 0);
+        pg.vertex(-size, +size, -size, 1, 1);
+        pg.vertex(+size, +size, -size, 0, 1);
+
+        // +Y "bottom" face
+        pg.vertex(-size, +size, +size, 0, 0);
+        pg.vertex(+size, +size, +size, 1, 0);
+        pg.vertex(+size, +size, -size, 1, 1);
+        pg.vertex(-size, +size, -size, 0, 1);
+
+        // -Y "top" face
+        pg.vertex(-size, -size, -size, 0, 0);
+        pg.vertex(+size, -size, -size, 1, 0);
+        pg.vertex(+size, -size, +size, 1, 1);
+        pg.vertex(-size, -size, +size, 0, 1);
+
+        // +X "right" face
+        pg.vertex(+size, -size, +size, 0, 0);
+        pg.vertex(+size, -size, -size, 1, 0);
+        pg.vertex(+size, +size, -size, 1, 1);
+        pg.vertex(+size, +size, +size, 0, 1);
+
+        // -X "left" face
+        pg.vertex(-size, -size, -size, 0, 0);
+        pg.vertex(-size, -size, +size, 1, 0);
+        pg.vertex(-size, +size, +size, 1, 1);
+        pg.vertex(-size, +size, -size, 0, 1);
+
+        pg.endShape();
+    }
+    
     private void drawBackground() {
         pg.fill(gui.colorPicker("background").hex);
         pg.noStroke();
@@ -59,6 +150,8 @@ public class ParticleLayers extends PApplet {
 
     private void drawLayers() {
         gui.pushFolder("layers");
+        pg.pushMatrix();
+        pg.translate(width * .5f, height * .5f);
         int layerCount = gui.sliderInt("count", 3, 1, 100);
         while (layers.size() < layerCount) {
             layers.add(new Layer());
@@ -76,12 +169,13 @@ public class ParticleLayers extends PApplet {
             float layerNorm = norm(layerIndex, 0, layerCount);
             pg.scale(layerNorm * scaleLayer + scaleBase);
             drawLayer(layers.get(layerIndex).particles, layerNorm);
-            if(reset){
+            if (reset) {
                 layers.get(layerIndex).particles.clear();
             }
             pg.popMatrix();
         }
         gui.popFolder();
+        pg.popMatrix();
     }
 
     private void drawLayer(ArrayList<P> ps, float layerNorm) {
@@ -94,7 +188,7 @@ public class ParticleLayers extends PApplet {
                         random(-spawnSize.x, spawnSize.x),
                         random(-spawnSize.y, spawnSize.y))
                 ));
-                if(ps.size() > pCount){
+                if (ps.size() > pCount) {
                     break;
                 }
             }
@@ -117,10 +211,10 @@ public class ParticleLayers extends PApplet {
             float lifeDuration = gui.slider("life duration", 60);
             float lifeFade = constrain(norm(frameCount, p.born, p.born + gui.slider("fade in", 60)), 0, 1);
             float fadeOutDuration = gui.slider("fade out", 60);
-            if(frameCount >= p.born + lifeDuration - fadeOutDuration){
-                lifeFade =  1 - constrain(norm(frameCount, p.born + lifeDuration - fadeOutDuration, p.born + lifeDuration), 0, 1);
+            if (frameCount >= p.born + lifeDuration - fadeOutDuration) {
+                lifeFade = 1 - constrain(norm(frameCount, p.born + lifeDuration - fadeOutDuration, p.born + lifeDuration), 0, 1);
             }
-            if(frameCount >= p.born + lifeDuration){
+            if (frameCount >= p.born + lifeDuration) {
                 toDestroy.add(p);
             }
             p.spd.add(new PVector(cos(angle), sin(angle)).mult(acc));
