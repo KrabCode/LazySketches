@@ -1,5 +1,6 @@
 package _24_02.business_card;
 
+import com.krab.lazy.LazyGuiSettings;
 import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PGraphics;
@@ -20,12 +21,12 @@ public class Card extends PApplet {
 
     @Override
     public void settings() {
-        size(2000, 1080, P2D);
+        size(1600, 800, P2D);
     }
 
     @Override
     public void setup() {
-        gui = new LazyGui(this);
+        gui = new LazyGui(this, new LazyGuiSettings().setCustomGuiDataFolder("..\\gui_data"));
         colorMode(HSB, 1, 1, 1, 1);
         pg = createGraphics(width, height, P2D);
         pg.beginDraw();
@@ -63,17 +64,30 @@ public class Card extends PApplet {
         card.clear();
         card.background(gui.colorPicker("background", color(0.5f,0,0)).hex);
         PVector pos = gui.plotXY("position");
-        for(int i = 0; i < gui.sliderInt("text count"); i++){
+        drawTexts(card);
+        card.endDraw();
+        pg.image(card, pos.x, pos.y);
+    }
+
+    private void drawTexts(PGraphics card) {
+        gui.pushFolder("texts");
+        int textCount = gui.sliderInt("text count", 1);
+        if(gui.button("add text")){
+            textCount++;
+        }
+        gui.sliderSet("text count", textCount);
+        int maxTexts = 50;
+        for(int i = 0; i < maxTexts; i++){
             gui.pushFolder("text " + i);
             card.pushMatrix();
             font(card);
             transform(card);
-            card.text(gui.text("text", "Hello, World!"), card.width, card.height);
+            String value = gui.text("", "text " + i);
+            card.text(value, card.width, card.height);
             card.popMatrix();
             gui.popFolder();
         }
-        card.endDraw();
-        pg.image(card, pos.x, pos.y);
+        gui.popFolder();
     }
 
     private void drawBackground() {
