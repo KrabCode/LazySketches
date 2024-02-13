@@ -50,10 +50,14 @@ public class Card extends PApplet {
         pg.beginDraw();
         drawBackground();
         gui.pushFolder("back");
-        drawCardFlat(cardBack);
+        if(gui.toggle("enabled", true)){
+            drawCardFlat(cardBack);
+        }
         gui.popFolder();
         gui.pushFolder("front");
-        drawCardFlat(cardFront);
+        if(gui.toggle("enabled")){
+            drawCardFlat(cardFront);
+        }
         gui.popFolder();
         pg.endDraw();
         image(pg, 0, 0);
@@ -79,10 +83,17 @@ public class Card extends PApplet {
         int maxTexts = 50;
         for(int i = 0; i < maxTexts; i++){
             gui.pushFolder("text " + i);
+            if(i >= textCount){
+                gui.hideCurrentFolder();
+                gui.popFolder();
+                continue;
+            }else{
+                gui.showCurrentFolder();
+            }
             card.pushMatrix();
+            String value = gui.text("label", "text " + i);
             font(card);
             transform(card);
-            String value = gui.text("", "text " + i);
             card.text(value, card.width, card.height);
             card.popMatrix();
             gui.popFolder();
