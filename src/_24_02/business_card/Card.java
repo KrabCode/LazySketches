@@ -7,13 +7,14 @@ import processing.core.PGraphics;
 import com.krab.lazy.LazyGui;
 import processing.core.PVector;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class Card extends PApplet {
     LazyGui gui;
     PGraphics pg;
-    PGraphics cardFront;
-    PGraphics cardBack;
+    List<PGraphics> cards = new ArrayList<PGraphics>();
 
     public static void main(String[] args) {
         PApplet.main(java.lang.invoke.MethodHandles.lookup().lookupClass());
@@ -33,71 +34,90 @@ public class Card extends PApplet {
         pg.colorMode(HSB, 1, 1, 1, 1);
         pg.endDraw();
 
-        cardBack = createGraphics(900, 550, P2D);
-        cardBack.beginDraw();
-        cardBack.colorMode(HSB, 1, 1, 1, 1);
-        cardBack.endDraw();
-
-        cardFront = createGraphics(900, 550, P2D);
-        cardFront.beginDraw();
-        cardFront.colorMode(HSB, 1, 1, 1, 1);
-        cardFront.endDraw();
-        frameRate(144);
+        cards.add(createGraphics(900, 500, P2D));
+        cards.add(createGraphics(900, 500, P2D));
     }
 
     @Override
     public void draw() {
         pg.beginDraw();
         drawBackground();
-        gui.pushFolder("card front");
-        if(gui.toggle("enabled", true)){
-            drawCard(cardFront);
+        for (int i = 0; i < cards.size(); i++) {
+            String cardName = i == 0 ? "front" : "back";
+            PGraphics card = cards.get(i);
+            gui.pushFolder("card " + cardName);
+            if (gui.toggle("enabled", true)) {
+                PVector pos = gui.plotXY("position");
+                PVector size = gui.plotXY("size", 900, 500);
+                int cardWidth = (int) size.x;
+                int cardHeight = (int) size.y;
+                if (cardWidth != card.width || cardHeight != card.height) {
+                    card = createGraphics(cardWidth, cardHeight, P2D);
+                    println("recreated card at " + cardWidth + "x" + cardHeight + " pixels.");
+                }
+                float scale = gui.slider("scale", 1);
+                card.beginDraw();
+                card.clear();
+                card.colorMode(HSB, 1, 1, 1, 1);
+                card.background(gui.colorPicker("background", color(0.5f, 0, 0)).hex);
+                drawTexts(card);
+                drawLines(card);
+                card.endDraw();
+                pg.pushMatrix();
+                pg.scale(scale);
+                pg.image(card, pos.x, pos.y);
+                pg.popMatrix();
+            }
+            gui.popFolder();
         }
-        gui.popFolder();
-
-        gui.pushFolder("card back");
-        if(gui.toggle("enabled", false)){
-            drawCard(cardBack);
-        }
-        gui.popFolder();
-
         pg.endDraw();
         image(pg, 0, 0);
     }
 
-    private void drawCard(PGraphics card) {
-        int cardWidth = gui.sliderInt("w", 900);
-        int cardHeight = gui.sliderInt("h", 550);
-        if(cardWidth != card.width || cardHeight != card.height){
-            card = createGraphics(cardWidth, cardHeight, P2D);
-            card.beginDraw();
-            card.colorMode(HSB, 1, 1, 1, 1);
-            card.endDraw();
+    private void drawLines(PGraphics card) {
+        gui.pushFolder("lines");
+        int lineCount = gui.sliderInt("line count", 0);
+        if (gui.button("add line")) {
+            lineCount++;
         }
-        card.beginDraw();
-        card.clear();
-        card.background(gui.colorPicker("background", color(0.5f,0,0)).hex);
-        PVector pos = gui.plotXY("position");
-        drawTexts(card);
-        card.endDraw();
-        pg.image(card, pos.x, pos.y);
+        gui.sliderSet("line count", lineCount);
+        int maxLines = 50;
+        for (int i = 0; i < maxLines; i++) {
+            gui.pushFolder("line " + i);
+            if (i >= lineCount) {
+                gui.hideCurrentFolder();
+                gui.popFolder();
+                continue;
+            } else {
+                gui.showCurrentFolder();
+            }
+            card.pushMatrix();
+            styleLine(card);
+            transform(card);
+            PVector a = gui.plotXY("a", 0.2f, 0.2f);
+            PVector b = gui.plotXY("b", 0.2f, 0.8f);
+            card.line(a.x * card.width, a.y * card.height, b.x * card.width, b.y * card.height);
+            card.popMatrix();
+            gui.popFolder();
+        }
+        gui.popFolder();
     }
 
     private void drawTexts(PGraphics card) {
         gui.pushFolder("texts");
-        int textCount = gui.sliderInt("text count", 1);
-        if(gui.button("add text")){
+        int textCount = gui.sliderInt("text count", 0);
+        if (gui.button("add text")) {
             textCount++;
         }
         gui.sliderSet("text count", textCount);
         int maxTexts = 50;
-        for(int i = 0; i < maxTexts; i++){
+        for (int i = 0; i < maxTexts; i++) {
             gui.pushFolder("text " + i);
-            if(i >= textCount){
+            if (i >= textCount) {
                 gui.hideCurrentFolder();
                 gui.popFolder();
                 continue;
-            }else{
+            } else {
                 gui.showCurrentFolder();
             }
             card.pushMatrix();
@@ -118,25 +138,17 @@ public class Card extends PApplet {
         pg.rect(0, 0, width, height);
     }
 
-
-    // Change position and rotation without creating a new gui folder.
+    // Change position
     void transform(PGraphics canvas) {
         PVector pos = gui.plotXY("pos", 0.2f);
         canvas.translate(pos.x * canvas.width, pos.y * canvas.height);
     }
 
     // Change drawing style
-    void style(PGraphics canvas) {
+    void styleLine(PGraphics canvas) {
         gui.pushFolder("style");
         canvas.strokeWeight(gui.slider("weight", 4));
         canvas.stroke(gui.colorPicker("stroke", color(0)).hex);
-        canvas.fill(gui.colorPicker("fill", color(200)).hex);
-        String rectMode = gui.radio("rect mode", new String[]{"center", "corner"});
-        if("center".equals(rectMode)){
-            canvas.rectMode(CENTER);
-        }else{
-            canvas.rectMode(CORNER);
-        }
         gui.popFolder();
     }
 
@@ -173,7 +185,7 @@ public class Card extends PApplet {
         String fontKey = fontName + " | size: " + size;
         if (!fontCache.containsKey(fontKey)) {
             PFont loadedFont = createFont(fontName, size);
-            if(fontCache.size() > 50){
+            if (fontCache.size() > 50) {
                 // trying to avoid running out of memory
                 fontCache.clear();
             }
