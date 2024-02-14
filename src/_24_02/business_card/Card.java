@@ -49,21 +49,31 @@ public class Card extends PApplet {
     public void draw() {
         pg.beginDraw();
         drawBackground();
-        gui.pushFolder("back");
+        gui.pushFolder("card front");
         if(gui.toggle("enabled", true)){
-            drawCardFlat(cardBack);
+            drawCard(cardFront);
         }
         gui.popFolder();
-        gui.pushFolder("front");
-        if(gui.toggle("enabled")){
-            drawCardFlat(cardFront);
+
+        gui.pushFolder("card back");
+        if(gui.toggle("enabled", false)){
+            drawCard(cardBack);
         }
         gui.popFolder();
+
         pg.endDraw();
         image(pg, 0, 0);
     }
 
-    private void drawCardFlat(PGraphics card) {
+    private void drawCard(PGraphics card) {
+        int cardWidth = gui.sliderInt("w", 900);
+        int cardHeight = gui.sliderInt("h", 550);
+        if(cardWidth != card.width || cardHeight != card.height){
+            card = createGraphics(cardWidth, cardHeight, P2D);
+            card.beginDraw();
+            card.colorMode(HSB, 1, 1, 1, 1);
+            card.endDraw();
+        }
         card.beginDraw();
         card.clear();
         card.background(gui.colorPicker("background", color(0.5f,0,0)).hex);
@@ -94,7 +104,7 @@ public class Card extends PApplet {
             String value = gui.text("label", "text " + i);
             font(card);
             transform(card);
-            card.text(value, card.width, card.height);
+            card.text(value, 0, 0);
             card.popMatrix();
             gui.popFolder();
         }
@@ -111,13 +121,8 @@ public class Card extends PApplet {
 
     // Change position and rotation without creating a new gui folder.
     void transform(PGraphics canvas) {
-        gui.pushFolder("transform");
-        PVector pos = gui.plotXY("pos");
-        canvas.translate(pos.x, pos.y);
-        canvas.rotate(gui.slider("rotate"));
-        PVector scale = gui.plotXY("scale", 1.00f);
-        canvas.scale(scale.x, scale.y);
-        gui.popFolder();
+        PVector pos = gui.plotXY("pos", 0.2f);
+        canvas.translate(pos.x * canvas.width, pos.y * canvas.height);
     }
 
     // Change drawing style
@@ -141,10 +146,10 @@ public class Card extends PApplet {
     HashMap<String, Integer> yAligns;
 
     // Select from lazily created, cached fonts.
-    void font(PGraphics cardBack) {
+    void font(PGraphics canvas) {
         gui.pushFolder("font");
-        cardBack.fill(gui.colorPicker("fill", color(0)).hex);
-        int size = gui.sliderInt("size", 64, 1, 256);
+        canvas.fill(gui.colorPicker("fill", color(0)).hex);
+        int size = max(1, floor(gui.slider("size", 0.1f) * canvas.height));
         if (xAligns == null || yAligns == null) {
             xAligns = new HashMap<String, Integer>();
             xAligns.put("left", LEFT);
@@ -157,25 +162,26 @@ public class Card extends PApplet {
         }
         String xAlignSelection = gui.radio("align x", xAligns.keySet().toArray(new String[0]), "center");
         String yAlignSelection = gui.radio("align y", yAligns.keySet().toArray(new String[0]), "center");
-        cardBack.textAlign(xAligns.get(xAlignSelection), yAligns.get(yAlignSelection));
+        canvas.textAlign(xAligns.get(xAlignSelection), yAligns.get(yAlignSelection));
         String fontName = gui.text("font name", "Arial").trim();
         if (gui.button("list fonts")) {
             String[] fonts = PFont.list();
             for (String font : fonts) {
-                println(font + "                 "); // some spaces to avoid copying newlines from the console
+                println(font + "       "); // some spaces to avoid copying newlines from the console
             }
         }
         String fontKey = fontName + " | size: " + size;
         if (!fontCache.containsKey(fontKey)) {
             PFont loadedFont = createFont(fontName, size);
             if(fontCache.size() > 50){
+                // trying to avoid running out of memory
                 fontCache.clear();
             }
             fontCache.put(fontKey, loadedFont);
             println("Loaded font: " + fontKey);
         }
         PFont cachedFont = fontCache.get(fontKey);
-        cardBack.textFont(cachedFont);
+        canvas.textFont(cachedFont);
         gui.popFolder();
     }
 
