@@ -813,11 +813,6 @@
         },
         {
           "className": "SaveItemNode",
-          "path": "saves/2",
-          "type": "TRANSIENT"
-        },
-        {
-          "className": "SaveItemNode",
           "path": "saves/auto",
           "type": "TRANSIENT"
         }
@@ -908,6 +903,7 @@
               "type": "VALUE"
             }
           ],
+          "window": {},
           "className": "PlotFolderNode",
           "path": "card front/position",
           "type": "FOLDER"
@@ -1103,6 +1099,7 @@
                           "type": "TRANSIENT"
                         }
                       ],
+                      "window": {},
                       "className": "RadioFolderNode",
                       "path": "card front/texts/text 0/font/align x",
                       "type": "FOLDER"
@@ -1145,6 +1142,7 @@
                       "type": "TRANSIENT"
                     }
                   ],
+                  "window": {},
                   "className": "FolderNode",
                   "path": "card front/texts/text 0/font",
                   "type": "FOLDER"
@@ -1173,11 +1171,13 @@
                       "type": "VALUE"
                     }
                   ],
+                  "window": {},
                   "className": "PlotFolderNode",
                   "path": "card front/texts/text 0/pos",
                   "type": "FOLDER"
                 }
               ],
+              "window": {},
               "className": "FolderNode",
               "path": "card front/texts/text 0",
               "type": "FOLDER"
@@ -1272,6 +1272,7 @@
                           "type": "TRANSIENT"
                         }
                       ],
+                      "window": {},
                       "className": "RadioFolderNode",
                       "path": "card front/texts/text 1/font/align x",
                       "type": "FOLDER"
@@ -1298,6 +1299,7 @@
                           "type": "TRANSIENT"
                         }
                       ],
+                      "window": {},
                       "className": "RadioFolderNode",
                       "path": "card front/texts/text 1/font/align y",
                       "type": "FOLDER"
@@ -1314,6 +1316,7 @@
                       "type": "TRANSIENT"
                     }
                   ],
+                  "window": {},
                   "className": "FolderNode",
                   "path": "card front/texts/text 1/font",
                   "type": "FOLDER"
@@ -1342,11 +1345,13 @@
                       "type": "VALUE"
                     }
                   ],
+                  "window": {},
                   "className": "PlotFolderNode",
                   "path": "card front/texts/text 1/pos",
                   "type": "FOLDER"
                 }
               ],
+              "window": {},
               "className": "FolderNode",
               "path": "card front/texts/text 1",
               "type": "FOLDER"
@@ -1511,11 +1516,13 @@
                       "type": "VALUE"
                     }
                   ],
+                  "window": {},
                   "className": "PlotFolderNode",
                   "path": "card front/texts/text 2/pos",
                   "type": "FOLDER"
                 }
               ],
+              "window": {},
               "className": "FolderNode",
               "path": "card front/texts/text 2",
               "type": "FOLDER"
@@ -1680,11 +1687,13 @@
                       "type": "VALUE"
                     }
                   ],
+                  "window": {},
                   "className": "PlotFolderNode",
                   "path": "card front/texts/text 3/pos",
                   "type": "FOLDER"
                 }
               ],
+              "window": {},
               "className": "FolderNode",
               "path": "card front/texts/text 3",
               "type": "FOLDER"
@@ -1821,6 +1830,7 @@
                       "type": "TRANSIENT"
                     }
                   ],
+                  "window": {},
                   "className": "FolderNode",
                   "path": "card front/texts/text 4/font",
                   "type": "FOLDER"
@@ -1849,16 +1859,19 @@
                       "type": "VALUE"
                     }
                   ],
+                  "window": {},
                   "className": "PlotFolderNode",
                   "path": "card front/texts/text 4/pos",
                   "type": "FOLDER"
                 }
               ],
+              "window": {},
               "className": "FolderNode",
               "path": "card front/texts/text 4",
               "type": "FOLDER"
             }
           ],
+          "window": {},
           "className": "FolderNode",
           "path": "card front/texts",
           "type": "FOLDER"
@@ -1969,6 +1982,7 @@
                       "type": "VALUE"
                     }
                   ],
+                  "window": {},
                   "className": "PlotFolderNode",
                   "path": "card front/lines/line 0/pos",
                   "type": "FOLDER"
@@ -1997,6 +2011,7 @@
                       "type": "VALUE"
                     }
                   ],
+                  "window": {},
                   "className": "PlotFolderNode",
                   "path": "card front/lines/line 0/a",
                   "type": "FOLDER"
@@ -2025,21 +2040,25 @@
                       "type": "VALUE"
                     }
                   ],
+                  "window": {},
                   "className": "PlotFolderNode",
                   "path": "card front/lines/line 0/b",
                   "type": "FOLDER"
                 }
               ],
+              "window": {},
               "className": "FolderNode",
               "path": "card front/lines/line 0",
               "type": "FOLDER"
             }
           ],
+          "window": {},
           "className": "FolderNode",
           "path": "card front/lines",
           "type": "FOLDER"
         }
       ],
+      "window": {},
       "className": "FolderNode",
       "path": "card front",
       "type": "FOLDER"
@@ -2076,6 +2095,7 @@
               "type": "VALUE"
             }
           ],
+          "window": {},
           "className": "PlotFolderNode",
           "path": "card back/position",
           "type": "FOLDER"
@@ -2313,6 +2333,7 @@
                       "type": "TRANSIENT"
                     }
                   ],
+                  "window": {},
                   "className": "FolderNode",
                   "path": "card back/texts/text 0/font",
                   "type": "FOLDER"
@@ -2341,16 +2362,19 @@
                       "type": "VALUE"
                     }
                   ],
+                  "window": {},
                   "className": "PlotFolderNode",
                   "path": "card back/texts/text 0/pos",
                   "type": "FOLDER"
                 }
               ],
+              "window": {},
               "className": "FolderNode",
               "path": "card back/texts/text 0",
               "type": "FOLDER"
             }
           ],
+          "window": {},
           "className": "FolderNode",
           "path": "card back/texts",
           "type": "FOLDER"
@@ -2376,6 +2400,7 @@
           "type": "FOLDER"
         }
       ],
+      "window": {},
       "className": "FolderNode",
       "path": "card back",
       "type": "FOLDER"
