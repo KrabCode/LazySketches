@@ -22,7 +22,8 @@ public class Card extends PApplet {
 
     @Override
     public void settings() {
-        size(1600, 800, P2D);
+//        size(1600, 800, P2D);
+        fullScreen(P2D, 3);
     }
 
     @Override
@@ -64,8 +65,9 @@ public class Card extends PApplet {
                 drawLines(card);
                 card.endDraw();
                 pg.pushMatrix();
+                pg.translate(pos.x, pos.y);
                 pg.scale(scale);
-                pg.image(card, pos.x, pos.y);
+                pg.image(card, 0, 0);
                 pg.popMatrix();
             }
             gui.popFolder();
@@ -94,8 +96,8 @@ public class Card extends PApplet {
             card.pushMatrix();
             styleLine(card);
             transform(card);
-            PVector a = gui.plotXY("a", 0.2f, 0.2f);
-            PVector b = gui.plotXY("b", 0.2f, 0.8f);
+            PVector a = gui.plotXY("a", 0.0f, 0);
+            PVector b = gui.plotXY("b", 0.2f, 0);
             card.line(a.x * card.width, a.y * card.height, b.x * card.width, b.y * card.height);
             card.popMatrix();
             gui.popFolder();
@@ -148,7 +150,7 @@ public class Card extends PApplet {
     void styleLine(PGraphics canvas) {
         gui.pushFolder("style");
         canvas.strokeWeight(gui.slider("weight", 4));
-        canvas.stroke(gui.colorPicker("stroke", color(0)).hex);
+        canvas.stroke(gui.colorPicker("stroke", color(1)).hex);
         gui.popFolder();
     }
 
@@ -160,7 +162,7 @@ public class Card extends PApplet {
     // Select from lazily created, cached fonts.
     void font(PGraphics canvas) {
         gui.pushFolder("font");
-        canvas.fill(gui.colorPicker("fill", color(0)).hex);
+        canvas.fill(gui.colorPicker("fill", color(1)).hex);
         int size = max(1, floor(gui.slider("size", 0.1f) * canvas.height));
         if (xAligns == null || yAligns == null) {
             xAligns = new HashMap<String, Integer>();
