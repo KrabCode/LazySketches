@@ -4,67 +4,81 @@ uniform sampler2D texture;
 uniform vec2 resolution;
 uniform float time;
 
-const int MAX_STEPS = 10;
-const float MAX_STEP_SIZE = 0.1;
-const float epsilon = 0.001;
+const float MAX_DIST = 80.;
+const float MAX_STEPS = 300;
+const float SURFACE_DIST = 0.001;
+
+float mapPlane(vec3 p, float y){
+    return abs(p.y - y);
+}
 
 float mapSphere(vec3 p, vec3 pos, float r){
     return length(p-pos) - r;
 }
 
 float map(vec3 p){
-    return mapSphere(p, vec3(0, 1, 1), 0.1);
+    return mapSphere(mod(p+0.5, 1.)-0.5, vec3(0), 0.075);
 }
 
 vec3 getNormal(vec3 p){
-    vec2 e = vec2(0.1, 0);
-    return normalize(vec3(
-    map(p+e.xyy) - map(p-e.xyy),
-    map(p+e.yxy) - map(p-e.yxy),
-    map(p+e.yyx) - map(p-e.yyx)
-    ));
+    const vec2 epsilon = vec2(.0001,0);
+    float d0 = map(p);
+    vec3 d1 = vec3(
+        map(p-epsilon.xyy),
+        map(p-epsilon.yxy),
+        map(p-epsilon.yyx));
+    return normalize(d0 - d1);
+}
+
+float rayMarch(vec3 rayOrigin, vec3 rayDirection){
+    float distanceFromOrigin = 0.;
+    for(int i = 0; i < MAX_STEPS; i++)
+    {
+        vec3 p = rayOrigin + distanceFromOrigin * rayDirection;
+        float distanceToScene = map(p);
+        distanceFromOrigin += distanceToScene;
+        bool foundSurface = distanceToScene < SURFACE_DIST;
+        bool exceededMax = distanceFromOrigin > MAX_DIST;
+        if (foundSurface || exceededMax){
+            break;
+        }
+    }
+    return distanceFromOrigin;
 }
 
 vec3 render(vec2 uv){
     vec3 col = vec3(0);
-    vec3 rayOrigin = vec3(0, 1, 0);
-    vec3 rayDir = normalize(vec3(uv.x, uv.y, 1.));
     float t = time;
-    vec3 lightDir = normalize(vec3(cos(t), sin(t), -1.));
-    float stepSize = MAX_STEP_SIZE;
-    vec3 p = rayOrigin;
-    bool hit = false;
-    float nearMissDistance = 1000.;
-    vec3 nearestMissPoint = rayOrigin;
-    for (int step = 0; step < MAX_STEPS; step++){
-        p += rayDir * stepSize;
-        float d = map(p);
-        stepSize = d*1.0;
-        if (d < epsilon){
-            vec3 normalDir = getNormal(p);
-            col = vec3(dot(normalDir, lightDir));
-            hit = true;
-            break;
-        }
-        if (d < nearMissDistance){
-            nearMissDistance = min(nearMissDistance, d);
-            nearestMissPoint = p;
-        }
+    vec3 rayOrigin = vec3(0.5+cos(t), 0.5+sin(t), t);
+    vec3 rayDirection = normalize(vec3(uv.x, uv.y, 1.));
+    vec3 lightDir = normalize(vec3(0.0, -0.2, -.5));
+    float distanceFromOrigin = rayMarch(rayOrigin, rayDirection);
+    vec3 p = rayOrigin + distanceFromOrigin * rayDirection;
+    vec3 normal = getNormal(p);
+    float light = dot(normal, lightDir);
+    if(distanceFromOrigin < MAX_DIST){
+        col = vec3(light);
+    }else{
+        col = vec3(0.1);
     }
-    if (!hit){
-        vec3 normalDir = getNormal(nearestMissPoint);
-        col = vec3(dot(normalDir, lightDir));
-    }
+
     return col;
 }
 
 vec3 aa(vec2 uv){
     vec3 col = vec3(0);
-    vec2 offset = vec2(1./resolution.x, 1./resolution.y);
-    return (render(uv + vec2(-offset.x, -offset.y)) +
-            render(uv + vec2(offset.x, -offset.y)) +
-            render(uv + vec2(-offset.x, offset.y)) +
-            render(uv + vec2(offset.x, offset.y))) / 4.0;
+    vec2 n = vec2(dFdxFine(uv.x), dFdxFine(uv.y));
+    return (
+         render(uv) +
+        (render(uv + vec2(+n.x, 0.)))   * 0.20 +
+        (render(uv + vec2(-n.x, 0.)))   * 0.20 +
+        (render(uv + vec2(0., -n.y)))   * 0.20 +
+        (render(uv + vec2(0., +n.y)))   * 0.20 +
+        (render(uv + vec2(+n.x, +n.y))) * 0.05 +
+        (render(uv + vec2(+n.x, -n.y))) * 0.05 +
+        (render(uv + vec2(-n.x, -n.y))) * 0.05 +
+        (render(uv + vec2(-n.x, +n.y))) * 0.05
+    ) / 2.;
 }
 
 void main(){

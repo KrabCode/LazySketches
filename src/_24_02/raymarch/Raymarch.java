@@ -19,22 +19,20 @@ public class Raymarch extends PApplet {
 
     @Override
     public void settings() {
-        fullScreen(P2D);
+        fullScreen(P2D, 2);
     }
 
     @Override
     public void setup() {
-        int padding = 0;
-        surface.setSize(600,480);
-        surface.setLocation(1920*2-600-padding, padding);
-        surface.setAlwaysOnTop(true);
+//        surface.setSize(w, h);
+//        surface.setLocation(2560-w, 0);
+//        surface.setAlwaysOnTop(true);
         gui = new LazyGui(this, new LazyGuiSettings()
                 .setCustomGuiDataFolder("..\\gui_data")
                 .setStartGuiHidden(true)
         );
         pg = createGraphics(width, height, P2D);
         colorMode(HSB, 1, 1, 1, 1);
-//        frameRate(60);
     }
 
     @Override
@@ -45,19 +43,14 @@ public class Raymarch extends PApplet {
         drawDarkFrame();
         pg.endDraw();
         image(pg, 0, 0);
-        gui.draw();
         Utils.record(this, gui);
     }
 
-    private void drawDarkFrame() {
-        gui.pushFolder("frame");
-        float weight = gui.slider("frame weight", 10);
-        pg.strokeWeight(weight * 2);
-        pg.stroke(gui.colorPicker("frame color", color(0.1f)).hex);
-        pg.noFill();
-        pg.rectMode(CENTER);
-        pg.rect(width / 2f, height / 2f, width, height);
-        gui.popFolder();
+    private void drawBackground() {
+        pg.fill(gui.colorPicker("background").hex);
+        pg.noStroke();
+        pg.rectMode(CORNER);
+        pg.rect(0, 0, width, height);
     }
 
     private void drawFilterShader() {
@@ -70,10 +63,14 @@ public class Raymarch extends PApplet {
         gui.popFolder();
     }
 
-    private void drawBackground() {
-        pg.fill(gui.colorPicker("background").hex);
-        pg.noStroke();
-        pg.rectMode(CORNER);
-        pg.rect(0, 0, width, height);
+    private void drawDarkFrame() {
+        gui.pushFolder("frame");
+        float weight = gui.slider("frame weight", 10);
+        pg.strokeWeight(weight * 2);
+        pg.stroke(gui.colorPicker("frame color", color(0.1f)).hex);
+        pg.noFill();
+        pg.rectMode(CENTER);
+        pg.rect(width / 2f, height / 2f, width, height);
+        gui.popFolder();
     }
 }

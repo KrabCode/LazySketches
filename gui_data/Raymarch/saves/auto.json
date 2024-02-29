@@ -869,14 +869,15 @@
     {
       "children": [
         {
-          "valueFloat": 1.0,
-          "currentPrecisionIndex": 4,
-          "valueFloatPrecision": 1.0,
+          "valueFloat": 0.1,
+          "currentPrecisionIndex": 3,
+          "valueFloatPrecision": 0.1,
           "className": "SliderNode",
           "path": "shader/shader time +",
           "type": "VALUE"
         }
       ],
+      "window": {},
       "className": "FolderNode",
       "path": "shader",
       "type": "FOLDER"
@@ -949,7 +950,7 @@
     {
       "children": [
         {
-          "valueFloat": 360.0,
+          "valueFloat": 1.0,
           "currentPrecisionIndex": 3,
           "valueFloatPrecision": 0.1,
           "className": "SliderIntNode",
@@ -1056,7 +1057,6 @@
           "type": "VALUE"
         }
       ],
-      "window": {},
       "className": "FolderNode",
       "path": "rec",
       "type": "FOLDER"
