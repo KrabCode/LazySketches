@@ -869,12 +869,6 @@
     {
       "children": [
         {
-          "stringValue": "..\\_24_02\\raymarch\\raymarch.glsl",
-          "className": "TextNode",
-          "path": "shader/path",
-          "type": "VALUE"
-        },
-        {
           "valueFloat": 1.0,
           "currentPrecisionIndex": 4,
           "valueFloatPrecision": 1.0,
@@ -955,7 +949,7 @@
     {
       "children": [
         {
-          "valueFloat": 1.0,
+          "valueFloat": 360.0,
           "currentPrecisionIndex": 3,
           "valueFloatPrecision": 0.1,
           "className": "SliderIntNode",
@@ -1062,6 +1056,7 @@
           "type": "VALUE"
         }
       ],
+      "window": {},
       "className": "FolderNode",
       "path": "rec",
       "type": "FOLDER"

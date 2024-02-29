@@ -1,3 +1,5 @@
+// to research: https://www.shadertoy.com/view/WsV3zz
+
 uniform sampler2D texture;
 uniform vec2 resolution;
 uniform float time;
