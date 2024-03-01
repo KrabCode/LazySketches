@@ -869,11 +869,19 @@
     {
       "children": [
         {
-          "valueFloat": 0.1,
+          "valueFloat": 278.0889,
           "currentPrecisionIndex": 3,
           "valueFloatPrecision": 0.1,
           "className": "SliderNode",
-          "path": "shader/shader time +",
+          "path": "shader/time",
+          "type": "VALUE"
+        },
+        {
+          "valueFloat": 0.38000035,
+          "currentPrecisionIndex": 2,
+          "valueFloatPrecision": 0.01,
+          "className": "SliderNode",
+          "path": "shader/time ++",
           "type": "VALUE"
         }
       ],
@@ -885,15 +893,15 @@
     {
       "children": [
         {
-          "valueFloat": 10.0,
-          "currentPrecisionIndex": 4,
-          "valueFloatPrecision": 1.0,
+          "valueFloat": 0.0,
+          "currentPrecisionIndex": 3,
+          "valueFloatPrecision": 0.1,
           "className": "SliderNode",
           "path": "frame/frame weight",
           "type": "VALUE"
         },
         {
-          "hexString": "FF191919",
+          "hexString": "FF282828",
           "children": [
             {
               "className": "ColorPreviewNode",
@@ -917,7 +925,7 @@
               "type": "VALUE"
             },
             {
-              "valueFloat": 0.09803922,
+              "valueFloat": 0.15686275,
               "currentPrecisionIndex": 2,
               "valueFloatPrecision": 0.01,
               "className": "BrightnessNode",

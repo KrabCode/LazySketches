@@ -57,8 +57,9 @@ public class Raymarch extends PApplet {
         gui.pushFolder("shader");
         String shaderPath = "_24_02\\raymarch.glsl";
         PShader shader = ShaderReloader.getShader(shaderPath);
-        t += radians(gui.slider("shader time +", 1));
-        shader.set("time", t);
+        float time = gui.slider("time", 0);
+        gui.sliderSet("time", time + radians(gui.slider("time ++", 0.1f)));
+        shader.set("time", time);
         ShaderReloader.filter(shaderPath, pg);
         gui.popFolder();
     }

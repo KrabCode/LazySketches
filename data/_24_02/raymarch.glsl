@@ -6,27 +6,43 @@ uniform float time;
 
 const float MAX_DIST = 80.;
 const float MAX_STEPS = 300;
-const float SURFACE_DIST = 0.001;
+const float SURFACE_DIST = 0.0001;
 
-float mapPlane(vec3 p, float y){
+float sdOctahedron( vec3 p, float s )
+{
+    p = abs(p);
+    float m = p.x+p.y+p.z-s;
+    vec3 q;
+    if( 3.0*p.x < m ) q = p.xyz;
+    else if( 3.0*p.y < m ) q = p.yzx;
+    else if( 3.0*p.z < m ) q = p.zxy;
+    else return m*0.57735027;
+
+    float k = clamp(0.5*(q.z-q.y+s),0.0,s);
+    return length(vec3(q.x,q.y-s+k,q.z-k));
+}
+
+float sdPlane(vec3 p, float y){
     return abs(p.y - y);
 }
 
-float mapSphere(vec3 p, vec3 pos, float r){
+float sdSphere(vec3 p, vec3 pos, float r){
     return length(p-pos) - r;
 }
 
-float map(vec3 p){
-    return mapSphere(mod(p+0.5, 1.)-0.5, vec3(0), 0.075);
+float sd(vec3 p){
+    vec3 prep = mod(p+0.5, 1.)-0.5;
+//    return sdSphere(prep, vec3(0), 0.075);
+    return sdOctahedron(prep, 0.25);
 }
 
 vec3 getNormal(vec3 p){
     const vec2 epsilon = vec2(.0001,0);
-    float d0 = map(p);
+    float d0 = sd(p);
     vec3 d1 = vec3(
-        map(p-epsilon.xyy),
-        map(p-epsilon.yxy),
-        map(p-epsilon.yyx));
+        sd(p-epsilon.xyy),
+        sd(p-epsilon.yxy),
+        sd(p-epsilon.yyx));
     return normalize(d0 - d1);
 }
 
@@ -35,7 +51,7 @@ float rayMarch(vec3 rayOrigin, vec3 rayDirection){
     for(int i = 0; i < MAX_STEPS; i++)
     {
         vec3 p = rayOrigin + distanceFromOrigin * rayDirection;
-        float distanceToScene = map(p);
+        float distanceToScene = sd(p);
         distanceFromOrigin += distanceToScene;
         bool foundSurface = distanceToScene < SURFACE_DIST;
         bool exceededMax = distanceFromOrigin > MAX_DIST;
@@ -49,9 +65,9 @@ float rayMarch(vec3 rayOrigin, vec3 rayDirection){
 vec3 render(vec2 uv){
     vec3 col = vec3(0);
     float t = time;
-    vec3 rayOrigin = vec3(0.5+cos(t), 0.5+sin(t), t);
+    vec3 rayOrigin = vec3(0.5, 0.5, t);
     vec3 rayDirection = normalize(vec3(uv.x, uv.y, 1.));
-    vec3 lightDir = normalize(vec3(0.0, -0.2, -.5));
+    vec3 lightDir = normalize(vec3(0.7, 0.5, -1.));
     float distanceFromOrigin = rayMarch(rayOrigin, rayDirection);
     vec3 p = rayOrigin + distanceFromOrigin * rayDirection;
     vec3 normal = getNormal(p);
@@ -59,7 +75,7 @@ vec3 render(vec2 uv){
     if(distanceFromOrigin < MAX_DIST){
         col = vec3(light);
     }else{
-        col = vec3(0.1);
+        col = vec3(0.0);
     }
 
     return col;
@@ -83,6 +99,7 @@ vec3 aa(vec2 uv){
 
 void main(){
     vec2 uv = (gl_FragCoord.xy - .5*resolution) / resolution.y;
-    vec3 aaCol = aa(uv);
-    gl_FragColor = vec4(aaCol, 1.);
+//    vec3 col = aa(uv);
+    vec3 col = render(uv);
+    gl_FragColor = vec4(col, 1.);
 }
