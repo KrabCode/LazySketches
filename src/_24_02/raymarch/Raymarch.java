@@ -11,7 +11,6 @@ import processing.opengl.PShader;
 public class Raymarch extends PApplet {
     LazyGui gui;
     PGraphics pg;
-    float t;
 
     public static void main(String[] args) {
         PApplet.main(java.lang.invoke.MethodHandles.lookup().lookupClass());

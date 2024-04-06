@@ -869,7 +869,7 @@
     {
       "children": [
         {
-          "valueFloat": 278.0889,
+          "valueFloat": 279.91666,
           "currentPrecisionIndex": 3,
           "valueFloatPrecision": 0.1,
           "className": "SliderNode",
@@ -885,7 +885,6 @@
           "type": "VALUE"
         }
       ],
-      "window": {},
       "className": "FolderNode",
       "path": "shader",
       "type": "FOLDER"
