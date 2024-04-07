@@ -137,19 +137,22 @@ public class Utils {
         if (customPath != null) {
             moveShaderPath = customPath;
         }
-        moveShaderTime += radians(gui.sliderInt("move/time speed", 1));
+        gui.pushFolder("move");
+        moveShaderTime += radians(gui.sliderInt("time speed", 1));
         PShader moveShader = ShaderReloader.getShader(moveShaderPath);
         moveShader.set("time", moveShaderTime);
-        moveShader.set("timeRadius", gui.slider("move/time radius", 1));
-        moveShader.set("baseAngle", gui.slider("move/base angle", 1));
-        moveShader.set("angleRange", gui.slider("move/angle range", 8));
-        moveShader.set("frequency", gui.slider("move/frequency", 2));
-        moveShader.set("octaves", gui.sliderInt("move/octaves", 4));
-        moveShader.set("freqMult", gui.slider("move/freqMult", 2.5f));
-        moveShader.set("ampMult", gui.slider("move/ampMult", 0.5f));
-        moveShader.set("strength", gui.slider("move/strength", 0.1f, 0, Float.MAX_VALUE));
-        moveShader.set("centerForce", gui.slider("move/center force"));
+        moveShader.set("timeRadius", gui.slider("time radius", 1));
+        moveShader.set("baseAngle", gui.slider("base angle", 1));
+        moveShader.set("angleRange", gui.slider("angle range", 8));
+        moveShader.set("frequency", gui.slider("frequency", 2));
+        moveShader.set("octaves", gui.sliderInt("octaves", 4));
+        moveShader.set("freqMult", gui.slider("freqMult", 2.5f));
+        moveShader.set("ampMult", gui.slider("ampMult", 0.5f));
+        moveShader.set("strength", gui.slider("strength", 0.1f, 0, Float.MAX_VALUE));
+        moveShader.set("centerForce", gui.slider("center force"));
+        moveShader.set("darken", gui.slider("darken"));
         ShaderReloader.filter(moveShaderPath, pg);
+        gui.popFolder();
     }
 
     /**

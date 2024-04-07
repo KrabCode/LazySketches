@@ -56,8 +56,9 @@ public class collab2 extends PApplet {
         frameRate(144);
         generateArrows(5);
     }
-
-    private void generateArrows(int rowCount) {
+    int rowCount;
+    private void generateArrows(int _rowCount) {
+        rowCount = _rowCount;
         arrows.clear();
         final int cols = 21;
         final float WIDTH = width / (float) (cols) / 2f;
@@ -170,6 +171,21 @@ public class collab2 extends PApplet {
                 rot_n_slide_floor = floor(rot_n_slide_anim_in / rot_n_slide_anim_len);
                 rot_n_slide_anim = easeInOutQuint(rot_n_slide_anim_in % rot_n_slide_anim_len);
             }
+            float push_anim_anim;
+            float push_anim_idx;
+            float push_anim_dir;
+            {
+                float push_anim_len = 5f;
+                float push_anim_t = t % push_anim_len;
+                push_anim_idx = floor(t/push_anim_len) % 2f;
+                float push_anim_key_a = 2.5f;
+                float push_anim_key_b = 5f;
+
+                float push_anim_driver = (push_anim_t - push_anim_key_a) / (push_anim_key_b - push_anim_key_a);
+                push_anim_anim =  easeInOutQuint(push_anim_driver);
+
+                push_anim_dir = push_anim_idx > 0 ? 1f : -1f;
+            }
 
 
             float arrw = curve_a * a.size.x;
@@ -188,7 +204,8 @@ public class collab2 extends PApplet {
 
             float speed = gui.slider("tx", 1) * slide_dir;
             speed += gui.slider("ex") * rot_n_slide_anim * slide_dir;
-            if (abs(curve_id % 2f) < EPSILON) {
+            int curve_mode = (int)(curve_id % 2f);
+            if (curve_mode == 0) {
                 a.pos.x += speed;
                 if (slide_dir < 0 && a.pos.x < -a.size.x) {
                     a.pos.x = width + a.size.x;
@@ -196,7 +213,14 @@ public class collab2 extends PApplet {
                     a.pos.x = -a.size.x;
                 }
             } else {
-                a.pos.y += speed;
+                float arr_row_idx = a.rowIndex;
+                float row_cnt = (float)rowCount;
+                if(arr_row_idx/row_cnt < 0.5f){
+                    push_anim_dir *= -1f;
+                }
+                if(push_anim_anim > 0.00001f){
+                    a.pos.y += push_anim_dir * push_anim_anim * 3f;
+                }
                 if (slide_dir < 0 && a.pos.y < -a.size.y) {
                     a.pos.y = height + a.size.y;
                 } else if (slide_dir > 0 && a.pos.y > height + a.size.y) {
