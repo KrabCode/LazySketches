@@ -808,6 +808,11 @@
         },
         {
           "className": "SaveItemNode",
+          "path": "saves/1",
+          "type": "TRANSIENT"
+        },
+        {
+          "className": "SaveItemNode",
           "path": "saves/auto",
           "type": "TRANSIENT"
         }
@@ -817,94 +822,21 @@
       "type": "FOLDER"
     },
     {
-      "hexString": "FF000000",
-      "children": [
-        {
-          "className": "ColorPreviewNode",
-          "path": "background/preview",
-          "type": "TRANSIENT"
-        },
-        {
-          "valueFloat": 0.0,
-          "currentPrecisionIndex": 2,
-          "valueFloatPrecision": 0.01,
-          "className": "HueNode",
-          "path": "background/hue",
-          "type": "VALUE"
-        },
-        {
-          "valueFloat": 0.0,
-          "currentPrecisionIndex": 2,
-          "valueFloatPrecision": 0.01,
-          "className": "SaturationNode",
-          "path": "background/sat",
-          "type": "VALUE"
-        },
-        {
-          "valueFloat": 0.0,
-          "currentPrecisionIndex": 2,
-          "valueFloatPrecision": 0.01,
-          "className": "BrightnessNode",
-          "path": "background/br",
-          "type": "VALUE"
-        },
-        {
-          "valueFloat": 1.0,
-          "currentPrecisionIndex": 2,
-          "valueFloatPrecision": 0.01,
-          "className": "AlphaNode",
-          "path": "background/alpha",
-          "type": "VALUE"
-        },
-        {
-          "className": "ColorPickerHexNode",
-          "path": "background/hex",
-          "type": "VALUE"
-        }
-      ],
-      "className": "ColorPickerFolderNode",
-      "path": "background",
-      "type": "FOLDER"
-    },
-    {
-      "children": [
-        {
-          "valueFloat": 279.91666,
-          "currentPrecisionIndex": 3,
-          "valueFloatPrecision": 0.1,
-          "className": "SliderNode",
-          "path": "shader/time",
-          "type": "VALUE"
-        },
-        {
-          "valueFloat": 0.38000035,
-          "currentPrecisionIndex": 2,
-          "valueFloatPrecision": 0.01,
-          "className": "SliderNode",
-          "path": "shader/time ++",
-          "type": "VALUE"
-        }
-      ],
-      "className": "FolderNode",
-      "path": "shader",
-      "type": "FOLDER"
-    },
-    {
       "children": [
         {
           "valueFloat": 0.0,
           "currentPrecisionIndex": 3,
           "valueFloatPrecision": 0.1,
           "className": "SliderNode",
-          "path": "frame/frame weight",
+          "path": "background/rotation",
           "type": "VALUE"
         },
         {
-          "hexString": "FF282828",
+          "hexString": "00010101",
           "children": [
             {
               "className": "ColorPreviewNode",
-              "path": "frame/frame color/preview",
+              "path": "background/stroke/preview",
               "type": "TRANSIENT"
             },
             {
@@ -912,7 +844,7 @@
               "currentPrecisionIndex": 2,
               "valueFloatPrecision": 0.01,
               "className": "HueNode",
-              "path": "frame/frame color/hue",
+              "path": "background/stroke/hue",
               "type": "VALUE"
             },
             {
@@ -920,38 +852,694 @@
               "currentPrecisionIndex": 2,
               "valueFloatPrecision": 0.01,
               "className": "SaturationNode",
-              "path": "frame/frame color/sat",
+              "path": "background/stroke/sat",
               "type": "VALUE"
             },
             {
-              "valueFloat": 0.15686275,
+              "valueFloat": 0.003921569,
               "currentPrecisionIndex": 2,
               "valueFloatPrecision": 0.01,
               "className": "BrightnessNode",
-              "path": "frame/frame color/br",
+              "path": "background/stroke/br",
               "type": "VALUE"
             },
             {
-              "valueFloat": 1.0,
+              "valueFloat": 0.0,
               "currentPrecisionIndex": 2,
               "valueFloatPrecision": 0.01,
               "className": "AlphaNode",
-              "path": "frame/frame color/alpha",
+              "path": "background/stroke/alpha",
               "type": "VALUE"
             },
             {
               "className": "ColorPickerHexNode",
-              "path": "frame/frame color/hex",
+              "path": "background/stroke/hex",
               "type": "VALUE"
             }
           ],
           "className": "ColorPickerFolderNode",
-          "path": "frame/frame color",
+          "path": "background/stroke",
+          "type": "FOLDER"
+        },
+        {
+          "valueFloat": 1.5,
+          "currentPrecisionIndex": 3,
+          "valueFloatPrecision": 0.1,
+          "className": "SliderNode",
+          "path": "background/weight",
+          "type": "VALUE"
+        },
+        {
+          "children": [
+            {
+              "className": "GradientPreviewNode",
+              "path": "background/texture/preview",
+              "type": "TRANSIENT"
+            },
+            {
+              "valueBoolean": true,
+              "className": "ToggleNode",
+              "path": "background/texture/vertical",
+              "type": "VALUE"
+            },
+            {
+              "valueBoolean": false,
+              "className": "ToggleNode",
+              "path": "background/texture/edge wrap",
+              "type": "VALUE"
+            },
+            {
+              "valueString": "mix",
+              "children": [
+                {
+                  "valueBoolean": true,
+                  "className": "RadioItemNode",
+                  "path": "background/texture/blend/mix",
+                  "type": "TRANSIENT"
+                },
+                {
+                  "valueBoolean": false,
+                  "className": "RadioItemNode",
+                  "path": "background/texture/blend/rgb",
+                  "type": "TRANSIENT"
+                },
+                {
+                  "valueBoolean": false,
+                  "className": "RadioItemNode",
+                  "path": "background/texture/blend/hsv",
+                  "type": "TRANSIENT"
+                }
+              ],
+              "className": "RadioFolderNode",
+              "path": "background/texture/blend",
+              "type": "FOLDER"
+            },
+            {
+              "valueFloat": 4.0,
+              "currentPrecisionIndex": 4,
+              "valueFloatPrecision": 1.0,
+              "className": "SliderIntNode",
+              "path": "background/texture/stops",
+              "type": "VALUE"
+            },
+            {
+              "hexString": "FFCEEDFF",
+              "children": [
+                {
+                  "className": "ColorPreviewNode",
+                  "path": "background/texture/A/preview",
+                  "type": "TRANSIENT"
+                },
+                {
+                  "valueFloat": 0.55999994,
+                  "currentPrecisionIndex": 2,
+                  "valueFloatPrecision": 0.01,
+                  "className": "HueNode",
+                  "path": "background/texture/A/hue",
+                  "type": "VALUE"
+                },
+                {
+                  "valueFloat": 0.19000006,
+                  "currentPrecisionIndex": 2,
+                  "valueFloatPrecision": 0.01,
+                  "className": "SaturationNode",
+                  "path": "background/texture/A/sat",
+                  "type": "VALUE"
+                },
+                {
+                  "valueFloat": 1.0,
+                  "currentPrecisionIndex": 2,
+                  "valueFloatPrecision": 0.01,
+                  "className": "BrightnessNode",
+                  "path": "background/texture/A/br",
+                  "type": "VALUE"
+                },
+                {
+                  "valueFloat": 1.0,
+                  "currentPrecisionIndex": 2,
+                  "valueFloatPrecision": 0.01,
+                  "className": "AlphaNode",
+                  "path": "background/texture/A/alpha",
+                  "type": "VALUE"
+                },
+                {
+                  "className": "ColorPickerHexNode",
+                  "path": "background/texture/A/hex",
+                  "type": "VALUE"
+                },
+                {
+                  "valueFloat": 0.25999996,
+                  "currentPrecisionIndex": 2,
+                  "valueFloatPrecision": 0.01,
+                  "className": "GradientColorStopPositionSlider",
+                  "path": "background/texture/A/pos",
+                  "type": "VALUE"
+                }
+              ],
+              "window": {},
+              "className": "GradientColorStopNode",
+              "path": "background/texture/A",
+              "type": "FOLDER"
+            },
+            {
+              "hexString": "00010101",
+              "children": [
+                {
+                  "className": "ColorPreviewNode",
+                  "path": "background/texture/B/preview",
+                  "type": "TRANSIENT"
+                },
+                {
+                  "valueFloat": 0.0,
+                  "currentPrecisionIndex": 2,
+                  "valueFloatPrecision": 0.01,
+                  "className": "HueNode",
+                  "path": "background/texture/B/hue",
+                  "type": "VALUE"
+                },
+                {
+                  "valueFloat": 0.0,
+                  "currentPrecisionIndex": 2,
+                  "valueFloatPrecision": 0.01,
+                  "className": "SaturationNode",
+                  "path": "background/texture/B/sat",
+                  "type": "VALUE"
+                },
+                {
+                  "valueFloat": 0.0,
+                  "currentPrecisionIndex": 2,
+                  "valueFloatPrecision": 0.01,
+                  "className": "BrightnessNode",
+                  "path": "background/texture/B/br",
+                  "type": "VALUE"
+                },
+                {
+                  "valueFloat": 0.0,
+                  "currentPrecisionIndex": 2,
+                  "valueFloatPrecision": 0.01,
+                  "className": "AlphaNode",
+                  "path": "background/texture/B/alpha",
+                  "type": "VALUE"
+                },
+                {
+                  "className": "ColorPickerHexNode",
+                  "path": "background/texture/B/hex",
+                  "type": "VALUE"
+                },
+                {
+                  "valueFloat": 0.29666674,
+                  "currentPrecisionIndex": 2,
+                  "valueFloatPrecision": 0.01,
+                  "className": "GradientColorStopPositionSlider",
+                  "path": "background/texture/B/pos",
+                  "type": "VALUE"
+                }
+              ],
+              "window": {},
+              "className": "GradientColorStopNode",
+              "path": "background/texture/B",
+              "type": "FOLDER"
+            },
+            {
+              "hexString": "00727272",
+              "children": [
+                {
+                  "className": "ColorPreviewNode",
+                  "path": "background/texture/C/preview",
+                  "type": "TRANSIENT"
+                },
+                {
+                  "valueFloat": 0.0,
+                  "currentPrecisionIndex": 2,
+                  "valueFloatPrecision": 0.01,
+                  "className": "HueNode",
+                  "path": "background/texture/C/hue",
+                  "type": "VALUE"
+                },
+                {
+                  "valueFloat": 0.0,
+                  "currentPrecisionIndex": 2,
+                  "valueFloatPrecision": 0.01,
+                  "className": "SaturationNode",
+                  "path": "background/texture/C/sat",
+                  "type": "VALUE"
+                },
+                {
+                  "valueFloat": 0.44705883,
+                  "currentPrecisionIndex": 2,
+                  "valueFloatPrecision": 0.01,
+                  "className": "BrightnessNode",
+                  "path": "background/texture/C/br",
+                  "type": "VALUE"
+                },
+                {
+                  "valueFloat": 0.0,
+                  "currentPrecisionIndex": 2,
+                  "valueFloatPrecision": 0.01,
+                  "className": "AlphaNode",
+                  "path": "background/texture/C/alpha",
+                  "type": "VALUE"
+                },
+                {
+                  "className": "ColorPickerHexNode",
+                  "path": "background/texture/C/hex",
+                  "type": "VALUE"
+                },
+                {
+                  "valueFloat": 0.6333334,
+                  "currentPrecisionIndex": 2,
+                  "valueFloatPrecision": 0.01,
+                  "className": "GradientColorStopPositionSlider",
+                  "path": "background/texture/C/pos",
+                  "type": "VALUE"
+                }
+              ],
+              "window": {},
+              "className": "GradientColorStopNode",
+              "path": "background/texture/C",
+              "type": "FOLDER"
+            },
+            {
+              "hexString": "00464646",
+              "children": [
+                {
+                  "className": "ColorPreviewNode",
+                  "path": "background/texture/D/preview",
+                  "type": "TRANSIENT"
+                },
+                {
+                  "valueFloat": 0.0,
+                  "currentPrecisionIndex": 2,
+                  "valueFloatPrecision": 0.01,
+                  "className": "HueNode",
+                  "path": "background/texture/D/hue",
+                  "type": "VALUE"
+                },
+                {
+                  "valueFloat": 0.0,
+                  "currentPrecisionIndex": 2,
+                  "valueFloatPrecision": 0.01,
+                  "className": "SaturationNode",
+                  "path": "background/texture/D/sat",
+                  "type": "VALUE"
+                },
+                {
+                  "valueFloat": 0.27450982,
+                  "currentPrecisionIndex": 2,
+                  "valueFloatPrecision": 0.01,
+                  "className": "BrightnessNode",
+                  "path": "background/texture/D/br",
+                  "type": "VALUE"
+                },
+                {
+                  "valueFloat": 0.0,
+                  "currentPrecisionIndex": 2,
+                  "valueFloatPrecision": 0.01,
+                  "className": "AlphaNode",
+                  "path": "background/texture/D/alpha",
+                  "type": "VALUE"
+                },
+                {
+                  "className": "ColorPickerHexNode",
+                  "path": "background/texture/D/hex",
+                  "type": "VALUE"
+                },
+                {
+                  "valueFloat": 0.94,
+                  "currentPrecisionIndex": 2,
+                  "valueFloatPrecision": 0.01,
+                  "className": "GradientColorStopPositionSlider",
+                  "path": "background/texture/D/pos",
+                  "type": "VALUE"
+                }
+              ],
+              "window": {},
+              "className": "GradientColorStopNode",
+              "path": "background/texture/D",
+              "type": "FOLDER"
+            },
+            {
+              "hexString": "FFCCCCCC",
+              "children": [
+                {
+                  "className": "ColorPreviewNode",
+                  "path": "background/texture/E/preview",
+                  "type": "TRANSIENT"
+                },
+                {
+                  "valueFloat": 0.0,
+                  "currentPrecisionIndex": 2,
+                  "valueFloatPrecision": 0.01,
+                  "className": "HueNode",
+                  "path": "background/texture/E/hue",
+                  "type": "VALUE"
+                },
+                {
+                  "valueFloat": 0.0,
+                  "currentPrecisionIndex": 2,
+                  "valueFloatPrecision": 0.01,
+                  "className": "SaturationNode",
+                  "path": "background/texture/E/sat",
+                  "type": "VALUE"
+                },
+                {
+                  "valueFloat": 0.8,
+                  "currentPrecisionIndex": 2,
+                  "valueFloatPrecision": 0.01,
+                  "className": "BrightnessNode",
+                  "path": "background/texture/E/br",
+                  "type": "VALUE"
+                },
+                {
+                  "valueFloat": 1.0,
+                  "currentPrecisionIndex": 2,
+                  "valueFloatPrecision": 0.01,
+                  "className": "AlphaNode",
+                  "path": "background/texture/E/alpha",
+                  "type": "VALUE"
+                },
+                {
+                  "className": "ColorPickerHexNode",
+                  "path": "background/texture/E/hex",
+                  "type": "VALUE"
+                },
+                {
+                  "valueFloat": 0.1,
+                  "currentPrecisionIndex": 2,
+                  "valueFloatPrecision": 0.01,
+                  "className": "GradientColorStopPositionSlider",
+                  "path": "background/texture/E/pos",
+                  "type": "VALUE"
+                }
+              ],
+              "className": "GradientColorStopNode",
+              "path": "background/texture/E",
+              "type": "FOLDER"
+            },
+            {
+              "hexString": "FF9F9F9F",
+              "children": [
+                {
+                  "className": "ColorPreviewNode",
+                  "path": "background/texture/F/preview",
+                  "type": "TRANSIENT"
+                },
+                {
+                  "valueFloat": 0.0,
+                  "currentPrecisionIndex": 2,
+                  "valueFloatPrecision": 0.01,
+                  "className": "HueNode",
+                  "path": "background/texture/F/hue",
+                  "type": "VALUE"
+                },
+                {
+                  "valueFloat": 0.0,
+                  "currentPrecisionIndex": 2,
+                  "valueFloatPrecision": 0.01,
+                  "className": "SaturationNode",
+                  "path": "background/texture/F/sat",
+                  "type": "VALUE"
+                },
+                {
+                  "valueFloat": 0.62352943,
+                  "currentPrecisionIndex": 2,
+                  "valueFloatPrecision": 0.01,
+                  "className": "BrightnessNode",
+                  "path": "background/texture/F/br",
+                  "type": "VALUE"
+                },
+                {
+                  "valueFloat": 1.0,
+                  "currentPrecisionIndex": 2,
+                  "valueFloatPrecision": 0.01,
+                  "className": "AlphaNode",
+                  "path": "background/texture/F/alpha",
+                  "type": "VALUE"
+                },
+                {
+                  "className": "ColorPickerHexNode",
+                  "path": "background/texture/F/hex",
+                  "type": "VALUE"
+                },
+                {
+                  "valueFloat": 0.36666667,
+                  "currentPrecisionIndex": 2,
+                  "valueFloatPrecision": 0.01,
+                  "className": "GradientColorStopPositionSlider",
+                  "path": "background/texture/F/pos",
+                  "type": "VALUE"
+                }
+              ],
+              "className": "GradientColorStopNode",
+              "path": "background/texture/F",
+              "type": "FOLDER"
+            },
+            {
+              "hexString": "FF727272",
+              "children": [
+                {
+                  "className": "ColorPreviewNode",
+                  "path": "background/texture/G/preview",
+                  "type": "TRANSIENT"
+                },
+                {
+                  "valueFloat": 0.0,
+                  "currentPrecisionIndex": 2,
+                  "valueFloatPrecision": 0.01,
+                  "className": "HueNode",
+                  "path": "background/texture/G/hue",
+                  "type": "VALUE"
+                },
+                {
+                  "valueFloat": 0.0,
+                  "currentPrecisionIndex": 2,
+                  "valueFloatPrecision": 0.01,
+                  "className": "SaturationNode",
+                  "path": "background/texture/G/sat",
+                  "type": "VALUE"
+                },
+                {
+                  "valueFloat": 0.44705883,
+                  "currentPrecisionIndex": 2,
+                  "valueFloatPrecision": 0.01,
+                  "className": "BrightnessNode",
+                  "path": "background/texture/G/br",
+                  "type": "VALUE"
+                },
+                {
+                  "valueFloat": 1.0,
+                  "currentPrecisionIndex": 2,
+                  "valueFloatPrecision": 0.01,
+                  "className": "AlphaNode",
+                  "path": "background/texture/G/alpha",
+                  "type": "VALUE"
+                },
+                {
+                  "className": "ColorPickerHexNode",
+                  "path": "background/texture/G/hex",
+                  "type": "VALUE"
+                },
+                {
+                  "valueFloat": 0.6333334,
+                  "currentPrecisionIndex": 2,
+                  "valueFloatPrecision": 0.01,
+                  "className": "GradientColorStopPositionSlider",
+                  "path": "background/texture/G/pos",
+                  "type": "VALUE"
+                }
+              ],
+              "className": "GradientColorStopNode",
+              "path": "background/texture/G",
+              "type": "FOLDER"
+            },
+            {
+              "hexString": "FF464646",
+              "children": [
+                {
+                  "className": "ColorPreviewNode",
+                  "path": "background/texture/H/preview",
+                  "type": "TRANSIENT"
+                },
+                {
+                  "valueFloat": 0.0,
+                  "currentPrecisionIndex": 2,
+                  "valueFloatPrecision": 0.01,
+                  "className": "HueNode",
+                  "path": "background/texture/H/hue",
+                  "type": "VALUE"
+                },
+                {
+                  "valueFloat": 0.0,
+                  "currentPrecisionIndex": 2,
+                  "valueFloatPrecision": 0.01,
+                  "className": "SaturationNode",
+                  "path": "background/texture/H/sat",
+                  "type": "VALUE"
+                },
+                {
+                  "valueFloat": 0.27450982,
+                  "currentPrecisionIndex": 2,
+                  "valueFloatPrecision": 0.01,
+                  "className": "BrightnessNode",
+                  "path": "background/texture/H/br",
+                  "type": "VALUE"
+                },
+                {
+                  "valueFloat": 1.0,
+                  "currentPrecisionIndex": 2,
+                  "valueFloatPrecision": 0.01,
+                  "className": "AlphaNode",
+                  "path": "background/texture/H/alpha",
+                  "type": "VALUE"
+                },
+                {
+                  "className": "ColorPickerHexNode",
+                  "path": "background/texture/H/hex",
+                  "type": "VALUE"
+                },
+                {
+                  "valueFloat": 0.90000004,
+                  "currentPrecisionIndex": 2,
+                  "valueFloatPrecision": 0.01,
+                  "className": "GradientColorStopPositionSlider",
+                  "path": "background/texture/H/pos",
+                  "type": "VALUE"
+                }
+              ],
+              "className": "GradientColorStopNode",
+              "path": "background/texture/H",
+              "type": "FOLDER"
+            }
+          ],
+          "window": {},
+          "className": "GradientPickerFolderNode",
+          "path": "background/texture",
+          "type": "FOLDER"
+        },
+        {
+          "valueFloat": 350.0,
+          "currentPrecisionIndex": 4,
+          "valueFloatPrecision": 1.0,
+          "className": "SliderIntNode",
+          "path": "background/vertices",
+          "type": "VALUE"
+        },
+        {
+          "valueFloat": 61.0,
+          "currentPrecisionIndex": 5,
+          "valueFloatPrecision": 10.0,
+          "className": "SliderNode",
+          "path": "background/radius",
+          "type": "VALUE"
+        }
+      ],
+      "window": {},
+      "className": "FolderNode",
+      "path": "background",
+      "type": "FOLDER"
+    },
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "valueFloat": 1.0199999,
+              "currentPrecisionIndex": 2,
+              "valueFloatPrecision": 0.01,
+              "className": "SliderIntNode",
+              "path": "shader/move/time speed",
+              "type": "VALUE"
+            },
+            {
+              "valueFloat": 0.28999978,
+              "currentPrecisionIndex": 2,
+              "valueFloatPrecision": 0.01,
+              "className": "SliderNode",
+              "path": "shader/move/time radius",
+              "type": "VALUE"
+            },
+            {
+              "valueFloat": 13.0,
+              "currentPrecisionIndex": 4,
+              "valueFloatPrecision": 1.0,
+              "className": "SliderNode",
+              "path": "shader/move/base angle",
+              "type": "VALUE"
+            },
+            {
+              "valueFloat": 7.2999916,
+              "currentPrecisionIndex": 3,
+              "valueFloatPrecision": 0.1,
+              "className": "SliderNode",
+              "path": "shader/move/angle range",
+              "type": "VALUE"
+            },
+            {
+              "valueFloat": 0.9099997,
+              "currentPrecisionIndex": 2,
+              "valueFloatPrecision": 0.01,
+              "className": "SliderNode",
+              "path": "shader/move/frequency",
+              "type": "VALUE"
+            },
+            {
+              "valueFloat": 4.1,
+              "currentPrecisionIndex": 3,
+              "valueFloatPrecision": 0.1,
+              "className": "SliderIntNode",
+              "path": "shader/move/octaves",
+              "type": "VALUE"
+            },
+            {
+              "valueFloat": 2.6000006,
+              "currentPrecisionIndex": 3,
+              "valueFloatPrecision": 0.1,
+              "className": "SliderNode",
+              "path": "shader/move/freqMult",
+              "type": "VALUE"
+            },
+            {
+              "valueFloat": 0.61100006,
+              "currentPrecisionIndex": 1,
+              "valueFloatPrecision": 0.001,
+              "className": "SliderNode",
+              "path": "shader/move/ampMult",
+              "type": "VALUE"
+            },
+            {
+              "valueFloat": 1.5299999,
+              "currentPrecisionIndex": 2,
+              "valueFloatPrecision": 0.01,
+              "className": "SliderNode",
+              "path": "shader/move/strength",
+              "type": "VALUE"
+            },
+            {
+              "valueFloat": -2.2400005,
+              "currentPrecisionIndex": 2,
+              "valueFloatPrecision": 0.01,
+              "className": "SliderNode",
+              "path": "shader/move/center force",
+              "type": "VALUE"
+            },
+            {
+              "valueFloat": 0.09699992,
+              "currentPrecisionIndex": 1,
+              "valueFloatPrecision": 0.001,
+              "className": "SliderNode",
+              "path": "shader/move/darken",
+              "type": "VALUE"
+            }
+          ],
+          "window": {},
+          "className": "FolderNode",
+          "path": "shader/move",
           "type": "FOLDER"
         }
       ],
+      "window": {},
       "className": "FolderNode",
-      "path": "frame",
+      "path": "shader",
       "type": "FOLDER"
     },
     {
@@ -1023,7 +1611,7 @@
               "type": "TRANSIENT"
             },
             {
-              "valueFloat": 600.0,
+              "valueFloat": 1080.0,
               "currentPrecisionIndex": 4,
               "valueFloatPrecision": 1.0,
               "className": "SliderNode",
@@ -1031,7 +1619,7 @@
               "type": "VALUE"
             },
             {
-              "valueFloat": 480.0,
+              "valueFloat": 1061.0,
               "currentPrecisionIndex": 4,
               "valueFloatPrecision": 1.0,
               "className": "SliderNode",
