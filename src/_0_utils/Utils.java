@@ -265,4 +265,19 @@ public class Utils {
     public static float noise(float x, float y, float z, float w) {
         return (float) noise.eval(x, y, z, w);
     }
+
+
+    @SuppressWarnings("CallToPrintStackTrace")
+    public static String localPath(String where) {
+        try {
+            String callingClassName = new Exception().getStackTrace()[1].getClassName();
+            Class<?> callingClass = Class.forName(callingClassName);
+            String packageName = callingClass.getPackage().getName().replaceAll("\\.", "\\\\");
+            String sketchPath = Paths.get("").toAbsolutePath().toString();
+            return sketchPath + "\\src\\" + packageName + "\\data\\" + where;
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }
