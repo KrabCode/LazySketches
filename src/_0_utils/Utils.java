@@ -267,6 +267,12 @@ public class Utils {
     }
 
 
+    /**
+     * Loads a resource from the sketch's data folder.
+     * Not from the global data folder, but from the data folder directly next to the main sketch java file.
+     * @param where path to the resource inside {current_sketch_folder}/data
+     * @return the absolute path to the resource
+     */
     @SuppressWarnings("CallToPrintStackTrace")
     public static String localPath(String where) {
         try {
