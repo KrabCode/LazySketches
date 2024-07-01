@@ -1,11 +1,10 @@
 package _24_06.standalone;
 
+import _0_utils.Utils;
 import com.krab.lazy.LazyGui;
 import com.krab.lazy.ShaderReloader;
 import processing.core.PApplet;
 import processing.core.PGraphics;
-
-import static _0_utils.Utils.localPath;
 
 public class Standalone extends PApplet {
 
@@ -30,8 +29,10 @@ public class Standalone extends PApplet {
     public void draw() {
         pg.beginDraw();
         pg.background(0);
-        String shaderPath = localPath("test.glsl");
-        ShaderReloader.getShader(shaderPath).set("time", millis() / 1000f);
+        float time = gui.slider("time");
+        gui.sliderSet("time", time + gui.slider("time ++"));
+        String shaderPath = Utils.dataPath("test.glsl");
+        ShaderReloader.getShader(shaderPath).set("time", time);
         ShaderReloader.filter(shaderPath, pg);
         pg.endDraw();
         clear();

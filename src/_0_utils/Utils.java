@@ -274,7 +274,7 @@ public class Utils {
      * @return the absolute path to the resource
      */
     @SuppressWarnings("CallToPrintStackTrace")
-    public static String localPath(String where) {
+    public static String dataPath(String where) {
         try {
             String callingClassName = new Exception().getStackTrace()[1].getClassName();
             Class<?> callingClass = Class.forName(callingClassName);

@@ -776,17 +776,116 @@
       "type": "FOLDER"
     },
     {
-      "valueFloat": 359.8013000488281,
-      "valueFloatPrecision": 0.1,
-      "className": "SliderNode",
-      "path": "time",
-      "type": "VALUE"
+      "children": [
+        {
+          "valueFloat": 1.0,
+          "valueFloatPrecision": 0.1,
+          "className": "SliderIntNode",
+          "path": "rec/frame",
+          "type": "VALUE"
+        },
+        {
+          "valueFloat": 360.0,
+          "valueFloatPrecision": 1.0,
+          "className": "SliderIntNode",
+          "path": "rec/length",
+          "type": "VALUE"
+        },
+        {
+          "className": "ButtonNode",
+          "path": "rec/start (ctrl + k)",
+          "type": "TRANSIENT"
+        },
+        {
+          "className": "ButtonNode",
+          "path": "rec/stop  (ctrl + l)",
+          "type": "TRANSIENT"
+        },
+        {
+          "className": "ButtonNode",
+          "path": "rec/open folder",
+          "type": "TRANSIENT"
+        },
+        {
+          "children": [
+            {
+              "className": "PlotDisplayNode",
+              "path": "rec/rect pos/_",
+              "type": "TRANSIENT"
+            },
+            {
+              "valueFloat": 0.0,
+              "valueFloatPrecision": 0.1,
+              "className": "SliderNode",
+              "path": "rec/rect pos/x",
+              "type": "VALUE"
+            },
+            {
+              "valueFloat": 0.0,
+              "valueFloatPrecision": 0.1,
+              "className": "SliderNode",
+              "path": "rec/rect pos/y",
+              "type": "VALUE"
+            }
+          ],
+          "className": "PlotFolderNode",
+          "path": "rec/rect pos",
+          "type": "FOLDER"
+        },
+        {
+          "children": [
+            {
+              "className": "PlotDisplayNode",
+              "path": "rec/rect size/_",
+              "type": "TRANSIENT"
+            },
+            {
+              "valueFloat": 800.0,
+              "valueFloatPrecision": 1.0,
+              "className": "SliderNode",
+              "path": "rec/rect size/x",
+              "type": "VALUE"
+            },
+            {
+              "valueFloat": 640.0,
+              "valueFloatPrecision": 1.0,
+              "className": "SliderNode",
+              "path": "rec/rect size/y",
+              "type": "VALUE"
+            }
+          ],
+          "className": "PlotFolderNode",
+          "path": "rec/rect size",
+          "type": "FOLDER"
+        },
+        {
+          "valueBoolean": false,
+          "className": "ToggleNode",
+          "path": "rec/show rect",
+          "type": "VALUE"
+        },
+        {
+          "valueFloat": 60.0,
+          "valueFloatPrecision": 1.0,
+          "className": "SliderIntNode",
+          "path": "rec/ffmpeg fps",
+          "type": "VALUE"
+        },
+        {
+          "valueBoolean": true,
+          "className": "ToggleNode",
+          "path": "rec/ffmpeg",
+          "type": "VALUE"
+        }
+      ],
+      "className": "FolderNode",
+      "path": "rec",
+      "type": "FOLDER"
     },
     {
-      "valueFloat": 0.0245005302131176,
-      "valueFloatPrecision": 0.001,
-      "className": "SliderNode",
-      "path": "time ++",
+      "stringValue": "60.05",
+      "className": "TextNode",
+      "path": "frameRate",
       "type": "VALUE"
     }
   ],
