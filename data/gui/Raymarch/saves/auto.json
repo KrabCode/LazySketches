@@ -883,7 +883,7 @@
       "type": "FOLDER"
     },
     {
-      "stringValue": "60.05",
+      "stringValue": "59.75",
       "className": "TextNode",
       "path": "frameRate",
       "type": "VALUE"
