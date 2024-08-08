@@ -827,7 +827,6 @@
           "type": "TRANSIENT"
         }
       ],
-      "window": {},
       "className": "SaveFolderNode",
       "path": "saves",
       "type": "FOLDER"
