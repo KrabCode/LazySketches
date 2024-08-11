@@ -132,6 +132,10 @@ public class Utils {
         }
     }
 
+    public static void shaderMove(PGraphics pg, LazyGui gui){
+        shaderMove(pg, gui, null);
+    }
+
     public static void shaderMove(PGraphics pg, LazyGui gui, String customPath) {
         String moveShaderPath = "_0_templates_glsl/move.glsl";
         if (customPath != null) {

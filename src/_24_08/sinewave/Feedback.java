@@ -1,7 +1,9 @@
 package _24_08.sinewave;
 
 import _0_utils.Utils;
+import _22_03.PostFxAdapter;
 import com.krab.lazy.LazyGui;
+import com.krab.lazy.PickerColor;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PVector;
@@ -36,6 +38,7 @@ public class Feedback extends PApplet {
         drawCanvasOnItselfRecursively();
         drawBackground();
         drawForegroundShape();
+        Utils.shaderMove(pg, gui);
         pg.endDraw();
         image(pg, 0, 0);
         // go one level up from the current folder
@@ -59,7 +62,7 @@ public class Feedback extends PApplet {
 
     void drawBackground() {
         gui.pushFolder("background");
-        if(frameCount % gui.sliderInt("frameSkip", 1) != 0) {
+        if(frameCount % max(1, gui.sliderInt("frameSkip", 1, 1, 100)) != 0) {
             gui.popFolder();
             return;
         }
@@ -100,8 +103,10 @@ public class Feedback extends PApplet {
 
         // change GUI values from code
         gui.sliderSet("rotation", rotationAngle + rotateDelta);
-        pg.fill(gui.colorPicker("fill", color(0x6B9BC1FF)).hex);
-        gui.colorPickerHueAdd("fill", radians(gui.slider("fill hue ++", 0.08f)));
+        float gradientNorm = gui.slider("gradient norm", 0.5f);
+        gui.sliderSet("gradient norm", gradientNorm + gui.slider("gradient speed", 0.01f));
+        PickerColor fill = gui.gradientColorAt("gradient", gradientNorm%1);
+        pg.fill(fill.hex);
 
         // plug GUI values directly into where they get consumed
         pg.stroke(gui.colorPicker("stroke", 0x1EFFFFFF).hex);
