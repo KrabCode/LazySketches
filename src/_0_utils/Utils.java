@@ -286,4 +286,41 @@ public class Utils {
             return null;
         }
     }
+    // font() related fields
+    private static PFont selectedFont;
+    private static HashMap<String, Integer> xAligns;
+    private static HashMap<String, Integer> yAligns;
+
+    public static void font(PApplet p, PGraphics pg, LazyGui gui) {
+        gui.pushFolder("font");
+        pg.fill(gui.colorPicker("fill", pg.color(255)).hex);
+        int size = gui.sliderInt("size", 64, 1, 256);
+        float leading = gui.slider("leading", 64);
+        if (xAligns == null || yAligns == null) {
+            xAligns = new HashMap<String, Integer>();
+            xAligns.put("left", LEFT);
+            xAligns.put("center", CENTER);
+            xAligns.put("right", RIGHT);
+            yAligns = new HashMap<String, Integer>();
+            yAligns.put("top", TOP);
+            yAligns.put("center", CENTER);
+            yAligns.put("bottom", BOTTOM);
+        }
+        String xAlignSelection = gui.radio("align x", xAligns.keySet().toArray(new String[0]), "center");
+        String yAlignSelection = gui.radio("align y", yAligns.keySet().toArray(new String[0]), "center");
+        pg.textAlign(xAligns.get(xAlignSelection), yAligns.get(yAlignSelection));
+        String fontName = gui.text("font name", "Arial").trim();
+        if (gui.button("list fonts")) {
+            String[] fonts = PFont.list();
+            for (String font : fonts) {
+                println(font + "                 "); // some spaces to avoid copying newlines from the console
+            }
+        }
+        if (selectedFont == null || gui.hasChanged("font name") || gui.hasChanged("size")) {
+            selectedFont = p.createFont(fontName, size);
+        }
+        pg.textFont(selectedFont);
+        pg.textLeading(leading);
+        gui.popFolder();
+    }
 }
