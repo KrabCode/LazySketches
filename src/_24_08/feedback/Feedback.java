@@ -1,7 +1,6 @@
-package _24_08.sinewave;
+package _24_08.feedback;
 
 import _0_utils.Utils;
-import _22_03.PostFxAdapter;
 import com.krab.lazy.LazyGui;
 import com.krab.lazy.PickerColor;
 import processing.core.PApplet;
