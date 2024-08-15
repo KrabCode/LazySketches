@@ -18,8 +18,7 @@ public class Feedback extends PApplet {
 
     @Override
     public void settings() {
-//        size(1200, 800, P2D);
-       fullScreen(P2D);
+        fullScreen(P2D);
         smooth(8);
     }
 
@@ -31,7 +30,6 @@ public class Feedback extends PApplet {
     }
 
     public void draw() {
-        // change the current GUI folder to go into the "scene" folder
         gui.pushFolder("scene");
         pg.beginDraw();
         drawCanvasOnItselfRecursively();
@@ -40,7 +38,6 @@ public class Feedback extends PApplet {
         Utils.shaderMove(pg, gui);
         pg.endDraw();
         image(pg, 0, 0);
-        // go one level up from the current folder
         gui.popFolder();
         Utils.record(this, gui);
     }
@@ -61,53 +58,46 @@ public class Feedback extends PApplet {
 
     void drawBackground() {
         gui.pushFolder("background");
-        if(frameCount % max(1, gui.sliderInt("frameSkip", 1, 1, 100)) != 0) {
+        if (frameCount % max(1, gui.sliderInt("frameSkip", 1, 1, 100)) != 0) {
             gui.popFolder();
             return;
         }
-        // the controls are ordered on screen by which gets called first
-        // so it can be better to ask for all the values before any if-statement branching
-        // because this way you can enforce any given ordering of them in the GUI
-        // and avoid control elements appearing suddenly at runtime at unexpected places
+
+
         int solidBackgroundColor = gui.colorPicker("solid", color(0xFF050705)).hex;
         PGraphics gradient = gui.gradient("gradient");
-        boolean useGradient = gui.toggle("solid\\/gradient"); // here '\\' escapes the '/' path separator
+        boolean useGradient = gui.toggle("solid\\/gradient");
         if (useGradient) {
             pg.imageMode(CORNER);
             pg.image(gradient, 0, 0);
         } else {
             if (gui.toggle("subtract", true)) {
-                pg.blendMode(SUBTRACT); // when fading out - subtract gets rid of traces that low alpha background doesn't
+                pg.blendMode(SUBTRACT);
             }
             pg.noStroke();
             pg.fill(solidBackgroundColor);
             pg.rectMode(CORNER);
             pg.rect(0, 0, width, height);
         }
-        pg.blendMode(BLEND); // reset blend mode to default
+        pg.blendMode(BLEND);
         gui.popFolder();
     }
 
     void drawForegroundShape() {
-        // go into a new "shape" folder nested inside the current folder
         gui.pushFolder("foreground");
 
-        // get various values from the GUI using a unique path and an optional default value parameter
         PVector pos = gui.plotXY("position");
         PVector size = gui.plotXY("size", 50, 125);
         float rotationAngle = gui.slider("rotation");
 
-        // enforce a minimum and maximum value on sliders with the min/max parameters (-10, 10) here
         float rotateDelta = gui.slider("rotation ++", -0.22f, -10, 10);
 
-        // change GUI values from code
         gui.sliderSet("rotation", rotationAngle + rotateDelta);
         float gradientNorm = gui.slider("gradient norm", 0.5f);
         gui.sliderSet("gradient norm", gradientNorm + gui.slider("gradient speed", 0.01f));
-        PickerColor fill = gui.gradientColorAt("gradient", gradientNorm%1);
+        PickerColor fill = gui.gradientColorAt("gradient", gradientNorm % 1);
         pg.fill(fill.hex);
 
-        // plug GUI values directly into where they get consumed
         pg.stroke(gui.colorPicker("stroke", 0x1EFFFFFF).hex);
         pg.strokeWeight(gui.slider("stroke weight", 1));
         if (gui.toggle("no stroke", true)) {
@@ -115,11 +105,10 @@ public class Feedback extends PApplet {
         }
 
         pg.pushMatrix();
-        pg.translate(width/2f, height/2f);
+        pg.translate(width / 2f, height / 2f);
         pg.translate(pos.x, pos.y);
         pg.rotate(radians(rotationAngle));
 
-        // pick one string from an array using gui.radio()
         String selectedShape = gui.radio("shape type", new String[]{"ellipse", "rectangle"});
         boolean shouldDrawEllipse = selectedShape.equals("ellipse");
         if (shouldDrawEllipse) {
@@ -128,14 +117,12 @@ public class Feedback extends PApplet {
             pg.rectMode(CENTER);
             pg.rect(0, 0, size.x, size.y);
         }
-        // go up one level back into the "scene" folder
         gui.popFolder();
 
         drawForegroundText();
 
         pg.popMatrix();
     }
-
 
 
     void drawForegroundText() {
@@ -148,7 +135,6 @@ public class Feedback extends PApplet {
         pg.text(labelText, 0, 0);
         gui.popFolder();
     }
-
 
 
 }
