@@ -21,7 +21,7 @@ public class Template extends PApplet {
     public void setup() {
         gui = new LazyGui(this);
         pg = createGraphics(width, height, P2D);
-        frameRate(144);
+        frameRate(60);
     }
 
     @Override

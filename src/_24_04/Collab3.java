@@ -1,7 +1,6 @@
 package _24_04;
 
 import _0_utils.Utils;
-import com.jogamp.opengl.util.glsl.ShaderProgram;
 import com.krab.lazy.LazyGui;
 import com.krab.lazy.ShaderReloader;
 import processing.core.PApplet;
