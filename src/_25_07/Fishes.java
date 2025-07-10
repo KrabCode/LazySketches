@@ -13,7 +13,7 @@ public class Fishes  extends PApplet {
     float gaussFishSize = 20;
     int fishCount = 50;
 
-    int dustCount = 100;
+    int dustCount = 300;
 
     Fish player;
     ArrayList<Fish> allFish = new ArrayList<Fish>();
@@ -22,8 +22,8 @@ public class Fishes  extends PApplet {
     private float t;
     LazyGui gui;
 
-    private ArrayList<Dust> dusts = new ArrayList<Dust>();
-    private ArrayList<Dust> dustsToRemove = new ArrayList<Dust>();
+    private final ArrayList<Dust> dusts = new ArrayList<Dust>();
+    private final ArrayList<Dust> dustsToRemove = new ArrayList<Dust>();
 
     public static void main(String[] args) {
         PApplet.main(java.lang.invoke.MethodHandles.lookup().lookupClass());
@@ -317,18 +317,18 @@ public class Fishes  extends PApplet {
             }
         }
 
-        void draw() {
-            float alpha;
-            if (lifeTime > 66) { // First third of the lifetime
-                alpha = map(lifeTime, lifeTimeTotal, lifeTimeTotal * 0.66f, 0, 255);
-            } else if (lifeTime < 33) { // Last third of the lifetime
-                alpha = map(lifeTime, lifeTimeTotal * 0.33f, 0, 255, 0);
-            } else { // Middle third of the lifetime
-                alpha = 255;
-            }
-            fill(128, alpha);
-            noStroke();
-            ellipse(pos.x, pos.y, radius * 2, radius * 2);
-        }
+void draw() {
+    float alpha;
+    if (lifeTime > lifeTimeTotal * 0.66f) { // First third of the lifetime
+        alpha = map(lifeTime, lifeTimeTotal, lifeTimeTotal * 0.66f, 0, 255);
+    } else if (lifeTime < lifeTimeTotal * 0.33f) { // Last third of the lifetime
+        alpha = map(lifeTime, lifeTimeTotal * 0.33f, 0, 255, 0);
+    } else { // Middle third of the lifetime
+        alpha = 255;
+    }
+    fill(128, alpha);
+    noStroke();
+    ellipse(pos.x, pos.y, radius * 2, radius * 2);
+}
     }
 }
