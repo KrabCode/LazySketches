@@ -7,12 +7,12 @@ import processing.core.PVector;
 import java.util.ArrayList;
 
 public class Fishes extends PApplet {
+    float minFishSize = 10;
+    float maxFishSize = 20;
+    int fishCount = 50;
+    final float animationSpeedIdle = radians(0.5f); // Speed of the fish animation
+    final float animationSpeedFast = radians(1f); // Speed of the fish animation
 
-    private int fishColorA = color(255, 0, 0);
-    private int fishColorB = color(0, 0, 255);
-    PVector target, cameraOffset;
-    float centerToCornerDistance;
-    float farSpawnDistance;
     float alignRadius = 200;
     float alignWeight = 0.5f;
     float centralizeRadius = 283;
@@ -23,48 +23,58 @@ public class Fishes extends PApplet {
     float maxSpeed = 16;
     float globalDrag = 0.95f;
     float randomMag = 0.5f;
-    float minFishSize = 10;
-    float maxFishSize = 20;
-    int fishCount = 50;
-    private final float animationSpeedIdle = radians(0.5f); // Speed of the fish animation
-    private final float animationSpeedFast = radians(1f); // Speed of the fish animation
-    int dustCount = 300;
 
+
+    final ArrayList<Dust> dusts = new ArrayList<Dust>();
+    final ArrayList<Dust> dustsToRemove = new ArrayList<Dust>();
+    int dustCount = 300;
+    float accSmoothing = 0.1f; // Smoothing factor for acceleration
+    float dustMinLife = 30; // Lifetime of dust particles
+    float dustMaxLife = 100; // Lifetime of dust particles
+    float dustMinSize = 2; // Minimum size of dust particles
+    float dustMaxSize = 5; // Maximum size of dust particles
+
+    float strokeWeightPlayer = 1;
+    float strokeWeightFish = 1;
+
+    int fishColorA, fishColorB, colorPlayer, dustColor;
+    PVector target, cameraOffset;
+    float centerToCornerDistance, farSpawnDistance;
     Fish player;
     ArrayList<Fish> allFish = new ArrayList<Fish>();
     ArrayList<Fish> fishToRemove = new ArrayList<Fish>();
-    private boolean targetActive = false;
-    LazyGui gui;
+    boolean targetActive = false;
 
-    private final ArrayList<Dust> dusts = new ArrayList<Dust>();
-    private final ArrayList<Dust> dustsToRemove = new ArrayList<Dust>();
-    private float accSmoothing = 0.1f; // Smoothing factor for acceleration
-    private float dustMinLife = 30; // Lifetime of dust particles
-    private float dustMaxLife = 100; // Lifetime of dust particles
-    private float dustMinSize = 2; // Minimum size of dust particles
-    private float dustMaxSize = 5; // Maximum size of dust particles
-
-
+//    LazyGui gui;
     public static void main(String[] args) {
         PApplet.main(java.lang.invoke.MethodHandles.lookup().lookupClass());
     }
 
-    public void settings() {
+    public void settings(){
         fullScreen(P3D);
         orientation(PORTRAIT);
     }
 
     public void setup() {
-        gui = new LazyGui(this);
+//        gui = new LazyGui(this);
         cameraOffset = new PVector(width * .5f, height * .5f);
         player = new Fish();
         player.pos = new PVector(0, 0);
         player.spd = new PVector(minSpeed, 0);
         allFish.add(player);
         target = new PVector(player.pos.x, player.pos.y);
+        initColorsWithoutGui();
+    }
+
+    void initColorsWithoutGui() {
+        colorPlayer = 0xFFFFFFFF;
+        fishColorA = 0xFF8364FF;
+        fishColorB = 0xFFFF9AA1;
+        dustColor = color(128, 128);
     }
 
     public void draw() {
+        drawSliders();
         centerToCornerDistance = dist(0, 0, width * .5f, height * .5f);
         farSpawnDistance = centerToCornerDistance * 1.5f;
         background(0);
@@ -78,10 +88,9 @@ public class Fishes extends PApplet {
         drawAllFish();
         spawnNewFish();
         popMatrix();
-        drawSliders();
     }
 
-    private void spawnNewDust() {
+    void spawnNewDust() {
         while (dusts.size() < dustCount) {
             // base location is the cameraOffset
             PVector pos = new PVector(
@@ -92,7 +101,7 @@ public class Fishes extends PApplet {
         }
     }
 
-    private void drawDust() {
+    void drawDust() {
         for (Dust d : dusts) {
             d.update();
             if (d.toRemove) {
@@ -105,13 +114,14 @@ public class Fishes extends PApplet {
         dustsToRemove.clear();
     }
 
-    private void spawnNewFish() {
+    void spawnNewFish() {
         while (allFish.size() < fishCount) {
             allFish.add(new Fish());
         }
     }
 
-    private void drawSliders() {
+    void drawSliders() {
+/*
         fishCount = gui.sliderInt("fish count", 50);
         minFishSize = gui.slider("min fish size", 10);
         maxFishSize = gui.slider("max fish size", 20);
@@ -131,15 +141,26 @@ public class Fishes extends PApplet {
         gui.popFolder();
 
         gui.pushFolder("dust");
-        dustCount = gui.sliderInt("dust count", 300);
-        dustMinLife = gui.slider("dust min life", 30, 0, 500);
-        dustMaxLife = gui.slider("dust max life", 100, 0, 500);
-        dustMinSize = gui.slider("dust min size", 2, 0, 10);
-        dustMaxSize = gui.slider("dust max size", 5, 0, 20);
+        dustCount = gui.sliderInt("dust count", dustCount);
+        dustMinLife = gui.slider("dust min life", dustMinLife, 0, 500);
+        dustMaxLife = gui.slider("dust max life",  dustMaxLife, 0, 500);
+        dustMinSize = gui.slider("dust min size", dustMinSize, 0, 10);
+        dustMaxSize = gui.slider("dust max size", dustMaxSize, 0, 20);
         gui.popFolder();
+
+        gui.pushFolder("visuals");
+        strokeWeightPlayer = gui.slider("weight (p)", 1);
+        strokeWeightFish = gui.slider("weight (f)", 1);
+        colorPlayer = gui.colorPicker("stroke (p)", color(255, 255, 255, 150)).hex;
+        fishColorA = gui.colorPicker("fish color A", fishColorA).hex; // 0xFF8364FF
+        fishColorB = gui.colorPicker("fish color B", fishColorB).hex; // 0xFFFF9AA1
+        dustColor = gui.colorPicker("dust color", color(128, 255)).hex;
+        gui.popFolder();
+        */
+
     }
 
-    private void drawAllFish() {
+    void drawAllFish() {
         noFill();
         for (Fish f : allFish) {
             f.update();
@@ -150,24 +171,20 @@ public class Fishes extends PApplet {
         allFish.removeAll(fishToRemove);
         fishToRemove.clear();
 
-        gui.pushFolder("visuals");
-        fishColorA = gui.colorPicker("fish color A", fishColorA).hex;
-        fishColorB = gui.colorPicker("fish color B", fishColorB).hex;
         for (Fish f : allFish) {
             if (f == player) {
-                stroke(gui.colorPicker("stroke (p)", color(255, 255, 255, 150)).hex);
-                strokeWeight(gui.slider("weight (p)", 1));
+                stroke(colorPlayer);
+                strokeWeight(strokeWeightPlayer);
             } else {
                 stroke(lerpColor(fishColorA, fishColorB, f.colorRand));
-                strokeWeight(gui.slider("weight (f)", 1));
+                strokeWeight(strokeWeightFish);
             }
             f.drawFish();
         }
-        gui.popFolder();
     }
 
-    private void updateMouseTarget() {
-        if (mousePressed && gui.isMouseOutsideGui()) {
+    void updateMouseTarget() {
+        if (mousePressed && isMouseOutsideGui()) {
             target.x = mouseX - cameraOffset.x;
             target.y = mouseY - cameraOffset.y;
             targetActive = true;
@@ -177,11 +194,16 @@ public class Fishes extends PApplet {
         }
     }
 
-    private float distanceFromPlayerToTarget() {
+    boolean isMouseOutsideGui(){
+        return true;
+        // gui.isMouseOutsideGui()
+    }
+
+    float distanceFromPlayerToTarget() {
         return (target.x == player.pos.x && target.y == player.pos.y) ? 0 : dist(player.pos.x, player.pos.y, target.x, target.y);
     }
 
-    private void movePlayerTowardsTarget() {
+    void movePlayerTowardsTarget() {
         if (!targetActive) {
             return;
         }
@@ -193,7 +215,7 @@ public class Fishes extends PApplet {
         player.pos.add(player.spd);
     }
 
-    private void moveCameraTowardsPlayer() {
+    void moveCameraTowardsPlayer() {
         // PVector playerCoordinateOnScreen = new PVector(modelX(player.pos.x, player.pos.y, player.pos.z), modelY(player.pos.x, player.pos.y, player.pos.z), 0);
         cameraOffset.x = lerp(cameraOffset.x, width * .5f - player.pos.x, .1f);
         cameraOffset.y = lerp(cameraOffset.y, height * .5f - player.pos.y, .1f);
@@ -233,29 +255,9 @@ public class Fishes extends PApplet {
             fishAvoidance.mult(0);
             int alignableFishCount = 0;
             int centralizableFishCount = 0;
-            gui.pushFolder("debug");
-            if (gui.toggle("avoid circle")) {
-                pushStyle();
-                stroke(255, 0, 0, 100);
-                noFill();
-                ellipse(pos.x, pos.y, avoidRadius * 2, avoidRadius * 2);
-                popStyle();
-            }
-            if (gui.toggle("align circle")) {
-                pushStyle();
-                stroke(0, 255, 0, 100);
-                noFill();
-                ellipse(pos.x, pos.y, alignRadius * 2, alignRadius * 2);
-                popStyle();
-            }
-            if (gui.toggle("centralize circle")) {
-                pushStyle();
-                stroke(0, 0, 255, 100);
-                noFill();
-                ellipse(pos.x, pos.y, centralizeRadius * 2, centralizeRadius * 2);
-                popStyle();
-            }
-            gui.popFolder();
+
+            debugFishRanges();
+
             for (Fish f : allFish) {
                 if (this.equals(f)) {
                     continue;
@@ -287,6 +289,53 @@ public class Fishes extends PApplet {
             PVector centralize = PVector.sub(centralizeAvgPos, pos).normalize().mult(centralizeWeight);
             PVector avoid = fishAvoidance.normalize().mult(avoidWeight);
             PVector align = PVector.sub(alignableAvgSpd, spd).normalize().mult(alignWeight);
+
+            debugFishVectors(avoid, align, centralize);
+
+            acc.add(centralize);
+            acc.add(avoid);
+            acc.add(align);
+            acc.add(PVector.random2D().mult(randomMag));
+            spd.lerp(acc, accSmoothing); // Smoothly apply acceleration to speed
+            spd.mult(globalDrag);
+            spd.limit(maxSpeed);
+            if (spd.mag() < minSpeed) {
+                spd.setMag(minSpeed);
+            }
+            pos.add(spd);
+        }
+
+        void debugFishRanges() {
+            /*
+            gui.pushFolder("debug");
+            if (gui.toggle("avoid circle")) {
+                pushStyle();
+                stroke(255, 0, 0, 100);
+                noFill();
+                ellipse(pos.x, pos.y, avoidRadius * 2, avoidRadius * 2);
+                popStyle();
+            }
+            if (gui.toggle("align circle")) {
+                pushStyle();
+                stroke(0, 255, 0, 100);
+                noFill();
+                ellipse(pos.x, pos.y, alignRadius * 2, alignRadius * 2);
+                popStyle();
+            }
+            if (gui.toggle("centralize circle")) {
+                pushStyle();
+                stroke(0, 0, 255, 100);
+                noFill();
+                ellipse(pos.x, pos.y, centralizeRadius * 2, centralizeRadius * 2);
+                popStyle();
+            }
+            gui.popFolder();
+            */
+
+        }
+
+        void debugFishVectors(PVector avoid, PVector align, PVector centralize) {
+            /*
             gui.pushFolder("debug");
             pushStyle();
             pushMatrix();
@@ -307,24 +356,14 @@ public class Fishes extends PApplet {
             popMatrix();
             popStyle();
             gui.popFolder();
-            acc.add(centralize);
-            acc.add(avoid);
-            acc.add(align);
-            acc.add(PVector.random2D().mult(randomMag));
-            spd.lerp(acc, accSmoothing); // Smoothly apply acceleration to speed
-            spd.mult(globalDrag);
-            spd.limit(maxSpeed);
-            if (spd.mag() < minSpeed) {
-                spd.setMag(minSpeed);
-            }
-            pos.add(spd);
+            */
         }
 
-        private boolean isPlayer() {
+        boolean isPlayer() {
             return this == player;
         }
 
-        private void drawFish() {
+        void drawFish() {
 
             pushMatrix();
             translate(pos.x, pos.y);
@@ -350,7 +389,7 @@ public class Fishes extends PApplet {
             popMatrix();
         }
 
-        private boolean isBehindPlayer(PVector pos) {
+        boolean isBehindPlayer(PVector pos) {
             float angleToPlayer = atan2(player.pos.y - pos.y, player.pos.x - pos.x);
             float normalizedAngleToPlayer = normalizeAngle(angleToPlayer, PI);
             float normalizedPlayerHeading = normalizeAngle(player.spd.heading(), PI);
@@ -358,7 +397,7 @@ public class Fishes extends PApplet {
             return abs(angleToPlayerVsHeading) < HALF_PI;
         }
 
-        private PVector randomPositionOffscreenInFrontOfPlayer() {
+        PVector randomPositionOffscreenInFrontOfPlayer() {
             float angle = random(player.spd.heading() - HALF_PI, player.spd.heading() + HALF_PI);
             float distance = random(centerToCornerDistance, farSpawnDistance);
             return new PVector(player.pos.x + distance * cos(angle), player.pos.y + distance * sin(angle));
@@ -410,11 +449,11 @@ public class Fishes extends PApplet {
             } else { // Middle third of the lifetime
                 alpha = 255;
             }
-            gui.pushFolder("dust");
-            fill(gui.colorPicker("color", 128).hex, alpha);
+
+            fill(dustColor, alpha);
             noStroke();
             ellipse(pos.x, pos.y, radius * 2, radius * 2);
-            gui.popFolder();
+
         }
     }
 }

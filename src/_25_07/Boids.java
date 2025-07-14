@@ -1,6 +1,8 @@
 package _25_07;
 
+import com.krab.lazy.ColorPoint;
 import com.krab.lazy.LazyGui;
+import com.krab.lazy.PickerColor;
 import processing.core.*;
 
 import java.util.ArrayList;
@@ -19,6 +21,7 @@ public class Boids extends PApplet {
     List<Dust> dusts = new ArrayList<>();
     int dustRate = 10; // particles per frame
     private float maxSpeed = 3;
+    private float minSpeed = 1;
     private float alignRange, cohRange, sepRange;
     private float alignWeight, cohWeight, sepWeight;
 
@@ -28,18 +31,20 @@ public class Boids extends PApplet {
 
     @Override
     public void settings() {
-        size(800, 800, P2D);
+//        size(800, 800, P2D);
+        fullScreen(P2D);
+        smooth(8);
     }
 
     @Override
     public void setup() {
         gui = new LazyGui(this);
         pg = createGraphics(width, height, P2D);
-        frameRate(60);
+        frameRate(144);
         boids.clear();
         player = new Boid(width/2f, height/2f, true);
-        boids.add(player); // Add player first
-        for (int i = 1; i < boidCount; i++) {
+        boids.add(0, player);
+        for (int i = 1; i < boidCount / 2f; i++) {
             boids.add(new Boid(random(width), random(height), false));
         }
     }
@@ -60,7 +65,7 @@ public class Boids extends PApplet {
         updateBoidPopulation();
         for (Boid b : boids) {
             b.update();
-            b.display(pg);
+            b.display();
         }
         pg.popMatrix();
         pg.endDraw();
@@ -75,6 +80,7 @@ public class Boids extends PApplet {
         dustRate = gui.sliderInt("dust rate", dustRate, 0, 100);
         trailDepth = gui.sliderInt("trail length", trailDepth, 1, 200);
         maxSpeed = gui.slider("max speed", maxSpeed);
+        minSpeed = gui.slider("min speed", minSpeed);
         gui.popFolder();
 
         gui.pushFolder("forces");
@@ -88,31 +94,30 @@ public class Boids extends PApplet {
     }
 
     private void updateBoidPopulation() {
-        // despawn boids that are too far behind the player
-        float margin = 200;
+        // Unified spawn/despawn distance logic
+        float centerToCorner = dist(0, 0, width/2f, height/2f);
+        float spawnDistMin = gui.slider("global/spawn dist min", 1.5f);
+        float spawnDistMax = gui.slider("global/spawn dist max", 2.0f);
+        float despawnDist = gui.slider("global/despawn dist", 1.6f);
+        float spread = radians(gui.slider("global/spawn spread °", 60));
         float playerAngle = player.spd.heading();
         PVector playerDir = PVector.fromAngle(playerAngle);
+        float despawnRadius = despawnDist * centerToCorner;
+        // Despawn boids outside despawnRadius behind player
         for (int i = boids.size() - 1; i >= 1; i--) { // skip player at index 0
             Boid b = boids.get(i);
-            // Vector from player to boid
             PVector toBoid = PVector.sub(b.pos, player.pos);
-            // Project onto player direction
             float forwardDist = toBoid.dot(playerDir);
-            float sideDist = toBoid.mag();
-            // Only remove if behind the player and off screen
-            if (forwardDist < -margin &&
-                    (abs(b.pos.x - player.pos.x) > width / 2f + margin ||
-                            abs(b.pos.y - player.pos.y) > height / 2f + margin)) {
+            float distFromPlayer = toBoid.mag();
+            if (forwardDist < 0 && distFromPlayer > despawnRadius) {
                 boids.remove(i);
             }
         }
         // Spawn new boids in direction of player travel to maintain count
         while (boids.size() < boidCount) {
             float angle = player.spd.heading();
-            float dist = max(width, height) * 0.6f;
-            float spread = radians(60);
+            float spawnDist = random(spawnDistMin, spawnDistMax) * centerToCorner;
             float spawnAngle = angle + random(-spread / 2, spread / 2);
-            float spawnDist = dist + random(-50, 50);
             float x = player.pos.x + cos(spawnAngle) * spawnDist;
             float y = player.pos.y + sin(spawnAngle) * spawnDist;
             boids.add(new Boid(x, y, false));
@@ -132,16 +137,20 @@ public class Boids extends PApplet {
     }
 
     private void drawBackground() {
-        pg.fill(gui.colorPicker("background").hex);
+        pg.fill(gui.colorPicker("global/background").hex);
         pg.noStroke();
         pg.rectMode(CORNER);
         pg.rect(0, 0, width, height);
     }
 
     class Boid {
+        private int clr;
         PVector pos, spd;
         boolean debug;
         ArrayList<PVector> trail = new ArrayList<>();
+        private final int alignClr = color(0, 200, 255, 200);
+        private final int cohClr = color(0, 255, 0, 200);
+        private final int sepClr = color(255, 0, 0, 200);
 
 
         Boid(float x, float y, boolean debug) {
@@ -149,6 +158,13 @@ public class Boids extends PApplet {
             float angle = random(TWO_PI);
             spd = PVector.fromAngle(angle).mult(maxSpeed);
             this.debug = debug;
+            clr = gui.gradientColorAt("visual/boid color", random(1)).hex;
+            if(debug){
+                clr = 0xFFFFFFFF;
+            }
+            if(clr == 0) {
+                clr = 0xFFFFFFFF;
+            }
         }
 
         void update() {
@@ -161,24 +177,52 @@ public class Boids extends PApplet {
             }
         }
 
-        void display(PGraphics pg) {
-            // Draw trail
+        void display() {
+            drawTrail();
+            drawBoid();
+        }
+
+        private void drawBoid() {
+            float arrowLen = boidRadius * 6;
+            float arrowWidth = boidRadius * 2.5f;
+            float baseCut = boidRadius * 1.2f;
+            float angle = spd.heading();
+            drawArrow(pos, angle, arrowLen, arrowWidth, baseCut);
+        }
+
+        private void drawTrail() {
             if (trail.size() > 1) {
                 pg.noFill();
-                pg.stroke(255, 80);
-                pg.strokeWeight(1);
+                pg.stroke(clr);
+                pg.strokeWeight(gui.slider("global/trailWeight", 1));
                 pg.beginShape();
-                for (int i = 0; i < trail.size(); i++) {
-                    PVector p = trail.get(i);
-                    pg.curveVertex(p.x, p.y);
+                for (PVector p : trail) {
+                    pg.vertex(p.x, p.y);
                 }
+                pg.vertex(pos.x, pos.y);
                 pg.endShape();
             }
-            // Draw boid
-            pg.fill(255);
-            pg.noStroke();
-            pg.ellipse(pos.x, pos.y, boidRadius * 2, boidRadius * 2);
         }
+
+        private void drawArrow(PVector pos, float angle, float arrowLen, float arrowWidth, float baseCut) {
+            pg.pushMatrix();
+            pg.translate(pos.x, pos.y);
+            pg.rotate(angle);
+            pg.noStroke();
+            pg.fill(clr);
+            pg.beginShape();
+            // Tip
+            pg.vertex(arrowLen/2, 0);
+            // Right base
+            pg.vertex(-arrowLen/2 + baseCut, arrowWidth/2);
+            // Center cut
+            pg.vertex(-arrowLen/2, 0);
+            // Left base
+            pg.vertex(-arrowLen/2 + baseCut, -arrowWidth/2);
+            pg.endShape(CLOSE);
+            pg.popMatrix();
+        }
+
 
         void debugVisuals(PVector speedVector,
                           PVector alignForce, float alignRange,
@@ -200,30 +244,30 @@ public class Boids extends PApplet {
 
             pg.noFill();
             if (showAlign) {
-                pg.stroke(0, 200, 255, 200);
+                pg.stroke(alignClr);
                 pg.ellipse(pos.x, pos.y, alignRange * 2, alignRange * 2);
             }
             if (showCoh) {
-                pg.stroke(0, 255, 0, 200);
+                pg.stroke(cohClr);
                 pg.ellipse(pos.x, pos.y, cohRange * 2, cohRange * 2);
             }
             if (showSep) {
-                pg.stroke(255, 0, 0, 200);
+                pg.stroke(sepClr);
                 pg.ellipse(pos.x, pos.y, sepRange * 2, sepRange * 2);
             }
             pg.strokeWeight(vectorStrokeWeight);
             // Draw force vectors
             if (showVectors) {
                 // align: blue, coh: green, sep: red
-                pg.stroke(0, 200, 255);
+                pg.stroke(alignClr);
                 drawVector(pos, alignForce, vectorScale);
-                pg.stroke(0, 255, 0);
+                pg.stroke(cohClr);
                 drawVector(pos, cohForce, vectorScale);
-                pg.stroke(255, 0, 0);
+                pg.stroke(sepClr);
                 drawVector(pos, sepForce, vectorScale);
             }
             if(showSpeed) {
-                pg.stroke(255);
+                pg.stroke(255, 0, 255);
                 drawVector(pos, speedVector, speedScale);
             }
         }
@@ -285,6 +329,9 @@ public class Boids extends PApplet {
             spd.add(PVector.mult(coh, cohWeight));
             spd.add(PVector.mult(sep, sepWeight));
             spd.limit(maxSpeed);
+            if(spd.mag() < minSpeed) {
+                spd.setMag(minSpeed); // Prevent zero speed
+            }
             if(debug){
                 debugVisuals(spd, align, alignRange, coh, cohRange, sep, sepRange);
             }
