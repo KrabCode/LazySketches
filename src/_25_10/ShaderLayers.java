@@ -38,20 +38,20 @@ public class ShaderLayers extends PApplet {
     public void draw() {
         background(gui.colorPicker("background").hex);
 
-        gui.image("source image", img);
+//        gui.image("source image", img);
 
         pgInvert.beginDraw();
         pgInvert.image(img, 0, 0);
         pgInvert.filter(INVERT);
         pgInvert.endDraw();
-        gui.image("inverted", pgInvert);
+//        gui.image("inverted", pgInvert);
 
         pgHue.beginDraw();
         pgHue.image(img, 0, 0);
         shaderHueShift.set("hueShiftAmount", frameCount * 0.01f);
         pgHue.filter(shaderHueShift);
         pgHue.endDraw();
-        gui.image("hue shifted", pgHue);
+//        gui.image("hue shifted", pgHue);
     }
 }
 

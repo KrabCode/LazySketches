@@ -1,5 +1,7 @@
 package _25_07;
 
+import _0_utils.Utils;
+import ch.bildspur.postfx.builder.PostFX;
 import com.krab.lazy.LazyGui;
 import processing.core.PApplet;
 import processing.core.PVector;
@@ -12,7 +14,7 @@ public class Fishes extends PApplet {
     int fishCount = 50;
     final float animationSpeedIdle = radians(0.5f); // Speed of the fish animation
     final float animationSpeedFast = radians(1f); // Speed of the fish animation
-
+    PostFX fx;
     float alignRadius = 200;
     float alignWeight = 0.5f;
     float centralizeRadius = 283;
@@ -45,18 +47,19 @@ public class Fishes extends PApplet {
     ArrayList<Fish> fishToRemove = new ArrayList<Fish>();
     boolean targetActive = false;
 
-//    LazyGui gui;
+    LazyGui gui;
     public static void main(String[] args) {
         PApplet.main(java.lang.invoke.MethodHandles.lookup().lookupClass());
     }
 
     public void settings(){
-        fullScreen(P3D);
-        orientation(PORTRAIT);
+        fullScreen(P2D);
+//        orientation(PORTRAIT);
     }
 
     public void setup() {
-//        gui = new LazyGui(this);
+        gui = new LazyGui(this);
+        fx = new PostFX(this);
         cameraOffset = new PVector(width * .5f, height * .5f);
         player = new Fish();
         player.pos = new PVector(0, 0);
@@ -88,6 +91,7 @@ public class Fishes extends PApplet {
         drawAllFish();
         spawnNewFish();
         popMatrix();
+        Utils.record(this, gui);
     }
 
     void spawnNewDust() {
@@ -121,7 +125,6 @@ public class Fishes extends PApplet {
     }
 
     void drawSliders() {
-/*
         fishCount = gui.sliderInt("fish count", 50);
         minFishSize = gui.slider("min fish size", 10);
         maxFishSize = gui.slider("max fish size", 20);
@@ -156,8 +159,6 @@ public class Fishes extends PApplet {
         fishColorB = gui.colorPicker("fish color B", fishColorB).hex; // 0xFFFF9AA1
         dustColor = gui.colorPicker("dust color", color(128, 255)).hex;
         gui.popFolder();
-        */
-
     }
 
     void drawAllFish() {
@@ -195,8 +196,7 @@ public class Fishes extends PApplet {
     }
 
     boolean isMouseOutsideGui(){
-        return true;
-        // gui.isMouseOutsideGui()
+        return gui.isMouseOutsideGui();
     }
 
     float distanceFromPlayerToTarget() {
@@ -306,7 +306,6 @@ public class Fishes extends PApplet {
         }
 
         void debugFishRanges() {
-            /*
             gui.pushFolder("debug");
             if (gui.toggle("avoid circle")) {
                 pushStyle();
@@ -330,12 +329,9 @@ public class Fishes extends PApplet {
                 popStyle();
             }
             gui.popFolder();
-            */
-
         }
 
         void debugFishVectors(PVector avoid, PVector align, PVector centralize) {
-            /*
             gui.pushFolder("debug");
             pushStyle();
             pushMatrix();
@@ -356,7 +352,6 @@ public class Fishes extends PApplet {
             popMatrix();
             popStyle();
             gui.popFolder();
-            */
         }
 
         boolean isPlayer() {
