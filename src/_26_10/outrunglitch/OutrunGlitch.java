@@ -200,7 +200,7 @@ public class OutrunGlitch extends PApplet {
         PVector win = colorVec("window color", color(0.09f, 0.5f, 1f));
         shader.set("winColor", win);
         shader.set("winBright", gui.slider("window brightness", 0.9f));
-        shader.set("winDensity", gui.slider("window density", 0.28f));
+        shader.set("winDensity", gui.slider("window density", 0.4f));
         shader.set("winFlicker", gui.slider("window flicker", 0.1f));
         gui.pushFolder("far layer");
         shader.set("farH", gui.slider("min height", 0.10f), gui.slider("height variation", 0.20f));
@@ -209,7 +209,7 @@ public class OutrunGlitch extends PApplet {
         shader.set("midH", gui.slider("min height", 0.05f), gui.slider("height variation", 0.22f));
         gui.popFolder();
         gui.pushFolder("near layer");
-        shader.set("nearH", gui.slider("min height", 0.07f), gui.slider("height variation", 0.14f));
+        shader.set("nearH", gui.slider("min height", 0.03f), gui.slider("height variation", 0.14f));
         gui.popFolder();
         gui.popFolder();
     }

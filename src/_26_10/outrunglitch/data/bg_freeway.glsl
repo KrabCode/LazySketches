@@ -74,9 +74,14 @@ void skyline(vec2 uv, float aspect, float scroll, float cells, float baseH, floa
 
     // windows: one warm tint, a few flicker slowly
     float inside = max(body, tier) * step(uv.y, topH - 0.01);
-    float winCol = floor(f * 4.0);
-    float winRow = floor(uv.y * winRows);
-    float cellMask = step(0.2, fract(f * 4.0)) * step(0.3, fract(uv.y * winRows));
+    // rectangular windows on a grid anchored to the building, taller than wide
+    float pitch = 1.0 / winRows;
+    float gx = (f - x0) / cells / (pitch * 0.8);
+    float gy = uv.y * winRows;
+    float winCol = floor(gx);
+    float winRow = floor(gy);
+    float cellMask = step(0.2, fract(gx)) * step(fract(gx), 0.8) * step(0.2, fract(gy)) * step(fract(gy), 0.85)
+                   * step(x0 + 0.08 * w, f) * step(f, x1 - 0.08 * w);
     float wh = hash2(vec2(winCol + id * 5.0, winRow + seed));
     float wh2 = hash2(vec2(winCol + id * 5.0 + 3.0, winRow + seed + 9.0));
     float on = step(1.0 - winDensity, wh);

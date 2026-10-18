@@ -155,9 +155,6 @@ class FavoritModel {
             // indicators wrapping around the front corner, tail lights around the rear corner
             sideQuad(INDICATOR, sign, 0.003f, new float[][]{{1.90f, 0.60f}, {1.74f, 0.60f}, {1.74f, 0.72f}, {1.90f, 0.72f}});
             sideQuad(TAILLIGHT, sign, 0.003f, new float[][]{{-1.78f, 0.62f}, {-1.90f, 0.62f}, {-1.90f, 0.88f}, {-1.78f, 0.88f}});
-            // mud flaps behind each wheel
-            box(BLACK, sign * 0.60f, sign * 0.80f, 0.08f, 0.30f, FRONT_AXLE - 0.34f, FRONT_AXLE - 0.32f);
-            box(BLACK, sign * 0.60f, sign * 0.80f, 0.08f, 0.30f, REAR_AXLE - 0.34f, REAR_AXLE - 0.32f);
         }
     }
 
