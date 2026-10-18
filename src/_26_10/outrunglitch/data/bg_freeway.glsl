@@ -68,16 +68,18 @@ void skyline(vec2 uv, float aspect, float scroll, float cells, float baseH, floa
     float hasTier = step(1.0 - tierChance, hash(id + seed * 5.0));
     float tierH = h + ampH * 0.3;
     float tier = hasTier * step(x0 + w * 0.22, f) * step(f, x1 - w * 0.22) * step(uv.y, tierH);
-    float topH = mix(h, tierH, hasTier);
 
     mask = max(body, tier);
 
     // windows: one warm tint, a few flicker slowly
-    float inside = max(body, tier) * step(uv.y, topH - 0.01);
-    // rectangular windows on a grid anchored to the building, taller than wide
+    // rows count down from the roof so the top row is always whole
+    float inTier = hasTier * step(x0 + w * 0.22, f) * step(f, x1 - w * 0.22);
+    float roofH = mix(h, tierH, inTier);
+    float gy = (roofH - 0.015 - uv.y) * winRows;
+    float inside = max(body, tier) * step(0.0, gy);
+    // rectangular windows on a grid anchored to the roof and the building edge, taller than wide
     float pitch = 1.0 / winRows;
     float gx = (f - x0) / cells / (pitch * 0.8);
-    float gy = uv.y * winRows;
     float winCol = floor(gx);
     float winRow = floor(gy);
     float cellMask = step(0.2, fract(gx)) * step(fract(gx), 0.8) * step(0.2, fract(gy)) * step(fract(gy), 0.85)
