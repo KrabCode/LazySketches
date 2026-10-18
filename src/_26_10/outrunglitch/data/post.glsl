@@ -23,7 +23,7 @@ float hash2(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453)
 
 void main() {
     vec2 uv = gl_FragCoord.xy / resolution.xy;
-    float px = 1.0 / resolution.x;
+    float px = resolution.y / 720.0 / resolution.x; // one pixel at 720p, scales with the frame
 
     // glitch bursts: random moments with a short smooth envelope
     float tick = floor(loopPhase * glitchRate);

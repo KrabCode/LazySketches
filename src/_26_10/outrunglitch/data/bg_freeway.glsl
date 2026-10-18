@@ -16,6 +16,16 @@ uniform vec3 colB;
 uniform vec3 colC;
 uniform float roadY;
 uniform float skyDim;
+uniform vec3 winColor;
+uniform float winBright;
+uniform float winDensity;
+uniform float winFlicker;
+uniform float widthVar;
+uniform float tierChance;
+uniform float hazeAmt;
+uniform vec2 farH;
+uniform vec2 midH;
+uniform vec2 nearH;
 
 float hash(float n) { return fract(sin(n * 12.9898) * 43758.5453); }
 float hash2(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
@@ -39,19 +49,39 @@ vec3 breathingGradient(vec2 uv, float aspect) {
     return mix(vec3(dot(c, vec3(0.333))), c, 1.45);
 }
 
-// one parallax layer of building silhouettes; returns mask in x, lit window in y
-vec2 skyline(vec2 uv, float aspect, float scroll, float cells, float baseH, float ampH, float seed) {
+// one parallax layer of buildings with uneven widths and stepped tops;
+// mask is the silhouette, emit is the light from its windows
+void skyline(vec2 uv, float aspect, float scroll, float cells, float baseH, float ampH, float seed,
+             float winRows, out float mask, out vec3 emit) {
     float xw = uv.x * aspect + cityScroll * scroll * cityParallax;
     float cx = xw * cells;
     float id = floor(cx);
+    float f = fract(cx);
+
+    float x0 = widthVar * hash(id + seed * 2.0);
+    float x1 = 1.0 - widthVar * hash(id + seed * 3.0);
+    float w = x1 - x0;
     float h = baseH + ampH * hash(id + seed);
-    float inside = step(uv.y, h);
-    float wx = fract(cx);
-    float winCol = floor(wx * 4.0);
-    float winRow = floor(uv.y * 70.0);
-    float cellMask = step(0.2, fract(wx * 4.0)) * step(0.3, fract(uv.y * 70.0));
-    float lit = step(0.72, hash2(vec2(winCol + id * 5.0, winRow + seed))) * cellMask * inside * step(uv.y, h - 0.01);
-    return vec2(inside, lit);
+    float inX = step(x0, f) * step(f, x1);
+    float body = inX * step(uv.y, h);
+
+    float hasTier = step(1.0 - tierChance, hash(id + seed * 5.0));
+    float tierH = h + ampH * 0.3;
+    float tier = hasTier * step(x0 + w * 0.22, f) * step(f, x1 - w * 0.22) * step(uv.y, tierH);
+    float topH = mix(h, tierH, hasTier);
+
+    mask = max(body, tier);
+
+    // windows: one warm tint, a few flicker slowly
+    float inside = max(body, tier) * step(uv.y, topH - 0.01);
+    float winCol = floor(f * 4.0);
+    float winRow = floor(uv.y * winRows);
+    float cellMask = step(0.2, fract(f * 4.0)) * step(0.3, fract(uv.y * winRows));
+    float wh = hash2(vec2(winCol + id * 5.0, winRow + seed));
+    float wh2 = hash2(vec2(winCol + id * 5.0 + 3.0, winRow + seed + 9.0));
+    float on = step(1.0 - winDensity, wh);
+    if (wh2 > 1.0 - winFlicker) on = step(fract(loopPhase * 2.0 + wh), 0.5);
+    emit = winColor * on * cellMask * inside * winBright;
 }
 
 void main() {
@@ -66,15 +96,22 @@ void main() {
     // glow behind the skyline
     col += mix(colA, colB, uv.x) * exp(-abs(uv.y - barrierTop - 0.12) * 6.0) * 0.45;
 
-    // far skyline
-    vec2 far = skyline(uv, aspect, 0.08, 6.0, barrierTop + 0.05, 0.22, 3.0);
-    col = mix(col, grad * 0.3 + vec3(0.02, 0.0, 0.05), far.x);
-    col += vec3(1.0, 0.8, 0.5) * far.y * 0.5;
+    // three layers, hazier and bluer the further back they are
+    vec3 haze = grad * skyDim * 0.85 + colA * 0.05;
+    float m;
+    vec3 e;
 
-    // near skyline
-    vec2 near = skyline(uv, aspect, 0.25, 3.0, barrierTop + 0.02, 0.12, 11.0);
-    col = mix(col, grad * 0.07 + vec3(0.01, 0.0, 0.03), near.x);
-    col += vec3(1.0, 0.3, 0.7) * near.y * 0.9;
+    skyline(uv, aspect, 0.04, 9.0, barrierTop + farH.x, farH.y, 23.0, 110.0, m, e);
+    col = mix(col, mix(grad * 0.25 + vec3(0.02, 0.0, 0.05), haze, clamp(0.65 * hazeAmt, 0.0, 1.0)), m);
+    col += e * 0.45;
+
+    skyline(uv, aspect, 0.08, 6.0, barrierTop + midH.x, midH.y, 3.0, 80.0, m, e);
+    col = mix(col, mix(grad * 0.18 + vec3(0.02, 0.0, 0.05), haze, clamp(0.35 * hazeAmt, 0.0, 1.0)), m);
+    col += e * 0.6;
+
+    skyline(uv, aspect, 0.25, 3.0, barrierTop + nearH.x, nearH.y, 11.0, 70.0, m, e);
+    col = mix(col, grad * 0.07 + vec3(0.01, 0.0, 0.03), m);
+    col += e;
 
     // street lamps
     float lampPeriod = 1.5;

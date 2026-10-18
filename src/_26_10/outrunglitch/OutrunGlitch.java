@@ -31,6 +31,8 @@ public class OutrunGlitch extends PApplet {
     private PShader phong;
     private boolean usePhong = true;
     private PFont titleFont;
+    private PFont tipFont;
+    private float ui = 1;
 
     private PVector blobA = new PVector();
     private PVector blobB = new PVector();
@@ -73,12 +75,13 @@ public class OutrunGlitch extends PApplet {
     }
 
     public void settings() {
-        size(1280, 720, P3D);
+        size(1920, 1080, P3D);
         smooth(4);
     }
 
     public void setup() {
         frameRate(60);
+        ui = height / 720f;
         gui = new LazyGui(this, new LazyGuiSettings().setLoadLatestSaveOnStartup(false));
         colorMode(HSB, 1, 1, 1, 1);
         bg = createGraphics(width, height, P2D);
@@ -88,6 +91,7 @@ public class OutrunGlitch extends PApplet {
         glowBuf = createGraphics(width, height, P3D);
         lamps = FavoritModel.buildLamps(this);
         titleFont = createFont("Impact", 128, true);
+        tipFont = createFont("Arial Bold", 64, true);
     }
 
     public void draw() {
@@ -109,7 +113,7 @@ public class OutrunGlitch extends PApplet {
         drawCar();
         drawTitle();
         postPass();
-        drawWantedStars();
+        drawHud();
         Utils.record(this, gui);
     }
 
@@ -159,8 +163,6 @@ public class OutrunGlitch extends PApplet {
         groundSpeedPx = scrollRate * 1.6f * height;
         shader.set("roadScroll", roadScroll);
         shader.set("cityScroll", cityScroll);
-        shader.set("skyDim", gui.slider("sky brightness", 0.55f));
-        shader.set("cityParallax", gui.slider("city parallax", 2.5f));
         shader.set("boost", boostSmooth);
         shader.set("streaks", gui.slider("streaks", 1f));
         busRoadY = 1f - gui.slider("car road y", 0.78f);
@@ -181,10 +183,35 @@ public class OutrunGlitch extends PApplet {
         shader.set("colB", blobB);
         shader.set("colC", blobC);
         gui.popFolder();
+        cityControls(shader);
 
         bg.beginDraw();
         bg.endDraw();
         ShaderReloader.filter(path, bg);
+    }
+
+    private void cityControls(PShader shader) {
+        gui.pushFolder("city");
+        shader.set("skyDim", gui.slider("sky brightness", 0.4f));
+        shader.set("cityParallax", gui.slider("parallax", 2.5f));
+        shader.set("hazeAmt", gui.slider("depth haze", 1f));
+        shader.set("widthVar", gui.slider("width variation", 0.22f));
+        shader.set("tierChance", gui.slider("stepped tops", 0.5f));
+        PVector win = colorVec("window color", color(0.09f, 0.5f, 1f));
+        shader.set("winColor", win);
+        shader.set("winBright", gui.slider("window brightness", 0.9f));
+        shader.set("winDensity", gui.slider("window density", 0.28f));
+        shader.set("winFlicker", gui.slider("window flicker", 0.1f));
+        gui.pushFolder("far layer");
+        shader.set("farH", gui.slider("min height", 0.10f), gui.slider("height variation", 0.20f));
+        gui.popFolder();
+        gui.pushFolder("middle layer");
+        shader.set("midH", gui.slider("min height", 0.05f), gui.slider("height variation", 0.22f));
+        gui.popFolder();
+        gui.pushFolder("near layer");
+        shader.set("nearH", gui.slider("min height", 0.07f), gui.slider("height variation", 0.14f));
+        gui.popFolder();
+        gui.popFolder();
     }
 
     private void updateCar(float t) {
@@ -393,12 +420,12 @@ public class OutrunGlitch extends PApplet {
             while (spawnCarry >= 1f) {
                 spawnCarry -= 1f;
                 Puff pf = new Puff();
-                pf.x = exhaustPos.x + random(-3, 3);
-                pf.y = exhaustPos.y + random(-3, 3);
-                pf.vx = -groundSpeedPx * random(0.6f, 0.95f) + random(-20, 20);
-                pf.vy = random(-45, -10);
+                pf.x = exhaustPos.x + random(-3, 3) * ui;
+                pf.y = exhaustPos.y + random(-3, 3) * ui;
+                pf.vx = -groundSpeedPx * random(0.6f, 0.95f) + random(-20, 20) * ui;
+                pf.vy = random(-45, -10) * ui;
                 pf.life = random(1.0f, 1.8f);
-                pf.size = random(8, 16) * sizeMul * carSize / 0.42f;
+                pf.size = random(8, 16) * ui * sizeMul * carSize / 0.42f;
                 puffs.add(pf);
             }
         }
@@ -492,11 +519,11 @@ public class OutrunGlitch extends PApplet {
         float lampPeriod = 1.5f;
         float lampY = height * (1f - (busRoadY + 0.10f + 0.035f + 0.22f - 0.012f));
         float first = ((0.63f - roadScroll * 0.6f) % lampPeriod + lampPeriod) % lampPeriod;
-        lightFalloff(0.35f, 0, 6e-6f);
+        lightFalloff(0.35f, 0, 6e-6f / (ui * ui));
         for (float a = first - lampPeriod; a < aspect + lampPeriod; a += lampPeriod) {
             float lampX = a / aspect * width;
             if (abs(lampX - width * carX) > width * 0.9f) continue;
-            pointLight(255 * lampAmount, 215 * lampAmount, 150 * lampAmount, lampX, lampY, 400);
+            pointLight(255 * lampAmount, 215 * lampAmount, 150 * lampAmount, lampX, lampY, 400 * ui);
         }
     }
 
@@ -551,6 +578,14 @@ public class OutrunGlitch extends PApplet {
         drawSpaced(x0, y, spacing);
     }
 
+    // drawn after the post pass so the glitch never touches it
+    private void drawHud() {
+        gui.pushFolder("hud");
+        drawWantedStars();
+        drawTooltip();
+        gui.popFolder();
+    }
+
     // wanted level in the top right
     private void drawWantedStars() {
         gui.pushFolder("wanted stars");
@@ -584,6 +619,65 @@ public class OutrunGlitch extends PApplet {
             endShape(CLOSE);
         }
         noStroke();
+        colorMode(HSB, 1, 1, 1, 1);
+    }
+
+    // GTA style help text anchored by its bottom right corner: dark box, button icon and a highlighted keyword
+    private void drawTooltip() {
+        gui.pushFolder("tooltip");
+        boolean enabled = gui.toggle("enabled", true);
+        float size = gui.slider("size", 0.034f) * height;
+        float x = gui.slider("x", 0.98f) * width;
+        float y = gui.slider("y", 0.96f) * height;
+        int highlight = gui.colorPicker("highlight", color(0.13f, 1f, 1f)).hex;
+        gui.popFolder();
+        if (!enabled) return;
+
+        colorMode(RGB, 255);
+        textFont(tipFont, size);
+        textAlign(LEFT, CENTER);
+        String before = "Press ";
+        String between = " to go ";
+        String keyword = "ALL IN";
+        float icon = size * 1.25f;
+        float pad = size * 0.55f;
+        float contentW = textWidth(before) + icon + textWidth(between) + textWidth(keyword);
+        float boxH = icon + pad * 1.2f;
+        x -= contentW + pad * 2;
+        y -= boxH;
+
+        noStroke();
+        fill(0, 0, 0, 175);
+        rect(x, y, contentW + pad * 2, boxH);
+
+        float cy = y + boxH / 2f;
+        float cx = x + pad;
+        fill(255);
+        text(before, cx, cy - size * 0.08f);
+        cx += textWidth(before);
+
+        // PlayStation cross: dark disc, thin light ring, light blue cross
+        fill(28, 30, 38);
+        stroke(205, 210, 222);
+        strokeWeight(size * 0.06f);
+        ellipse(cx + icon / 2f, cy, icon, icon);
+        float arm = icon * 0.2f;
+        float mx = cx + icon / 2f;
+        stroke(124, 178, 232);
+        strokeWeight(size * 0.13f);
+        strokeCap(ROUND);
+        line(mx - arm, cy - arm, mx + arm, cy + arm);
+        line(mx - arm, cy + arm, mx + arm, cy - arm);
+        strokeCap(PROJECT);
+        noStroke();
+        cx += icon;
+
+        fill(255);
+        text(between, cx, cy - size * 0.08f);
+        cx += textWidth(between);
+
+        fill(highlight);
+        text(keyword, cx, cy - size * 0.08f);
         colorMode(HSB, 1, 1, 1, 1);
     }
 
