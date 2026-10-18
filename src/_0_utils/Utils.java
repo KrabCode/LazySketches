@@ -11,6 +11,8 @@ import processing.opengl.PShader;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
@@ -104,9 +106,9 @@ public class Utils {
         if (gui.toggle("rec/ffmpeg", true) && recordingJustEnded) {
             String outMovieFilename = pApplet.dataPath("video/" + sketchMainClassName + "_" + recordingId);
             String inputFormat = recDirAbsolute + "/%01d" + recImageFormat;
-            String command = String.format("ffmpeg  -r %s -i %s -start_number_range 100 -an %s.mp4",
-                    ffmpegFramerate, inputFormat, outMovieFilename);
-            println("running ffmpeg: " + command);
+            String[] command = {ffmpegExecutable(), "-r", String.valueOf(ffmpegFramerate), "-i", inputFormat,
+                    "-start_number_range", "100", "-an", outMovieFilename + ".mp4"};
+            println("running ffmpeg: " + String.join(" ", command));
             try {
                 Process proc = Runtime.getRuntime().exec(command);
                 new Thread(() -> {
@@ -120,6 +122,12 @@ public class Utils {
                 e.printStackTrace();
             }
         }
+    }
+
+    // prefers the ffmpeg bundled in libs/, falls back to whatever is on the PATH
+    private static String ffmpegExecutable() {
+        Path bundled = Paths.get("libs", "ffmpeg", "ffmpeg-5.1.2-essentials_build", "bin", "ffmpeg.exe").toAbsolutePath();
+        return Files.exists(bundled) ? bundled.toString() : "ffmpeg";
     }
 
     public static void initSurface(PApplet pApplet, boolean onTop) {
