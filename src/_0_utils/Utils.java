@@ -33,9 +33,12 @@ public class Utils {
     }
 
     public static void record(PApplet pApplet, LazyGui gui) {
+        record(pApplet, gui, 360);
+    }
+
+    public static void record(PApplet pApplet, LazyGui gui, int recLengthDefault) {
         gui.sliderInt("rec/frame");
         gui.sliderSet("rec/frame", saveIndex);
-        int recLengthDefault = 360;
         int recLength = gui.sliderInt("rec/length", recLengthDefault);
 
         boolean recordingInProgress = recStarted != -1 && pApplet.frameCount < recStarted + recLength;

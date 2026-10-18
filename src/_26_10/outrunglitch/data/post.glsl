@@ -7,6 +7,7 @@ const float TAU = 6.2831853;
 
 uniform float wobble;
 uniform float chroma;
+uniform float burstChroma;
 uniform float scanlines;
 uniform float vignette;
 uniform float grain;
@@ -26,8 +27,10 @@ void main() {
     float px = resolution.y / 720.0 / resolution.x; // one pixel at 720p, scales with the frame
 
     // glitch bursts: random moments with a short smooth envelope
-    float tick = floor(loopPhase * glitchRate);
-    float within = fract(loopPhase * glitchRate);
+    // the burst pattern repeats every 6 seconds, same as before
+    float cycle = fract(loopPhase);
+    float tick = floor(cycle * glitchRate);
+    float within = fract(cycle * glitchRate);
     float fires = step(0.45, hash(tick * 3.7));
     float env = fires * smoothstep(0.0, 0.1, within) * smoothstep(1.0, 0.4, within) * glitchAmount;
 
@@ -56,7 +59,7 @@ void main() {
     // so the colour fringes smear smoothly instead of showing three separate copies
     vec2 dir = uv - 0.5;
     dir *= 2.0 * length(dir); // quadratic: sharp in the middle, fringed at the edges
-    float aberration = chroma * (1.0 + 2.5 * env + band);
+    float aberration = chroma * (1.0 + burstChroma * (2.5 * env + band));
     vec3 acc = vec3(0.0);
     vec3 wsum = vec3(0.0);
     for (int i = 0; i < 8; i++) {

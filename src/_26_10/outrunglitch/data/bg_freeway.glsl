@@ -155,13 +155,6 @@ void main() {
         float streak = step(0.8, hash(band + 17.0)) * smoothstep(len, len - 0.1, sx) * step(0.0, sx);
         col += colC * streak * 0.35;
 
-        // lane dashes
-        float dashY = roadY - 0.12;
-        float dash = step(abs(uv.y - dashY), 0.005) * step(0.5, fract((uv.x * aspect + roadScroll * 1.6) * 1.6));
-        float dashOn = step(0.5, fract((uv.x * aspect + roadScroll * 1.6) * 1.6));
-        col += colB * exp(-abs(uv.y - dashY) * 90.0) * dashOn * 0.35;
-        col = mix(col, vec3(1.0, 0.9, 0.95), dash * 0.85);
-
         // edge line
         float edge = step(abs(uv.y - (asphaltTop - 0.012)), 0.003);
         col += colB * exp(-abs(uv.y - (asphaltTop - 0.012)) * 60.0) * 0.5;
