@@ -38,6 +38,7 @@ public class OutrunGlitch extends PApplet {
     private float busRoadY = 0.22f;
     private float driveBoost;
     private float roadScroll;
+    private float cityScroll;
     private int lastMillis;
     private int lastCarMillis;
     private float bobPhase;
@@ -60,6 +61,12 @@ public class OutrunGlitch extends PApplet {
     private float spawnCarry;
     private float groundSpeedPx;
     private float frameDt;
+    private float reflAmount, shadowAmount, bloomAmount, aoAmount;
+    private PGraphics glowBuf;
+    private PShape lamps;
+    private final PVector[] headPos = {new PVector(), new PVector()};
+    private final PVector[] headDir = {new PVector(), new PVector()};
+    private final PVector reflSky = new PVector();
 
     public static void main(String[] args) {
         PApplet.main(java.lang.invoke.MethodHandles.lookup().lookupClass());
@@ -78,6 +85,8 @@ public class OutrunGlitch extends PApplet {
         car = FavoritModel.build(this);
         wheel = FavoritModel.buildWheel(this);
         phong = loadShader(Utils.dataPath("car_phong.frag.glsl"), Utils.dataPath("car_phong.vert.glsl"));
+        glowBuf = createGraphics(width, height, P3D);
+        lamps = FavoritModel.buildLamps(this);
         titleFont = createFont("Impact", 128, true);
     }
 
@@ -87,7 +96,7 @@ public class OutrunGlitch extends PApplet {
         updateCar(t);
 
         gui.pushFolder("breathing");
-        breath = 0.5f + 0.5f * sin(TWO_PI * loopPhase * gui.sliderInt("cycles per loop", 2));
+        breath = 0.5f + 0.5f * sin(TWO_PI * loopPhase * gui.sliderInt("cycles per loop", 1));
         breathDepth = gui.slider("depth", 0.6f);
         hueDrift = gui.slider("hue drift", 0.15f);
         gui.popFolder();
@@ -100,6 +109,7 @@ public class OutrunGlitch extends PApplet {
         drawCar();
         drawTitle();
         postPass();
+        drawWantedStars();
         Utils.record(this, gui);
     }
 
@@ -140,12 +150,16 @@ public class OutrunGlitch extends PApplet {
         gui.pushFolder("freeway");
         float dt = (millis() - lastMillis) / 1000f;
         lastMillis = millis();
-        float boostAmount = gui.slider("speed boost", 1.5f);
+        float boostAmount = gui.slider("speed boost", 0f);
         boostSmooth += (driveBoost - boostSmooth) * (1f - exp(-dt / 0.35f));
         float scrollRate = gui.slider("speed", 1.2f) * (1f + boostSmooth * boostAmount);
         roadScroll += dt * scrollRate;
+        float baseSpeed = gui.slider("speed", 1.2f);
+        cityScroll += dt * baseSpeed * (1f + boostSmooth * boostAmount * gui.slider("city boost share", 0.2f));
         groundSpeedPx = scrollRate * 1.6f * height;
         shader.set("roadScroll", roadScroll);
+        shader.set("cityScroll", cityScroll);
+        shader.set("skyDim", gui.slider("sky brightness", 0.55f));
         shader.set("cityParallax", gui.slider("city parallax", 2.5f));
         shader.set("boost", boostSmooth);
         shader.set("streaks", gui.slider("streaks", 1f));
@@ -191,10 +205,10 @@ public class OutrunGlitch extends PApplet {
         float rotX = rotate.x;
         float yaw = rotate.y;
         float rotZ = rotate.z;
-        float bob = gui.slider("bob", 0.7f);
+        float bob = gui.slider("bob", 0.4f);
         float bobSpeed = gui.slider("bob speed", 2f);
-        float wheelSpin = gui.slider("wheel spin", 1f);
-        boolean loop = gui.toggle("drive loop", true);
+        float wheelSpin = gui.slider("wheel spin", 3f);
+        boolean loop = gui.toggle("drive loop", false);
         int loopFrames = max(gui.sliderInt("loop frames", 360), 1);
         float catchShare = gui.slider("overtake share", 0.3f);
         float holdShare = gui.slider("cruise share", 0.25f);
@@ -248,9 +262,10 @@ public class OutrunGlitch extends PApplet {
     private void drawCar() {
         float s = width * carSize / FavoritModel.LENGTH;
         colorMode(RGB, 255);
+        addFreewayLights(carX);
+        drawShadow(s);
         hint(ENABLE_DEPTH_TEST);
         ortho();
-        addFreewayLights(carX);
         specular(0xFF8C8C8C);
         shininess(18);
         pushMatrix();
@@ -261,13 +276,105 @@ public class OutrunGlitch extends PApplet {
         scale(s, -s, s);
         drawCarShapes(roadScroll * 1.6f * height / (FavoritModel.WHEEL_RADIUS * s) * carWheelSpin);
         exhaustPos.set(screenX(-0.45f, 0.23f, -2.03f), screenY(-0.45f, 0.23f, -2.03f));
+        for (int i = 0; i < 2; i++) {
+            float lampX = i == 0 ? -0.5f : 0.5f;
+            headPos[i].set(screenX(lampX, 0.66f, 1.92f), screenY(lampX, 0.66f, 1.92f));
+            headDir[i].set(screenX(lampX, 0.66f, 3.92f) - headPos[i].x, screenY(lampX, 0.66f, 3.92f) - headPos[i].y);
+        }
         popMatrix();
         noLights();
         specular(0xFF000000);
         shininess(1);
         perspective();
         hint(DISABLE_DEPTH_TEST);
+        drawLightBeams(s);
+        drawLightBloom(s);
         colorMode(HSB, 1, 1, 1, 1);
+    }
+
+    // headlight cones ahead of the car
+    private void drawLightBeams(float s) {
+        gui.pushFolder("light beams");
+        float beam = gui.slider("headlight beam", 0.6f);
+        float beamLen = gui.slider("beam length", 0.15f);
+        float beamWidth = gui.slider("beam width", 4f);
+        float tilt = tan(radians(gui.slider("beam tilt down", -1f)));
+        gui.popFolder();
+
+        if (headDir[0].mag() < 1) return;
+        noStroke();
+        blendMode(ADD);
+        if (beam > 0) {
+            float len = width * beamLen;
+            for (int i = 0; i < 2; i++) {
+                PVector dir = headDir[i].copy().normalize();
+                dir.y += tilt * abs(dir.x);
+                dir.normalize();
+                PVector perp = new PVector(-dir.y, dir.x);
+                beamQuad(headPos[i], dir, perp, len, s * 0.05f * beamWidth, len * 0.1f * beamWidth, 255, 235, 190, beam * 45);
+                beamQuad(headPos[i], dir, perp, len * 0.8f, s * 0.03f * beamWidth, len * 0.04f * beamWidth, 255, 245, 215, beam * 70);
+            }
+        }
+        blendMode(BLEND);
+    }
+
+    // quad that starts at origin with the given alpha and fades to nothing at its far end
+    private void beamQuad(PVector o, PVector dir, PVector perp, float len, float w0, float w1, float r, float g, float b, float a) {
+        PVector end = PVector.add(o, PVector.mult(dir, len));
+        beginShape(QUADS);
+        fill(r, g, b, a);
+        vertex(o.x + perp.x * w0, o.y + perp.y * w0);
+        fill(r, g, b, 0);
+        vertex(end.x + perp.x * w1, end.y + perp.y * w1);
+        vertex(end.x - perp.x * w1, end.y - perp.y * w1);
+        fill(r, g, b, a);
+        vertex(o.x - perp.x * w0, o.y - perp.y * w0);
+        endShape();
+    }
+
+    // only the lamp lenses go into a mask, which is blurred and added over the scene
+    private void drawLightBloom(float s) {
+        if (bloomAmount <= 0) return;
+        glowBuf.beginDraw();
+        glowBuf.background(0);
+        glowBuf.hint(ENABLE_DEPTH_TEST);
+        glowBuf.ortho();
+        glowBuf.pushMatrix();
+        glowBuf.translate(width * carX, height * carRoadY, 0);
+        glowBuf.rotateZ(carRotZ);
+        glowBuf.rotateX(carRotX);
+        glowBuf.rotateY((carFlip ? -HALF_PI : HALF_PI) + carYaw);
+        glowBuf.scale(s, -s, s);
+        car.disableStyle();
+        glowBuf.noStroke();
+        glowBuf.fill(0);
+        glowBuf.shape(car);
+        car.enableStyle();
+        glowBuf.shape(lamps);
+        glowBuf.popMatrix();
+        glowBuf.endDraw();
+
+        String path = Utils.dataPath("bloom.glsl");
+        PShader blur = ShaderReloader.getShader(path);
+        blur.set("resolution", (float) width, (float) height);
+        blur.set("bloom", bloomAmount);
+        ShaderReloader.filter(path, glowBuf);
+
+        blendMode(ADD);
+        image(glowBuf, 0, 0);
+        blendMode(BLEND);
+    }
+
+    // soft dark ellipse on the asphalt under the car
+    private void drawShadow(float s) {
+        if (shadowAmount <= 0) return;
+        float len = FavoritModel.LENGTH * s * 0.95f;
+        noStroke();
+        for (int k = 0; k < 8; k++) {
+            float f = 1f - 0.09f * k;
+            fill(0, 0, 0, shadowAmount * 36);
+            ellipse(width * carX, height * carRoadY + len * 0.02f, len * f, len * 0.13f * f);
+        }
     }
 
     // soft smoke puffs from the tailpipe, left behind in the world so they stream back with the road
@@ -325,6 +432,10 @@ public class OutrunGlitch extends PApplet {
             shader(phong);
             phong.set("specColor", 0.25f, 0.25f, 0.28f);
             phong.set("specShininess", 12f);
+            phong.set("reflAmount", reflAmount);
+            phong.set("aoAmount", aoAmount);
+            phong.set("skyTop", reflSky.x, reflSky.y, reflSky.z);
+            phong.set("skyHorizon", blobB.x, blobB.y, blobB.z);
         }
         specular(0xFF4A4A4A);
         shininess(12);
@@ -333,6 +444,8 @@ public class OutrunGlitch extends PApplet {
         if (usePhong) {
             phong.set("specColor", 1f, 1f, 1f);
             phong.set("specShininess", 45f);
+            phong.set("reflAmount", 0f);
+            phong.set("aoAmount", 0f);
         }
         specular(0xFFFFFFFF);
         shininess(45);
@@ -356,11 +469,16 @@ public class OutrunGlitch extends PApplet {
         float skyAmount = gui.slider("sky light", 0.5f);
         float lampAmount = gui.slider("lamp light", 1.2f);
         usePhong = gui.toggle("phong per pixel", true);
-        float frontAmount = gui.slider("front light", 1f);
+        float frontAmount = gui.slider("front light", 0.4f);
+        reflAmount = gui.slider("sky reflection", 0.6f);
+        shadowAmount = gui.slider("shadow", 0.6f);
+        bloomAmount = gui.slider("light bloom", 0.6f);
+        aoAmount = gui.slider("lower body dark", 0.5f);
         gui.popFolder();
 
         float aspect = width / (float) height;
         PVector sky = skyColorAt(carX, aspect);
+        reflSky.set(sky);
         lightSpecular(200, 200, 215);
         ambientLight(255 * ambient, 255 * ambient, 255 * ambient);
         directionalLight(255 * sky.x * skyAmount, 255 * sky.y * skyAmount, 255 * sky.z * skyAmount, 0, 1, -0.3f);
@@ -369,7 +487,7 @@ public class OutrunGlitch extends PApplet {
         float tintR = 0.6f * sky.x + 0.4f;
         float tintG = 0.6f * sky.y + 0.4f;
         float tintB = 0.6f * sky.z + 0.4f;
-        directionalLight(255 * tintR * frontAmount, 255 * tintG * frontAmount, 255 * tintB * frontAmount, 0.25f, 0.45f, -1f);
+        directionalLight(255 * tintR * frontAmount, 255 * tintG * frontAmount, 255 * tintB * frontAmount, 0.6f, 0.8f, -0.6f);
 
         float lampPeriod = 1.5f;
         float lampY = height * (1f - (busRoadY + 0.10f + 0.035f + 0.22f - 0.012f));
@@ -433,6 +551,42 @@ public class OutrunGlitch extends PApplet {
         drawSpaced(x0, y, spacing);
     }
 
+    // wanted level in the top right
+    private void drawWantedStars() {
+        gui.pushFolder("wanted stars");
+        boolean enabled = gui.toggle("enabled", true);
+        int level = gui.sliderInt("level", 5, 0, 5);
+        float size = gui.slider("size", 0.032f);
+        float x = gui.slider("x", 0.95f);
+        float y = gui.slider("y", 0.07f);
+        gui.popFolder();
+        if (!enabled) return;
+
+        float r = size * height;
+        float gap = r * 2.5f;
+        colorMode(RGB, 255);
+        for (int i = 0; i < 5; i++) {
+            float cx = width * x - (4 - i) * gap;
+            boolean filled = i < level;
+            strokeWeight(r * 0.12f);
+            stroke(0, 0, 0, 200);
+            if (filled) {
+                fill(255, 205, 0);
+            } else {
+                fill(0, 0, 0, 90);
+            }
+            beginShape();
+            for (int k = 0; k < 10; k++) {
+                float a = -HALF_PI + k * PI / 5f;
+                float rad = k % 2 == 0 ? r : r * 0.42f;
+                vertex(cx + cos(a) * rad, height * y + sin(a) * rad);
+            }
+            endShape(CLOSE);
+        }
+        noStroke();
+        colorMode(HSB, 1, 1, 1, 1);
+    }
+
     private void drawSpaced(float x, float y, float spacing) {
         for (int i = 0; i < TITLE.length(); i++) {
             char c = TITLE.charAt(i);
@@ -449,9 +603,10 @@ public class OutrunGlitch extends PApplet {
         shader.set("loopFrame", loopFrame);
         gui.pushFolder("post");
         shader.set("wobble", gui.slider("wobble", 0.0015f));
-        shader.set("chroma", gui.slider("chromatic aberration", 0.04f));
+        shader.set("chroma", gui.slider("chromatic aberration", 0.02f));
         shader.set("scanlines", gui.slider("scanlines", 0.12f));
         shader.set("vignette", gui.slider("vignette", 0.8f));
+        shader.set("grain", gui.slider("grain", 0.08f));
         gui.popFolder();
         gui.pushFolder("glitch");
         shader.set("glitchAmount", gui.slider("amount", 0.6f));

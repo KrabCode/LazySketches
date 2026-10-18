@@ -11,10 +11,12 @@ attribute vec3 normal;
 varying vec3 vEcPos;
 varying vec3 vEcNormal;
 varying vec4 vColor;
+varying float vHeight;
 
 void main() {
     gl_Position = transform * position;
     vEcPos = vec3(modelview * position);
     vEcNormal = normalize(normalMatrix * normal);
     vColor = color;
+    vHeight = position.y;
 }

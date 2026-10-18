@@ -4,6 +4,7 @@ uniform float loopFrame;
 
 const float TAU = 6.2831853;
 uniform float roadScroll;
+uniform float cityScroll;
 uniform float cityParallax;
 uniform float boost;
 uniform float streaks;
@@ -14,6 +15,7 @@ uniform vec3 colA;
 uniform vec3 colB;
 uniform vec3 colC;
 uniform float roadY;
+uniform float skyDim;
 
 float hash(float n) { return fract(sin(n * 12.9898) * 43758.5453); }
 float hash2(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
@@ -39,7 +41,7 @@ vec3 breathingGradient(vec2 uv, float aspect) {
 
 // one parallax layer of building silhouettes; returns mask in x, lit window in y
 vec2 skyline(vec2 uv, float aspect, float scroll, float cells, float baseH, float ampH, float seed) {
-    float xw = uv.x * aspect + roadScroll * scroll * cityParallax;
+    float xw = uv.x * aspect + cityScroll * scroll * cityParallax;
     float cx = xw * cells;
     float id = floor(cx);
     float h = baseH + ampH * hash(id + seed);
@@ -59,20 +61,20 @@ void main() {
     float barrierTop = asphaltTop + 0.035;
 
     vec3 grad = breathingGradient(uv, aspect);
-    vec3 col = grad;
+    vec3 col = grad * skyDim;
 
     // glow behind the skyline
     col += mix(colA, colB, uv.x) * exp(-abs(uv.y - barrierTop - 0.12) * 6.0) * 0.45;
 
     // far skyline
     vec2 far = skyline(uv, aspect, 0.08, 6.0, barrierTop + 0.05, 0.22, 3.0);
-    col = mix(col, grad * 0.5 + vec3(0.03, 0.0, 0.06), far.x);
-    col += vec3(1.0, 0.8, 0.5) * far.y * 0.35;
+    col = mix(col, grad * 0.3 + vec3(0.02, 0.0, 0.05), far.x);
+    col += vec3(1.0, 0.8, 0.5) * far.y * 0.5;
 
     // near skyline
     vec2 near = skyline(uv, aspect, 0.25, 3.0, barrierTop + 0.02, 0.12, 11.0);
-    col = mix(col, grad * 0.2 + vec3(0.02, 0.0, 0.05), near.x);
-    col += vec3(1.0, 0.3, 0.7) * near.y * 0.6;
+    col = mix(col, grad * 0.07 + vec3(0.01, 0.0, 0.03), near.x);
+    col += vec3(1.0, 0.3, 0.7) * near.y * 0.9;
 
     // street lamps
     float lampPeriod = 1.5;
@@ -83,7 +85,7 @@ void main() {
     vec2 lampPos = vec2(-0.12, lampH - 0.012);
     float lampD = length(vec2(lx, uv.y) - lampPos);
     col = mix(col, vec3(0.02, 0.0, 0.05), max(pole, arm));
-    col += vec3(1.0, 0.85, 0.6) * exp(-lampD * 28.0) * 0.8;
+    col += vec3(1.0, 0.85, 0.6) * exp(-lampD * 20.0) * 1.1;
     col += vec3(1.0, 0.9, 0.7) * step(lampD, 0.008);
 
     // barrier with moving posts
@@ -96,7 +98,10 @@ void main() {
     // asphalt
     if (uv.y <= asphaltTop) {
         float v = uv.y / asphaltTop;
-        col = mix(grad * 0.12 + vec3(0.02, 0.0, 0.05), grad * 0.55, v);
+        col = mix(grad * 0.03 + vec3(0.01, 0.0, 0.03), grad * 0.28, v);
+
+        // warm pool of light under each street lamp
+        col += vec3(1.0, 0.75, 0.45) * exp(-pow((lx + 0.12) * 3.0, 2.0)) * (0.3 + 0.7 * v) * 0.45;
 
         // speed streaks
         float band = floor(uv.y * 90.0);
@@ -109,10 +114,13 @@ void main() {
         // lane dashes
         float dashY = roadY - 0.12;
         float dash = step(abs(uv.y - dashY), 0.005) * step(0.5, fract((uv.x * aspect + roadScroll * 1.6) * 1.6));
+        float dashOn = step(0.5, fract((uv.x * aspect + roadScroll * 1.6) * 1.6));
+        col += colB * exp(-abs(uv.y - dashY) * 90.0) * dashOn * 0.35;
         col = mix(col, vec3(1.0, 0.9, 0.95), dash * 0.85);
 
         // edge line
         float edge = step(abs(uv.y - (asphaltTop - 0.012)), 0.003);
+        col += colB * exp(-abs(uv.y - (asphaltTop - 0.012)) * 60.0) * 0.5;
         col = mix(col, colB * 1.4, edge * 0.9);
     }
 

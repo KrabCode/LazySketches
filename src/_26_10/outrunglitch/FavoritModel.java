@@ -23,10 +23,10 @@ class FavoritModel {
     private static final int GLASS = rgb(30, 38, 56);
     private static final int BLACK = rgb(22, 22, 26);
     private static final int BUMPER = rgb(38, 38, 42);
-    private static final int HEADLIGHT = rgb(200, 205, 205);
+    private static final int HEADLIGHT = rgb(255, 250, 225);
     private static final int REFLECTOR = rgb(120, 124, 130);
     private static final int INDICATOR = rgb(235, 150, 40);
-    private static final int TAILLIGHT = rgb(185, 22, 28);
+    private static final int TAILLIGHT = rgb(255, 40, 40);
     private static final int REVERSE = rgb(235, 235, 225);
     private static final int RUBBER = rgb(18, 18, 22);
     private static final int HUBCAP = rgb(150, 154, 162);
@@ -49,6 +49,15 @@ class FavoritModel {
         m.rearEnd();
         m.roofAndMirrors();
         m.arches();
+        return m.toShape(p);
+    }
+
+    // just the headlight and tail light lenses, used as the source for the bloom
+    static PShape buildLamps(PApplet p) {
+        FavoritModel m = new FavoritModel();
+        m.frontEnd();
+        m.rearEnd();
+        m.tris.keySet().removeIf(c -> c != HEADLIGHT && c != TAILLIGHT);
         return m.toShape(p);
     }
 

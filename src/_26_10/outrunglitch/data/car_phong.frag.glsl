@@ -13,9 +13,15 @@ uniform vec2 lightSpot[8];
 uniform vec3 specColor;
 uniform float specShininess;
 
+uniform float reflAmount;
+uniform float aoAmount;
+uniform vec3 skyTop;
+uniform vec3 skyHorizon;
+
 varying vec3 vEcPos;
 varying vec3 vEcNormal;
 varying vec4 vColor;
+varying float vHeight;
 
 float falloffFactor(vec3 lightPos, vec3 vertPos, vec3 coeff) {
     vec3 lpv = lightPos - vertPos;
@@ -70,6 +76,23 @@ void main() {
         totalSpecular += lightSpecular[i] * falloff * spotf * blinnPhongFactor(lightDir, vEcPos, n, specShininess);
     }
 
-    vec3 rgb = (totalAmbient + totalDiffuse) * vColor.rgb + totalSpecular * specColor;
+    // lower body sits in shadow so the shape reads from the side too
+    float ao = mix(1.0 - aoAmount, 1.0, smoothstep(0.25, 0.95, vHeight));
+    vec3 rgb = (totalAmbient + totalDiffuse) * vColor.rgb * ao + totalSpecular * specColor;
+
+    // fake sky reflection: sky colour above, a bright horizon band, stronger at grazing angles
+    vec3 view = vec3(0.0, 0.0, -1.0);
+    vec3 r = reflect(view, n);
+    float up = -r.y;
+    float fres = 0.12 + 0.88 * pow(1.0 - max(dot(n, -view), 0.0), 2.0);
+    vec3 env = mix(skyHorizon * 0.25, skyTop, smoothstep(-0.1, 0.7, up));
+    env += skyHorizon * exp(-abs(up) * 7.0) * 0.9;
+    rgb += env * fres * reflAmount;
+
+    // lamp lenses glow on their own: tail lights are pure red, headlights warm white
+    bool tail = vColor.r > 0.98 && vColor.g < 0.2 && vColor.b < 0.2;
+    bool head = vColor.r > 0.98 && vColor.g > 0.95 && vColor.b > 0.8 && vColor.b < 0.95;
+    if (tail) rgb = vec3(1.0, 0.1, 0.08);
+    if (head) rgb = vec3(1.0, 0.96, 0.8);
     gl_FragColor = vec4(min(rgb, vec3(1.0)), vColor.a);
 }

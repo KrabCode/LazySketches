@@ -9,6 +9,7 @@ uniform float wobble;
 uniform float chroma;
 uniform float scanlines;
 uniform float vignette;
+uniform float grain;
 
 uniform float glitchAmount;
 uniform float glitchRate;
@@ -54,6 +55,7 @@ void main() {
     // chromatic aberration: eight taps across the spectrum, radial like a lens,
     // so the colour fringes smear smoothly instead of showing three separate copies
     vec2 dir = uv - 0.5;
+    dir *= 2.0 * length(dir); // quadratic: sharp in the middle, fringed at the edges
     float aberration = chroma * (1.0 + 2.5 * env + band);
     vec3 acc = vec3(0.0);
     vec3 wsum = vec3(0.0);
@@ -74,6 +76,10 @@ void main() {
 
     vec2 c = gl_FragCoord.xy / resolution.xy - 0.5;
     col *= 1.0 - vignette * dot(c, c) * 2.0;
+
+    // film grain, strongest in the shadows
+    float lum = dot(col, vec3(0.333));
+    col += (hash2(gl_FragCoord.xy + loopFrame * vec2(1.7, 3.1)) - 0.5) * grain * (1.2 - lum);
 
     gl_FragColor = vec4(col, 1.0);
 }
