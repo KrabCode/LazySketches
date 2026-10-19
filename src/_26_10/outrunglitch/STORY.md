@@ -16,6 +16,7 @@ Right now there is no story. The car sits in the middle, the scene scrolls at a 
 | Road speed | `freeway/speed` | slow cruise to full speed |
 | Exhaust smoke | `exhaust/puffs per second` | heavier when the car is pushed |
 | Light beams | `light beams/headlight beam` | brighter late in the chase |
+| Road lighting | `road/headlight wash`, `road/tail light wash` | pulse with the chase; a brake flash needs the `brake` idea from `ROAD_REALISM.md` |
 | Title | `drawTitle()` | glitch in at the start, fade at the end |
 
 Nothing is wired to time yet. A small helper like `float seg(float startSec, float endSec)` that returns 0 to 1 across a time range would cover most of it.

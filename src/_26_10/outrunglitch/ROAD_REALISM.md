@@ -1,33 +1,33 @@
-# OutrunGlitch: road realism plan (not built yet)
+# OutrunGlitch: road realism
 
-The car doesn't feel like it is on the road. It sits in the middle of the asphalt in a flat side view, and nothing ties it to the surface. The lane dashes are gone, so the asphalt is a plain gradient.
+The car didn't feel like it was on the road: a flat side view on a plain gradient, with a weak shadow and no light interaction. Most of this is now built. Everything has a slider in the `road` folder.
 
-## Why it floats
+## What is built
 
-1. **Weak contact shadow.** `drawShadow()` draws one soft ellipse wider than the car. A real shadow is darkest right under the tyres.
-2. **No road cue.** Nothing on the asphalt says "surface": no lines, no texture, no reflection.
-3. **No light interaction.** The headlights and tail lights don't touch the road, and the body colour doesn't spill onto it.
+| Change | Where | Sliders |
+|---|---|---|
+| Wet road reflection: the car mirrored under the ground line, blurred more and faded with distance, tinted by the palette. Lamp lenses are boosted so they survive the blur. | `drawRoadReflection()`, `data/road_reflect.glsl` | `reflection` 1.2, `reflection fade` 0.4, `reflection blur` 4, `reflection lights` 4 |
+| Road shadow: a dark strip on the asphalt under the body | asphalt block of `data/bg_freeway.glsl`, `roadShading()` | `road shadow` 0.7 |
+| Headlight wash: a soft warm glow on the road ahead that widens and fades | same | `headlight wash` 1.5, `wash start` 0.7, `wash falloff` 1.2, `wash width` 0.1, `wash y` 0 |
+| Tail light wash: a dark red wash behind the car, rotatable around the tail light | same | `tail light wash` 6.1, `tail wash color`, `tail wash start` 0.57, `tail wash falloff` 5, `tail wash width` 0.054, `tail wash spread` 7.6, `tail wash y` 0.012, `tail wash angle` 15, `tail wash pivot` -0.75 |
 
-## Plan, in order of value
+The shading is done in the road shader, not by drawing shapes over the road. All of it follows `car/x`, `car/size`, `car/road y` and `flip direction`.
 
-| # | Change | Where | Notes |
-|---|---|---|---|
-| 1 | Tight contact shadows | `drawShadow()` | a small dark ellipse under each tyre, plus the wide soft one under the body. The shadow is darkest at the wheels. |
-| 2 | Wet road reflection | a new pass after the car, before the post pass | a vertically flipped, blurred copy of the car under it, fading downwards, tinted by the palette. Probably rendered into `glowBuf`-style buffer and drawn with `blendMode(ADD)`. |
-| 3 | Light spill on the road | `drawLightBeams()` and a new glow under the car | a faint red glow under the body, and the beam touching the asphalt ahead of the car. |
-| 4 | Tyre dust or spray | the exhaust particle system | small particles at the wheels. The most work and the least convincing, so last. |
+The headlight lens no longer has the grey reflector patch, so it is one bright colour.
 
-## Controls to add
+## What didn't work
 
-A `road` folder, for example:
-- `contact shadow` (opacity)
-- `reflection` (opacity)
-- `reflection fade` (how fast it dissolves)
-- `reflection blur`
-- `light spill` (opacity)
+- **Per-tyre contact shadows** drawn as ellipses: near and far wheels land at different screen x because of the yaw, so each blob sat beside its tyre.
+- **Ellipse light pools** and **additive wedge quads** on the road: visible rings, hard edges, and they looked like floating discs.
+- **A narrow streak** copied from a wet-road photo: not what we wanted. The soft wash is the version that stayed.
+
+## Not built
+
+- **Tyre dust or spray:** small particles at the wheels. The most work and the least convincing.
+- **Brake light:** the tail lights are always at full red now. A running-light level with a brighter braking state is more realistic. A `brake` slider could drive the lens and the tail wash together, and the story could key it to a moment.
+- **A single faint lane or edge line near the car**, if the asphalt ever feels too plain.
 
 ## Open questions
 
-- Should the reflection show the whole car or only the lower half?
-- Should it be glossy (a clear mirror image) or rough (a faint smear)?
-- Does the lane marking come back in some form, for example a single faint edge line near the car, or does the asphalt stay plain?
+- Should the reflection show the whole car or only the lower half? (Currently the whole car.)
+- Glossy mirror or rough smear? (Currently a blurred smear with sharper lights.)
