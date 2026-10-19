@@ -65,7 +65,7 @@ public class OutrunGlitch extends PApplet {
     private float groundSpeedPx;
     private float frameDt;
     private float reflAmount, shadowAmount, bloomAmount, aoAmount;
-    private PGraphics glowBuf;
+    private PGraphics glowBuf, reflBuf;
     private PShape lamps;
     private final PVector[] headPos = {new PVector(), new PVector()};
     private final PVector[] headDir = {new PVector(), new PVector()};
@@ -90,6 +90,7 @@ public class OutrunGlitch extends PApplet {
         wheel = FavoritModel.buildWheel(this);
         phong = loadShader(Utils.dataPath("car_phong.frag.glsl"), Utils.dataPath("car_phong.vert.glsl"));
         glowBuf = createGraphics(width, height, P3D);
+        reflBuf = createGraphics(width, height, P3D);
         lamps = FavoritModel.buildLamps(this);
         titleFonts = new PFont[]{
                 createFont(Utils.dataPath("fonts/Orbitron-VF.ttf"), 128, true),
@@ -186,10 +187,35 @@ public class OutrunGlitch extends PApplet {
         shader.set("colC", blobC);
         gui.popFolder();
         cityControls(shader);
+        roadShading(shader);
 
         bg.beginDraw();
         bg.endDraw();
         ShaderReloader.filter(path, bg);
+    }
+
+    // the car lights and shades the asphalt itself
+    private void roadShading(PShader shader) {
+        gui.pushFolder("road");
+        shader.set("carPos", carX, 1f - carRoadY);
+        shader.set("carSize", carSize);
+        shader.set("carDir", carFlip ? -1f : 1f);
+        shader.set("carShadow", gui.slider("road shadow", 0.7f));
+        shader.set("headWash", gui.slider("headlight wash", 1.5f));
+        shader.set("washStart", gui.slider("wash start", 0.7f));
+        shader.set("washLen", gui.slider("wash falloff", 1.2f));
+        shader.set("washWidth", gui.slider("wash width", 0.1f));
+        shader.set("washY", gui.slider("wash y", 0f));
+        shader.set("tailWash", gui.slider("tail light wash", 6.1f));
+        shader.set("tailColor", colorVec("tail wash color", color(0f, 0.882f, 0.24f)));
+        shader.set("tailStart", gui.slider("tail wash start", 0.57f));
+        shader.set("tailLen", gui.slider("tail wash falloff", 5f));
+        shader.set("tailWidth", gui.slider("tail wash width", 0.054f));
+        shader.set("tailSpread", gui.slider("tail wash spread", 7.6f));
+        shader.set("tailY", gui.slider("tail wash y", 0.012f));
+        shader.set("tailAngle", radians(gui.slider("tail wash angle", 15f)));
+        shader.set("tailPivotY", gui.slider("tail wash pivot", -0.75f) * carSize * width / (float) height / FavoritModel.LENGTH);
+        gui.popFolder();
     }
 
     private void cityControls(PShader shader) {
@@ -259,7 +285,9 @@ public class OutrunGlitch extends PApplet {
         float s = width * carSize / FavoritModel.LENGTH;
         colorMode(RGB, 255);
         addFreewayLights(carX);
+        float wheelAngle = roadScroll * 1.6f * height / (FavoritModel.WHEEL_RADIUS * s) * carWheelSpin;
         drawShadow(s);
+        drawRoadReflection(s, wheelAngle);
         hint(ENABLE_DEPTH_TEST);
         ortho();
         specular(0xFF8C8C8C);
@@ -270,7 +298,7 @@ public class OutrunGlitch extends PApplet {
         rotateX(carRotX);
         rotateY((carFlip ? -HALF_PI : HALF_PI) + carYaw);
         scale(s, -s, s);
-        drawCarShapes(roadScroll * 1.6f * height / (FavoritModel.WHEEL_RADIUS * s) * carWheelSpin);
+        drawCarShapes(wheelAngle);
         exhaustPos.set(screenX(-0.45f, 0.23f, -2.03f), screenY(-0.45f, 0.23f, -2.03f));
         for (int i = 0; i < 2; i++) {
             float lampX = i == 0 ? -0.5f : 0.5f;
@@ -358,6 +386,58 @@ public class OutrunGlitch extends PApplet {
 
         blendMode(ADD);
         image(glowBuf, 0, 0);
+        blendMode(BLEND);
+    }
+
+    // the car mirrored under the ground line, blurred and faded like wet asphalt
+    private void drawRoadReflection(float s, float wheelAngle) {
+        gui.pushFolder("road");
+        float opacity = gui.slider("reflection", 1.2f);
+        float fade = gui.slider("reflection fade", 0.4f);
+        float blur = gui.slider("reflection blur", 4f);
+        float lampBoost = gui.slider("reflection lights", 4f);
+        gui.popFolder();
+        if (opacity <= 0) return;
+
+        reflBuf.beginDraw();
+        reflBuf.background(0);
+        reflBuf.hint(ENABLE_DEPTH_TEST);
+        reflBuf.ortho();
+        reflBuf.pushMatrix();
+        reflBuf.translate(width * carX, height * carRoadY, 0);
+        reflBuf.rotateZ(carRotZ);
+        reflBuf.rotateX(carRotX);
+        reflBuf.rotateY((carFlip ? -HALF_PI : HALF_PI) + carYaw);
+        reflBuf.scale(s, s, s);
+        reflBuf.noStroke();
+        reflBuf.shape(car);
+        for (float sign : new float[]{-1, 1}) {
+            for (float axle : new float[]{FavoritModel.REAR_AXLE, FavoritModel.FRONT_AXLE}) {
+                reflBuf.pushMatrix();
+                reflBuf.translate(sign * FavoritModel.WHEEL_X, FavoritModel.WHEEL_RADIUS, axle);
+                reflBuf.rotateX(wheelAngle);
+                if (sign < 0) reflBuf.rotateY(PI);
+                reflBuf.shape(wheel);
+                reflBuf.popMatrix();
+            }
+        }
+        reflBuf.popMatrix();
+        reflBuf.endDraw();
+
+        String path = Utils.dataPath("road_reflect.glsl");
+        PShader sh = ShaderReloader.getShader(path);
+        sh.set("resolution", (float) width, (float) height);
+        sh.set("groundY", 1f - carRoadY);
+        sh.set("opacity", opacity);
+        sh.set("fade", fade);
+        sh.set("blur", blur);
+        sh.set("lampBoost", lampBoost);
+        float peak = max(max(blobB.x, blobB.y), max(blobB.z, 0.001f));
+        sh.set("tint", blobB.x / peak, blobB.y / peak, blobB.z / peak);
+        ShaderReloader.filter(path, reflBuf);
+
+        blendMode(ADD);
+        image(reflBuf, 0, 0);
         blendMode(BLEND);
     }
 

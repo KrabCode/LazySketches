@@ -23,6 +23,24 @@ uniform float winFlicker;
 uniform float widthVar;
 uniform float tierChance;
 uniform float hazeAmt;
+uniform vec2 carPos;
+uniform float carSize;
+uniform float carDir;
+uniform float carShadow;
+uniform float headWash;
+uniform float washStart;
+uniform float washLen;
+uniform float washWidth;
+uniform float washY;
+uniform float tailWash;
+uniform vec3 tailColor;
+uniform float tailStart;
+uniform float tailLen;
+uniform float tailWidth;
+uniform float tailSpread;
+uniform float tailY;
+uniform float tailAngle;
+uniform float tailPivotY;
 uniform vec2 farH;
 uniform vec2 midH;
 uniform vec2 nearH;
@@ -146,6 +164,29 @@ void main() {
 
         // warm pool of light under each street lamp
         col += vec3(1.0, 0.75, 0.45) * exp(-pow((lx + 0.12) * 3.0, 2.0)) * (0.3 + 0.7 * v) * 0.45;
+
+        // the car shades the road: dark under the body, light ahead of the headlights, red behind the tail
+        float cdx = (uv.x - carPos.x) / carSize * carDir;   // car lengths ahead of the car centre
+        float cdy = uv.y - carPos.y;
+        float under = smoothstep(0.62, 0.42, abs(cdx)) * exp(-pow((cdy + 0.012) / 0.03, 2.0));
+        col *= 1.0 - carShadow * under;
+        float ahead = max(cdx - washStart, 0.0);
+        float spread = washWidth * (0.5 + ahead * 3.0);
+        float hw = exp(-ahead * washLen) * smoothstep(-0.05, 0.1, cdx - washStart) * exp(-pow((cdy + washY) / spread, 2.0));
+        col += vec3(1.0, 0.9, 0.7) * hw * headWash * 0.6;
+        // the tail wash is rotated around the tail light lens
+        float tx = carSize * aspect;
+        vec2 pivot = vec2(-0.48 * tx, tailPivotY);
+        vec2 dd = vec2(cdx * tx, cdy) - pivot;
+        float ca = cos(tailAngle);
+        float sa = sin(tailAngle);
+        vec2 rp = pivot + vec2(dd.x * ca - dd.y * sa, dd.x * sa + dd.y * ca);
+        float rdx = rp.x / tx;
+        float rdy = rp.y;
+        float behind = max(-rdx - tailStart, 0.0);
+        float tailSpreadY = tailWidth * (1.0 + behind * tailSpread);
+        float tw = exp(-behind * tailLen) * smoothstep(0.0, 0.05, -rdx - tailStart) * exp(-pow((rdy + tailY) / tailSpreadY, 2.0));
+        col += tailColor * tw * tailWash * 0.6;
 
         // speed streaks
         float band = floor(uv.y * 90.0);

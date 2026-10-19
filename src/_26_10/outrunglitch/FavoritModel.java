@@ -24,7 +24,6 @@ class FavoritModel {
     private static final int BLACK = rgb(22, 22, 26);
     private static final int BUMPER = rgb(38, 38, 42);
     private static final int HEADLIGHT = rgb(255, 250, 225);
-    private static final int REFLECTOR = rgb(120, 124, 130);
     private static final int INDICATOR = rgb(235, 150, 40);
     private static final int TAILLIGHT = rgb(255, 40, 40);
     private static final int REVERSE = rgb(235, 235, 225);
@@ -170,8 +169,6 @@ class FavoritModel {
         for (float sign : new float[]{-1, 1}) {
             float x0 = Math.min(sign * 0.36f, sign * 0.79f), x1 = Math.max(sign * 0.36f, sign * 0.79f);
             flatZ(HEADLIGHT, x0, x1, 0.585f, 0.735f, 1.903f);
-            float rx0 = Math.min(sign * 0.45f, sign * 0.73f), rx1 = Math.max(sign * 0.45f, sign * 0.73f);
-            flatZ(REFLECTOR, rx0, rx1, 0.62f, 0.70f, 1.906f);
         }
         flatZ(BLACK, -0.30f, 0.30f, 0.585f, 0.665f, 1.903f);
         flatZ(BUMPER, -0.28f, 0.28f, 0.612f, 0.620f, 1.906f);
