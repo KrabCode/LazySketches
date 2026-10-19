@@ -37,6 +37,11 @@ public class Utils {
     }
 
     public static void record(PApplet pApplet, LazyGui gui, int recLengthDefault) {
+        record(pApplet, gui, recLengthDefault, false);
+    }
+
+    // autoStart begins recording on the first frame of the sketch
+    public static void record(PApplet pApplet, LazyGui gui, int recLengthDefault, boolean autoStart) {
         gui.sliderInt("rec/frame");
         gui.sliderSet("rec/frame", saveIndex);
         int recLength = gui.sliderInt("rec/length", recLengthDefault);
@@ -44,7 +49,8 @@ public class Utils {
         boolean recordingInProgress = recStarted != -1 && pApplet.frameCount < recStarted + recLength;
         boolean recordingJustEnded = recStarted != -1 && pApplet.frameCount == recStarted + recLength;
         if (gui.button("rec/start (ctrl + k)") ||
-                (Input.getCode(CONTROL).down && Input.getChar('k').pressed)) {
+                (Input.getCode(CONTROL).down && Input.getChar('k').pressed) ||
+                (autoStart && pApplet.frameCount == 1)) {
             recordingId = generateRandomShortId();
             recStarted = pApplet.frameCount;
             saveIndex = 1;

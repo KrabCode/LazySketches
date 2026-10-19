@@ -17,6 +17,8 @@ uniform float reflAmount;
 uniform float aoAmount;
 uniform vec3 skyTop;
 uniform vec3 skyHorizon;
+// 1 leaves window glass and the white rear sticker out of the scene lights
+uniform float flatGlass;
 
 varying vec3 vEcPos;
 varying vec3 vEcNormal;
@@ -88,6 +90,13 @@ void main() {
     vec3 env = mix(skyHorizon * 0.25, skyTop, smoothstep(-0.1, 0.7, up));
     env += skyHorizon * exp(-abs(up) * 7.0) * 0.9;
     rgb += env * fres * reflAmount;
+
+    if (flatGlass > 0.5) {
+        bool glass = abs(vColor.r - 0.1176) < 0.012 && abs(vColor.g - 0.149) < 0.012 && abs(vColor.b - 0.2196) < 0.012;
+        bool decal = vColor.r > 0.97 && vColor.r < 0.99 && vColor.g > 0.97 && vColor.b > 0.97;
+        if (decal) rgb = vec3(0.92);
+        else if (glass) rgb = vColor.rgb * 0.7 + env * fres * reflAmount;
+    }
 
     // lamp lenses glow on their own: tail lights are pure red, headlights warm white
     bool tail = vColor.r > 0.98 && vColor.g < 0.2 && vColor.b < 0.2;

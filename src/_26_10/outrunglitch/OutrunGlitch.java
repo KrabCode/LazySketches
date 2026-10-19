@@ -15,9 +15,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class OutrunGlitch extends PApplet {
-    private static final String[] PALETTE_NAMES = {"neon night", "sunset drive", "miami", "vapor", "gradient"};
+    static final String[] PALETTE_NAMES = {"neon night", "sunset drive", "miami", "vapor", "gradient"};
     // HSB triples (blob A, B, C) per palette; neighbouring hues so the blends stay rich instead of going grey
-    private static final float[][][] PALETTES = {
+    static final float[][][] PALETTES = {
             {{0.88f, 0.85f, 1.0f}, {0.68f, 0.80f, 0.85f}, {0.52f, 0.80f, 0.95f}},
             {{0.08f, 0.85f, 1.0f}, {0.995f, 0.90f, 1.0f}, {0.82f, 0.80f, 0.60f}},
             {{0.93f, 0.75f, 1.0f}, {0.04f, 0.80f, 1.0f}, {0.50f, 0.80f, 0.80f}},
@@ -299,7 +299,7 @@ public class OutrunGlitch extends PApplet {
         rotateY((carFlip ? -HALF_PI : HALF_PI) + carYaw);
         scale(s, -s, s);
         drawCarShapes(wheelAngle);
-        exhaustPos.set(screenX(-0.45f, 0.23f, -2.03f), screenY(-0.45f, 0.23f, -2.03f));
+        exhaustPos.set(screenX(-0.45f, 0.23f, -1.96f), screenY(-0.45f, 0.23f, -1.96f));
         for (int i = 0; i < 2; i++) {
             float lampX = i == 0 ? -0.5f : 0.5f;
             headPos[i].set(screenX(lampX, 0.66f, 1.92f), screenY(lampX, 0.66f, 1.92f));
