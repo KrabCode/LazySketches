@@ -22,9 +22,10 @@ public class UnlockedCar extends PApplet {
     LazyGui gui;
     private PGraphics bg;
     private PShape car;
+    private PShape carMask;
     private PShape wheel;
     private PShape lamps;
-    private PGraphics glowBuf, reflBuf;
+    private PGraphics glowBuf, reflBuf, flareSprite;
     private PShader phong;
     private PFont cardFont, statFont;
     private float spin;
@@ -43,15 +44,18 @@ public class UnlockedCar extends PApplet {
     }
 
     public void settings() {
-        size(1920, 1080, P3D);
+        size(Integer.getInteger("shotW", 1920), Integer.getInteger("shotH", 1080), P3D);
         smooth(4);
     }
 
     public void setup() {
         frameRate(60);
+        if (Integer.getInteger("winX") != null) surface.setLocation(Integer.getInteger("winX"), Integer.getInteger("winY", 0));
         gui = new LazyGui(this, new LazyGuiSettings().setLoadLatestSaveOnStartup(false));
         bg = createGraphics(width, height, P2D);
         car = FavoritModel.build(this, true, true);
+        carMask = FavoritModel.build(this, true, true);
+        carMask.setFill(color(0));
         wheel = FavoritModel.buildWheel(this);
         lamps = FavoritModel.buildLamps(this);
         glowBuf = createGraphics(width, height, P3D);
@@ -75,6 +79,7 @@ public class UnlockedCar extends PApplet {
         drawReflection();
         drawCar();
         drawLightBloom();
+        drawLensFlare();
         camera();
         perspective();
         drawFlash();
@@ -361,11 +366,7 @@ public class UnlockedCar extends PApplet {
         glowBuf.pushMatrix();
         glowBuf.rotateY(carYaw);
         glowBuf.scale(1, -1, 1);
-        car.disableStyle();
-        glowBuf.noStroke();
-        glowBuf.fill(0);
-        glowBuf.shape(car);
-        car.enableStyle();
+        glowBuf.shape(carMask);
         glowBuf.shape(lamps);
         glowBuf.popMatrix();
         glowBuf.endDraw();
@@ -381,6 +382,76 @@ public class UnlockedCar extends PApplet {
         blendMode(ADD);
         image(glowBuf, 0, 0);
         blendMode(BLEND);
+    }
+
+    // halo, anamorphic streak and ghosts along the line from each headlight through the screen centre
+    private void drawLensFlare() {
+        gui.pushFolder("lens flare");
+        float strength = gui.slider("strength", 1f);
+        float haloSize = gui.slider("halo size", 0.5f);
+        float streakLen = gui.slider("streak length", 1.4f);
+        float ghostSize = gui.slider("ghost size", 0.06f);
+        float ghostSpread = gui.slider("ghost spread", 1f);
+        gui.popFolder();
+        if (strength <= 0) return;
+        if (flareSprite == null) flareSprite = buildFlareSprite();
+
+        PVector f = new PVector(sin(carYaw), 0, cos(carYaw));
+        PVector r = new PVector(cos(carYaw), 0, -sin(carYaw));
+        perspective(fov, width / (float) height, 1f, 60f);
+        camera(eye.x, eye.y, eye.z, eye.x + fwd.x, eye.y + fwd.y, eye.z + fwd.z, 0, 1, 0);
+        float[][] lampXY = new float[2][];
+        float[] facing = new float[2];
+        int i = 0;
+        for (float side : new float[]{-0.575f, 0.575f}) {
+            PVector lamp = new PVector(side * r.x + 1.92f * f.x, -0.66f, side * r.z + 1.92f * f.z);
+            lampXY[i] = new float[]{screenX(lamp.x, lamp.y, lamp.z), screenY(lamp.x, lamp.y, lamp.z)};
+            facing[i] = constrain(map(f.dot(PVector.sub(eye, lamp).normalize()), 0.1f, 0.7f, 0, 1), 0, 1);
+            i++;
+        }
+        camera();
+        perspective();
+
+        float unit = height;
+        blendMode(ADD);
+        imageMode(CENTER);
+        for (i = 0; i < 2; i++) {
+            float k = strength * facing[i];
+            if (k <= 0.001f) continue;
+            float px = lampXY[i][0], py = lampXY[i][1];
+            tint(255, 240, 215, 255 * k);
+            image(flareSprite, px, py, unit * haloSize, unit * haloSize);
+            tint(neonB.x * 255, neonB.y * 255, neonB.z * 255, 255 * k);
+            image(flareSprite, px, py, unit * streakLen, unit * 0.02f);
+            float vx = width / 2f - px, vy = height / 2f - py;
+            for (int g = 0; g < 5; g++) {
+                float t = (0.35f + g * 0.45f) * ghostSpread;
+                PVector c = g % 2 == 0 ? neonA : neonB;
+                tint(c.x * 255, c.y * 255, c.z * 255, 255 * k * 0.35f / (1 + g * 0.4f));
+                float s = unit * ghostSize * (1f + 0.6f * g);
+                image(flareSprite, px + vx * t, py + vy * t, s, s);
+            }
+        }
+        noTint();
+        imageMode(CORNER);
+        blendMode(BLEND);
+    }
+
+    private PGraphics buildFlareSprite() {
+        int n = 128;
+        PGraphics s = createGraphics(n, n, P2D);
+        s.beginDraw();
+        s.loadPixels();
+        for (int y = 0; y < n; y++) {
+            for (int x = 0; x < n; x++) {
+                float d = dist(x, y, n / 2f, n / 2f) / (n / 2f);
+                float a = pow(constrain(1f - d, 0, 1), 2.2f);
+                s.pixels[y * n + x] = color(255, 255, 255, 255 * a);
+            }
+        }
+        s.updatePixels();
+        s.endDraw();
+        return s;
     }
 
     private void drawFlash() {
@@ -437,8 +508,9 @@ public class UnlockedCar extends PApplet {
         gui.popFolder();
         if (!enabled) return;
         String[] labels = {"VPIP", "PFR", "WTSD", "BB/100", "HANDS"};
-        String[] values = {"82%", "25%", "58%", "-37.4", "13'583"};
-        float[] gauge = {0.82f, 0.25f, 0.58f, 0.37f, -1f};
+        boolean shark = "shark".equals(System.getProperty("stats"));
+        String[] values = shark ? new String[]{"23%", "19%", "27%", "+24.6", "13'583"} : new String[]{"82%", "25%", "58%", "-37.4", "13'583"};
+        float[] gauge = shark ? new float[]{0.23f, 0.19f, 0.27f, 0.25f, -1f} : new float[]{0.82f, 0.25f, 0.58f, 0.37f, -1f};
         float rowH = 46 * ui * spacing;
         float colW = 250 * ui;
         float kp = constrain(t / max(slideLen, 0.01f), 0, 1);
@@ -488,18 +560,25 @@ public class UnlockedCar extends PApplet {
         gui.pushFolder("post");
         shader.set("wobble", gui.slider("wobble", 0f));
         shader.set("chroma", gui.slider("chromatic aberration", 0.01f));
-        shader.set("burstChroma", gui.slider("burst chroma", 0f));
+        shader.set("burstChroma", gui.slider("burst chroma", 1f));
         shader.set("scanlines", gui.slider("scanlines", 0.06f));
         shader.set("vignette", gui.slider("vignette", 0.9f));
         shader.set("grain", gui.slider("grain", 0.12f));
         gui.popFolder();
         gui.pushFolder("glitch");
-        shader.set("glitchAmount", gui.slider("amount", 0f));
+        shader.set("glitchAmount", gui.slider("amount", 0.6f));
         shader.set("glitchRate", gui.slider("bursts per second", 0.5f) * 360f * FIXED_DT);
-        shader.set("tear", gui.slider("tear", 0f));
-        shader.set("lineJitter", gui.slider("line jitter", 0f));
-        shader.set("tracking", gui.slider("tracking band", 0f));
-        shader.set("ghost", gui.slider("ghost", 0f));
+        shader.set("tear", gui.slider("tear", 0.06f));
+        shader.set("lineJitter", gui.slider("line jitter", 0.012f));
+        shader.set("tracking", gui.slider("tracking band", 0.5f));
+        shader.set("ghost", gui.slider("ghost", 0.3f));
+        gui.popFolder();
+        gui.pushFolder("vhs");
+        shader.set("vhsBleed", gui.slider("colour bleed", 0.5f));
+        shader.set("vhsHeadSwitch", gui.slider("head switching", 1f));
+        shader.set("vhsDropouts", gui.slider("dropouts", 1f));
+        shader.set("vhsNoise", gui.slider("tape noise", 0.6f));
+        shader.set("vhsWarp", gui.slider("tape warp", 1f));
         gui.popFolder();
         ShaderReloader.filter(path, g);
     }
