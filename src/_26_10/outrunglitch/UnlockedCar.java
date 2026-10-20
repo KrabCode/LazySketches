@@ -16,7 +16,7 @@ public class UnlockedCar extends PApplet {
     private static final float FIXED_DT = 1f / 60f;
     // one full camera orbit in RECORD_FRAMES frames; AUTO_RECORD starts recording on the first frame
     private static final int RECORD_FRAMES = 600;
-    private static final boolean AUTO_RECORD = true;
+    private static final boolean AUTO_RECORD = Boolean.getBoolean("autoRecord");
     private static final String NAME = "ŠMELO FAVORIT";
 
     LazyGui gui;
@@ -26,7 +26,7 @@ public class UnlockedCar extends PApplet {
     private PShape lamps;
     private PGraphics glowBuf, reflBuf;
     private PShader phong;
-    private PFont cardFont;
+    private PFont cardFont, statFont;
     private float spin;
 
     private final PVector eye = new PVector();
@@ -58,6 +58,7 @@ public class UnlockedCar extends PApplet {
         reflBuf = createGraphics(width, height, P3D);
         phong = loadShader(Utils.dataPath("car_phong.frag.glsl"), Utils.dataPath("car_phong.vert.glsl"));
         cardFont = createFont(Utils.dataPath("fonts/Orbitron-VF.ttf"), 128, true);
+        statFont = createFont(Utils.dataPath("fonts/BebasNeue-Regular.ttf"), 128, true);
     }
 
     public void draw() {
@@ -79,7 +80,7 @@ public class UnlockedCar extends PApplet {
         drawFlash();
         postPass();
         drawUnlockCard();
-        Utils.record(this, gui, RECORD_FRAMES, AUTO_RECORD);
+        Utils.record(this, gui, RECORD_FRAMES * Integer.getInteger("orbits", 1), AUTO_RECORD);
     }
 
     private PVector colorVec(String name, int defaultColor) {
@@ -422,6 +423,60 @@ public class UnlockedCar extends PApplet {
         text(NAME, left, height * y + 62 * ui);
         fill(255, 60, 60, 255 * k);
         rect(left, height * y + 78 * ui, 160 * ui * k, 4 * ui);
+        drawStats(ui, t, slideLen);
+    }
+
+    private void drawStats(float ui, float t, float slideLen) {
+        gui.pushFolder("unlock card");
+        boolean enabled = gui.toggle("stats/enabled", true);
+        float right = width * gui.slider("stats/x", 0.94f);
+        float top = height * gui.slider("stats/y", 0.14f);
+        float spacing = gui.slider("stats/line spacing", 1.38f);
+        float panelOpacity = gui.slider("stats/panel opacity", 0.484f);
+        float panelPad = gui.slider("stats/panel padding", 17f);
+        gui.popFolder();
+        if (!enabled) return;
+        String[] labels = {"VPIP", "PFR", "WTSD", "BB/100", "HANDS"};
+        String[] values = {"82%", "25%", "58%", "-37.4", "13'583"};
+        float[] gauge = {0.82f, 0.25f, 0.58f, 0.37f, -1f};
+        float rowH = 46 * ui * spacing;
+        float colW = 250 * ui;
+        float kp = constrain(t / max(slideLen, 0.01f), 0, 1);
+        kp = 1f - pow(1f - kp, 3f);
+        float pad = panelPad * ui;
+        float panelRight = right + pad + (1f - kp) * 120 * ui;
+        float panelTop = top - 36 * ui - pad;
+        float panelW = colW + 2 * pad;
+        float lastRowBelow = gauge[labels.length - 1] < 0 ? 0 : 14 * ui;
+        float panelH = (labels.length - 1) * rowH + 36 * ui + lastRowBelow + 2 * pad;
+        float radius = 18 * ui;
+        noStroke();
+        for (int g = 6; g >= 1; g--) {
+            float grow = g * 5 * ui;
+            fill(0, 0, 0, 255 * panelOpacity * 0.06f * kp);
+            rect(panelRight - panelW - grow, panelTop - grow, panelW + 2 * grow, panelH + 2 * grow, radius + grow);
+        }
+        fill(8, 4, 14, 255 * panelOpacity * kp);
+        rect(panelRight - panelW, panelTop, panelW, panelH, radius);
+        textFont(statFont);
+        for (int i = 0; i < labels.length; i++) {
+            float k = constrain((t - 0.15f - i * 0.1f) / max(slideLen, 0.01f), 0, 1);
+            k = 1f - pow(1f - k, 3f);
+            float rowRight = right + (1f - k) * 120 * ui;
+            float baseline = top + i * rowH;
+            fill(255, 255, 255, 255 * k);
+            textAlign(LEFT, BASELINE);
+            textSize(36 * ui);
+            text(labels[i], rowRight - colW, baseline);
+            textAlign(RIGHT, BASELINE);
+            textSize(36 * ui);
+            text(values[i], rowRight, baseline);
+            if (gauge[i] < 0) continue;
+            fill(255, 255, 255, 50 * k);
+            rect(rowRight - colW, baseline + 8 * ui, colW, 6 * ui);
+            fill(255, 60, 60, 255 * k);
+            rect(rowRight - colW, baseline + 8 * ui, colW * gauge[i] * k, 6 * ui);
+        }
     }
 
     private void postPass() {

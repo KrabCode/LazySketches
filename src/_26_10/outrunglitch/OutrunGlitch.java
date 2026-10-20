@@ -122,7 +122,7 @@ public class OutrunGlitch extends PApplet {
         drawTitle();
         postPass();
         drawHud();
-        Utils.record(this, gui, 3600);
+        Utils.record(this, gui, Integer.getInteger("recFrames", 3600), Boolean.getBoolean("autoRecord"));
     }
 
     private PVector colorVec(String name, int defaultColor) {
@@ -170,7 +170,7 @@ public class OutrunGlitch extends PApplet {
         shader.set("streaks", gui.slider("streaks", 1f));
         busRoadY = 1f - gui.slider("car road y", 0.78f);
         shader.set("roadY", busRoadY);
-        String palette = gui.radio("palette", PALETTE_NAMES, "sunset drive");
+        String palette = gui.radio("palette", PALETTE_NAMES, System.getProperty("palette", "sunset drive"));
         gui.gradient("custom gradient", new int[]{color(0.08f, 0.85f, 1f), color(0.995f, 0.9f, 1f), color(0.82f, 0.8f, 0.6f)});
         int preset = java.util.Arrays.asList(PALETTE_NAMES).indexOf(palette);
         if (preset < PALETTES.length) {

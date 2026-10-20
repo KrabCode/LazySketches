@@ -47,7 +47,7 @@ class FavoritModel {
         return build(p, rearSticker, false);
     }
 
-    // hoodButterfly puts a pale blue butterfly on the bonnet
+    // hoodButterfly puts a white butterfly on the bonnet
     static PShape build(PApplet p, boolean rearSticker, boolean hoodButterfly) {
         FavoritModel m = new FavoritModel();
         m.lowerBody();
@@ -294,9 +294,9 @@ class FavoritModel {
         hoodPoly(col, new float[][]{{u0 + nu, v0 + nv}, {u1 + nu, v1 + nv}, {u1 - nu, v1 - nv}, {u0 - nu, v0 - nv}}, h);
     }
 
-    // pale blue wings with darker outline, veins, body and antennae, symmetric about the bonnet centre
+    // white wings with black outline, veins, body and antennae, symmetric about the bonnet centre
     private void butterfly() {
-        int fill = rgb(125, 190, 220), line = rgb(38, 86, 120);
+        int fill = rgb(250, 250, 250), line = rgb(12, 12, 14);
         float[][] upper = {{0.02f, 0.03f}, {0.06f, 0.22f}, {0.20f, 0.36f}, {0.40f, 0.38f}, {0.50f, 0.30f}, {0.46f, 0.16f}, {0.30f, 0.04f}, {0.04f, -0.01f}};
         float[][] lower = {{0.04f, -0.02f}, {0.26f, 0.0f}, {0.34f, -0.10f}, {0.26f, -0.26f}, {0.14f, -0.30f}, {0.06f, -0.18f}};
         float[][][] veins = {{{0.03f, 0.01f}, {0.38f, 0.32f}}, {{0.03f, 0.01f}, {0.46f, 0.22f}}, {{0.03f, 0.0f}, {0.32f, 0.06f}},
